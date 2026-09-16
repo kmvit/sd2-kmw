@@ -1,0 +1,247 @@
+<title>UX-аудит sd2-kmv.ru</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f5f2; --paper:#ffffff; --ink:#20242a; --muted:#5c636e;
+  --line:#dcdad4; --accent:#1d4f8f; --accent-ink:#ffffff;
+  --crit:#b3362a; --crit-bg:#f9e9e6; --warn:#8a6116; --warn-bg:#f7efdc;
+  --ok:#2e6e4c; --ok-bg:#e6f1ea; --mono-bg:#eeede9;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181a1e; --paper:#20242a; --ink:#e8e6e1; --muted:#9aa1ab;
+    --line:#363b43; --accent:#6ea3e0; --accent-ink:#10151c;
+    --crit:#e08578; --crit-bg:#3a2320; --warn:#d8b36a; --warn-bg:#352b18;
+    --ok:#7dbb98; --ok-bg:#1e3328; --mono-bg:#2a2f36;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181a1e; --paper:#20242a; --ink:#e8e6e1; --muted:#9aa1ab;
+  --line:#363b43; --accent:#6ea3e0; --accent-ink:#10151c;
+  --crit:#e08578; --crit-bg:#3a2320; --warn:#d8b36a; --warn-bg:#352b18;
+  --ok:#7dbb98; --ok-bg:#1e3328; --mono-bg:#2a2f36;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font:400 16px/1.65 "Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;}
+.page{max-width:880px; margin:0 auto; padding:48px 24px 96px;}
+.doc{background:var(--paper); border:1px solid var(--line); border-radius:4px;
+  padding:56px 64px;}
+@media(max-width:720px){.doc{padding:32px 20px}.page{padding:16px 8px 48px}}
+.kicker{font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; margin:0 0 10px;}
+h1{font-size:clamp(28px,4.5vw,40px); line-height:1.15; font-weight:800;
+  margin:0 0 8px; letter-spacing:-.01em; text-wrap:balance;}
+.sub{color:var(--muted); margin:0 0 4px; max-width:60ch;}
+.meta{display:flex; flex-wrap:wrap; gap:8px 28px; margin:24px 0 0; padding:16px 0 0;
+  border-top:1px solid var(--line); font-size:14px; color:var(--muted);}
+.meta b{color:var(--ink); font-weight:600;}
+h2{font-size:22px; font-weight:800; letter-spacing:-.005em; margin:56px 0 6px;
+  padding-top:24px; border-top:2px solid var(--ink); text-wrap:balance;}
+h2 .num{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:10px;}
+h3{font-size:16.5px; font-weight:600; margin:28px 0 8px;}
+p{margin:10px 0; max-width:68ch;}
+ul,ol{margin:10px 0; padding-left:22px; max-width:66ch;}
+li{margin:6px 0;}
+li::marker{color:var(--accent);}
+a{color:var(--accent);}
+code,.mono{font:400 .88em/1.5 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;}
+code{background:var(--mono-bg); padding:1px 6px; border-radius:3px; white-space:nowrap;}
+.lede{font-size:18px; line-height:1.6;}
+.verdict{border-left:4px solid var(--accent); background:var(--mono-bg);
+  padding:16px 20px; margin:20px 0; border-radius:0 4px 4px 0;}
+.verdict p{margin:6px 0;}
+.chip{display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.06em;
+  text-transform:uppercase; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.chip.crit{color:var(--crit); background:var(--crit-bg);}
+.chip.warn{color:var(--warn); background:var(--warn-bg);}
+.chip.ok{color:var(--ok); background:var(--ok-bg);}
+.tw{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:4px;}
+table{border-collapse:collapse; width:100%; font-size:14.5px; line-height:1.5;}
+th{font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+  text-align:left; font-weight:600; padding:10px 14px; border-bottom:2px solid var(--line);
+  background:var(--mono-bg);}
+td{padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.mono, .tw .mono{font-size:13px; white-space:nowrap;}
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px; margin:20px 0;}
+.fact{border:1px solid var(--line); border-radius:4px; padding:14px 16px;}
+.fact .v{font-size:26px; font-weight:800; letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums; line-height:1.2;}
+.fact .l{font-size:13px; color:var(--muted); margin-top:2px;}
+.fact.bad .v{color:var(--crit);}
+.fact.good .v{color:var(--ok);}
+.note{font-size:14px; color:var(--muted); max-width:68ch;}
+.dont{border:1px solid var(--crit); border-radius:4px; padding:18px 22px; margin:18px 0;}
+.dont h3{margin-top:0; color:var(--crit);}
+.arrow{color:var(--muted);}
+tfoot td{color:var(--muted); font-size:13px;}
+@media print{
+  body{background:#fff}
+  .doc{border:none; padding:0}
+  .fact,.verdict,.dont,tr,li{break-inside:avoid}
+  h2,h3{break-after:avoid}
+}
+</style>
+
+<div class="page"><div class="doc">
+
+<p class="kicker">ГАНИН ГРУПП · Этап 3.1 — UX-аудит и доработка структуры</p>
+<h1>UX-аудит сайта sd2-kmv.ru</h1>
+<p class="sub">Анализ текущего сайта ЗАО «Стройдеталь-2» перед редизайном на дизайн-системе GANIN GROUP: что переделываем, что сохраняем и как не потерять поисковый трафик.</p>
+<div class="meta">
+  <span>Объект: <b>sd2-kmv.ru</b></span>
+  <span>Дата аудита: <b>7 сентября 2026</b></span>
+  <span>Проверено: <b>32 страницы</b></span>
+</div>
+
+<h2><span class="num">1</span>Резюме</h2>
+<p class="lede">Сайт выполняет роль «визитки с прайсом» и накопил ценный, живой контент, но морально и технически устарел: он не адаптирован под мобильные устройства, почти не размечен для поисковых систем и не собирает заявки как полноценные лиды. При этом у сайта есть работающий поисковый фундамент — понятные ЧПУ-адреса, уникальные тексты и корректные редиректы, — который при переезде нужно сохранить, а не строить заново.</p>
+<div class="verdict">
+  <p><b>Вердикт:</b> редизайн оправдан максимально. Переделываем оболочку (дизайн, вёрстку, навигацию, формы) и структуру каталога; переносим и усиливаем тексты; поисковый профиль защищаем картой 301-редиректов и сохранением счётчика Яндекс.Метрики.</p>
+</div>
+<div class="facts">
+  <div class="fact bad"><div class="v">0</div><div class="l">страниц адаптировано под мобильные</div></div>
+  <div class="fact bad"><div class="v">0 из 32</div><div class="l">страниц имеют meta description</div></div>
+  <div class="fact good"><div class="v">19</div><div class="l">живых карточек продукции ЖБИ</div></div>
+  <div class="fact bad"><div class="v">0</div><div class="l">страниц с открытой ценой</div></div>
+</div>
+
+<h2><span class="num">2</span>Что и как проверяли</h2>
+<ul>
+  <li><b>Структура и навигация</b> — карта всех разделов, меню, внутренние ссылки, статусы ответов сервера по каждой странице.</li>
+  <li><b>Контент</b> — тексты всех шести разделов и 26&nbsp;карточек каталога ЖБИ: уникальность, польза для клиента, наличие цен.</li>
+  <li><b>Мобильная версия</b> — рендеринг на экране 375&nbsp;px (iPhone), поведение меню и форм.</li>
+  <li><b>Техника</b> — скорость и вес страниц, используемые библиотеки, кэширование, формы отправки заявок.</li>
+  <li><b>SEO</b> — заголовки title и H1, мета-теги, robots.txt, sitemap.xml, canonical, микроразметка, зеркала домена, редиректы, аналитика.</li>
+</ul>
+
+<h2><span class="num">3</span>Карта текущего сайта</h2>
+<p>Сайт состоит из шести основных разделов и вложенного каталога ЖБИ:</p>
+<div class="tw"><table>
+<thead><tr><th>Раздел</th><th>Адрес</th><th>Содержимое</th></tr></thead>
+<tbody>
+<tr><td>Главная («Почему мы?»)</td><td class="mono">/</td><td>Слайдер, обращение собственника, преимущества завода, партнёры</td></tr>
+<tr><td>Бетонные изделия</td><td class="mono">/ZHB-zavod-ZHBI</td><td>Каталог: 19 живых карточек + 7 адресов старых карточек с 301-редиректом на каталог</td></tr>
+<tr><td>Бетон с доставкой</td><td class="mono">/cena-betona-s-dostavkoj</td><td>Развёрнутое УТП, 9 таблиц с марками (цены закрыты)</td></tr>
+<tr><td>Асфальтобетон</td><td class="mono">/asfaltobeton</td><td>Описание продукции</td></tr>
+<tr><td>Наш карьер</td><td class="mono">/karer-shchebnya-i-peska</td><td>Щебень и песок собственного карьера</td></tr>
+<tr><td>Опалубка</td><td class="mono">→ upex.pro</td><td>Внешняя ссылка на сторонний сайт (уводит посетителя)</td></tr>
+<tr><td>Контакты</td><td class="mono">/kontakty</td><td>Часы работы, 7 сотрудников с прямыми телефонами, реквизиты, схема проезда</td></tr>
+</tbody>
+</table></div>
+<p class="note">Карточки каталога живут по адресам вида <code>/zhelezobeton/…</code> — от тротуарной плитки и бордюров до колец колодцев, дорожных плит и ФБС.</p>
+
+<h2><span class="num">4</span>Сильные стороны — это переносим обязательно</h2>
+<ul>
+  <li><b>Уникальные продающие тексты.</b> Страница бетона — лучшая на сайте: конкретные, проверяемые аргументы (кубовидный щебень 1-й категории, 10–15&nbsp;% запас прочности, 25 миксеров, 30&nbsp;литров бонусом на куб, собственная аттестованная лаборатория, коэффициент вариации &lt;10&nbsp;%). Это готовое сырьё для копирайтинга — смыслы сохраняем, упаковку меняем.</li>
+  <li><b>Готовая структура прайса.</b> На странице бетона 9 таблиц с марками, классами, водонепроницаемостью и морозостойкостью; на карточках ЖБИ — размеры, вес и характеристики изделий. Сами цены закрыты (см.&nbsp;5.6), но вся техническая часть прайса описана и переносится как есть.</li>
+  <li><b>Понятные адреса страниц (ЧПУ)</b> с ключевыми словами — по ним сайт собирает поисковый трафик годами.</li>
+  <li><b>Корректная серверная база:</b> все зеркала (http, www) сведены 301-редиректом на <code>https://sd2-kmv.ru</code>, несуществующие страницы отдают честный 404, снятые с производства карточки — 301 на каталог.</li>
+  <li><b>Яндекс.Метрика с историей</b> — счётчик №&nbsp;104585865 (плюс старый №&nbsp;30121754). История посещаемости — база для оценки эффекта редизайна.</li>
+  <li><b>Элементы доверия:</b> «с 1962 года», имена и прямые телефоны сотрудников, форма «жалоба директору», фото производства. Форму жалобы стоит переосмыслить в дизайне, но сам механизм прямой связи с руководством — редкое и ценное отличие.</li>
+</ul>
+
+<h2><span class="num">5</span>Проблемы</h2>
+
+<h3>5.1. Мобильная версия <span class="chip crit">Критично</span></h3>
+<p>На сайте нет даже метатега <code>viewport</code> — телефон показывает уменьшенную десктопную страницу с нечитаемым текстом и микроскопическими ссылками. В строительной тематике с мобильных приходит больше половины посетителей: сейчас каждому из них неудобно, а поисковые системы за это понижают сайт в мобильной выдаче.</p>
+
+<h3>5.2. Заявки и лиды <span class="chip crit">Критично</span></h3>
+<ul>
+  <li>Единственная форма — всплывающее окно «Жду звонка!» с одним полем телефона. Заявка уходит GET-запросом через <code>send-data-get.php</code>: номер клиента попадает в адресную строку и серверные логи, подтверждения клиент не видит.</li>
+  <li>Нет форм расчёта: нельзя запросить ТКП, прикинуть объём бетона, заказать конкретную позицию из каталога.</li>
+  <li>Заявки не попадают в CRM — история обращений не накапливается.</li>
+</ul>
+
+<h3>5.3. SEO-разметка <span class="chip crit">Критично</span></h3>
+<div class="tw"><table>
+<thead><tr><th>Проверка</th><th>Состояние</th></tr></thead>
+<tbody>
+<tr><td>meta description</td><td>Пустой на всех 32 проверенных страницах — сниппет в выдаче формируется случайным текстом</td></tr>
+<tr><td>Заголовки title</td><td>Без города и ключевых слов: «Контакты», «Бетонные изделия», «Прогоны»</td></tr>
+<tr><td>H1</td><td>На главной отсутствует; на странице бетона — три H1 с инлайн-стилями</td></tr>
+<tr><td>robots.txt</td><td>Отсутствует (404)</td></tr>
+<tr><td>sitemap.xml</td><td>Отсутствует (404)</td></tr>
+<tr><td>canonical, Open Graph, микроразметка Schema.org</td><td>Нет нигде: ни организации, ни товаров, ни цен, ни хлебных крошек</td></tr>
+<tr><td>alt у изображений</td><td>Пустой у 19 из 49 картинок главной</td></tr>
+</tbody>
+</table></div>
+
+<h3>5.4. Дизайн и UX <span class="chip warn">Важно</span></h3>
+<ul>
+  <li>Визуальный стиль 2010-х: узкий шрифт PT Sans Narrow, растянутые «продающие» заголовки капсом, инлайн-стили, клипарт-иллюстрации (стоковая «лаборатория» на первом экране главной).</li>
+  <li>Первый экран не отвечает на вопросы «что продают и почём» — вместо этого слайдер из 9 фотографий (~970&nbsp;КБ) со сменяющимися лозунгами.</li>
+  <li>Каталог ЖБИ — одна длинная страница со списком, без фильтров, категорий и понятных карточек; на карточках товара нет кнопки заказа рядом с ценой.</li>
+  <li>Пункт меню «Опалубка» уводит на внешний сайт upex.pro без предупреждения.</li>
+  <li>Контакты перегружены: таблица часов работы на 7 строк, 7 персон с 2–3 телефонами каждая — посетителю трудно понять, куда звонить по своему вопросу.</li>
+</ul>
+
+<h3>5.5. Техника <span class="chip warn">Важно</span></h3>
+<ul>
+  <li>jQuery 1.12.4 (2016 год) и плагины bxslider / lightbox / magnific-popup — три библиотеки ради слайдера и увеличения картинок.</li>
+  <li>HTML кэшируется на двое суток (<code>max-age=172800</code>) — изменения цен доходят до посетителей с опозданием.</li>
+  <li>Изображения без сжатия в современные форматы (WebP/AVIF) и без отложенной загрузки.</li>
+  <li>Сайт, судя по всему, без CMS — правки требуют программиста; заказчик не может сам обновить цену или добавить позицию.</li>
+</ul>
+
+<h3>5.6. Цены закрыты на всём сайте <span class="chip crit">Критично</span></h3>
+<p>Ни на одной странице нет ни одной цифры цены. В таблицах бетона стоит «По&nbsp;запросу» и «Договорная», в прайсах доставки и бетононасосов — прочерки «-&nbsp;руб.», на карточках ЖБИ — кнопка «Узнать цену». Структура прайса при этом заполнена: марки, классы, размеры и характеристики на месте.</p>
+<p>Для посетителя это означает, что сравнить предложение с конкурентом на сайте невозможно, а поисковые системы не видят на страницах товарных цен — это заметная потеря и в выдаче, и в конверсии.</p>
+<p>Решение зависит от коммерческой политики завода, поэтому выносим его в раздел&nbsp;8. Пока цены закрыты, новый сайт строится вокруг быстрого получения расчёта: короткая форма на каждой странице продукции, калькулятор объёма и явное обещание срока ответа. Если завод решит открыть хотя бы ориентировочные цены «от», блок продукции готов их принять без переделки.</p>
+
+<h2><span class="num">6</span>Чего не ломаем: SEO-страховка при переезде</h2>
+<div class="dont">
+<h3>Обязательные условия запуска нового сайта</h3>
+<ol>
+  <li><b>Карта 301-редиректов</b> со всех существующих адресов на новые (раздел 7) — включая все 26 адресов <code>/zhelezobeton/…</code>. Ни один старый URL не должен отдавать 404.</li>
+  <li><b>Смыслы и ключевые формулировки текстов сохраняются.</b> Копирайтинг — это переупаковка, а не написание с нуля: вхождения «бетон с доставкой», «КМВ», «Пятигорск», названия изделий и марок должны остаться на целевых страницах.</li>
+  <li><b>Счётчик Метрики №&nbsp;104585865 переносится</b> на новый сайт (старый №&nbsp;30121754 выводим из кода). До переезда — снять срез: страницы-доноры трафика и запросы из Яндекс.Вебмастера.</li>
+  <li><b>Домен, протокол и главное зеркало не меняются:</b> <code>https://sd2-kmv.ru</code> без www.</li>
+  <li><b>Технические характеристики не исчезают.</b> Марки, классы, размеры и ГОСТы с нынешних таблиц переносятся полностью — именно они сейчас работают на поиск вместо цен.</li>
+  <li>Новый сайт закрыт от индексации только на тестовом домене; в день переезда — открытие индексации, отправка новой sitemap.xml в Вебмастер и Search Console, контроль обхода первые 2–3 недели.</li>
+</ol>
+</div>
+
+<h2><span class="num">7</span>Новая структура и карта редиректов</h2>
+<p>Структуру строим по образцу GANIN GROUP — та же логика разделов «Продукция / Услуги / Контакты», та же платформа и CMS. Это даёт общую ДНК двух сайтов и позволяет переиспользовать готовые механики: формы заявок с записью в CRM, калькулятор бетона, автоматические sitemap.xml и robots.txt, управление контентом из админки.</p>
+<div class="tw"><table>
+<thead><tr><th>Было</th><th></th><th>Станет</th><th>Комментарий</th></tr></thead>
+<tbody>
+<tr><td class="mono">/</td><td class="arrow">→</td><td class="mono">/</td><td>Главная: продукция и выгоды на первом экране вместо слайдера</td></tr>
+<tr><td class="mono">/cena-betona-s-dostavkoj</td><td class="arrow">→</td><td class="mono">/produkciya/beton/</td><td>Бетон и растворы: марки, цены, УТП, форма расчёта</td></tr>
+<tr><td class="mono">/ZHB-zavod-ZHBI</td><td class="arrow">→</td><td class="mono">/produkciya/zhbi/</td><td>Каталог ЖБИ с категориями и карточками</td></tr>
+<tr><td class="mono">/zhelezobeton/&lt;товар&gt;</td><td class="arrow">→</td><td class="mono">/produkciya/zhbi/&lt;товар&gt;/</td><td>19 живых карточек — постранично; 7 снятых — на каталог</td></tr>
+<tr><td class="mono">/asfaltobeton</td><td class="arrow">→</td><td class="mono">/produkciya/asfalt/</td><td>Асфальтобетонные смеси</td></tr>
+<tr><td class="mono">/karer-shchebnya-i-peska</td><td class="arrow">→</td><td class="mono">/produkciya/inertnye/</td><td>Щебень и песок собственного карьера</td></tr>
+<tr><td class="mono">/kontakty</td><td class="arrow">→</td><td class="mono">/kontakty/</td><td>Контакты: сценарии «купить бетон / купить ЖБИ / бухгалтерия»</td></tr>
+<tr><td class="mono">—</td><td class="arrow">+</td><td class="mono">/o-zavode/</td><td>Новая: история с 1962 г., производство, лаборатория, команда</td></tr>
+<tr><td class="mono">—</td><td class="arrow">+</td><td class="mono">/kalkulyator/</td><td>Новая: калькулятор бетона (готовый модуль GANIN GROUP)</td></tr>
+</tbody>
+<tfoot><tr><td colspan="4">Пункт «Опалубка» согласуем с заказчиком: убрать, оставить внешней ссылкой с пометкой или сделать страницей-прокладкой.</td></tr></tfoot>
+</table></div>
+
+<h3>Что получает каждая страница нового сайта</h3>
+<ul>
+  <li>Уникальные title и description с городом и ключевым запросом; один H1.</li>
+  <li>Микроразметку Schema.org: Organization на всём сайте, Product с ценой на карточках, BreadcrumbList в каталоге.</li>
+  <li>Адаптивную вёрстку (мобильные — в приоритете), быстрые изображения в WebP.</li>
+  <li>Форму заявки, которая пишет лид в CRM и отправляет уведомление на почту — вместо телефона в адресной строке.</li>
+</ul>
+
+<h2><span class="num">8</span>Решения, которые нужны от заказчика</h2>
+<ol>
+  <li><b>«Слово собственника» и «жалоба директору»</b> — сохраняем как фирменную фишку доверия (в новой подаче) или убираем?</li>
+  <li><b>«Опалубка» (upex.pro)</b> — судьба пункта меню.</li>
+  <li><b>Контактные лица</b> — кого из 7 сотрудников показываем публично и с какими телефонами.</li>
+  <li><b>Показываем ли цены</b> (см.&nbsp;5.6) — оставляем всё «по запросу», открываем ориентировочные цены «от» или публикуем полный прайс. Это решение сильнее всего влияет на конверсию и позиции в поиске.</li>
+  <li><b>Доступ к Яндекс.Метрике и Вебмастеру</b> — нужен для среза трафика до переезда.</li>
+</ol>
+
+<h2><span class="num">9</span>Следующий шаг</h2>
+<p>После согласования структуры (раздел 7) и решений (раздел 8) переходим к этапу 3.2 — дизайн страниц на дизайн-системе GANIN GROUP. Параллельно готовим карту редиректов в финальном виде и снимаем срез поисковых позиций.</p>
+
+</div></div>
+
