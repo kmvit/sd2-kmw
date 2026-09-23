@@ -34,31 +34,69 @@
   --gut: clamp(20px,4.5vw,72px);
   --maxw: 1520px;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Роли ниже — то, что переключает тема. Палитра выше остаётся неизменной:
+     синий, красный и белый одинаковы в обеих темах, меняются только фон,
+     текст и линии. Светлые секции (.light) написаны светлыми цветами
+     изначально и в переключении не участвуют — они контрастная вставка
+     и в тёмной теме, и в светлой. */
+  --bg:        var(--ink);      /* фон страницы */
+  --bg-2:      var(--ink-2);    /* приподнятая поверхность: шапки таблиц, карточки */
+  --bg-3:      var(--ink-3);    /* наведение, разделительные полосы таблиц */
+  --bg-foot:   #0A0E12;         /* подвал — на тон глубже фона */
+  --bg-blur:   rgba(13,18,23,.88);  /* шапка и плавающие кнопки поверх контента */
+  --text:      var(--paper);    /* основной текст */
+  --text-2:    var(--silver);   /* второстепенный */
+  --text-3:    var(--steel);    /* подписи, приглушённый */
+  --head:      var(--white);    /* заголовки и акцентные значения */
+  --edge:      var(--line);     /* тонкие линии и сетки */
+  --edge-2:    var(--line-2);   /* заметные границы: поля ввода, кнопки */
+  --accent-t:  var(--accent-2); /* синий для текста — на светлом фоне темнее */
+}
+
+/* Светлая тема. Фон белый, светлые секции остаются серыми — ритм чередования
+   сохраняется, только становится мягче. Ставится атрибутом на <html>,
+   значение запоминается в localStorage. */
+:root[data-theme="light"]{
+  --bg:        #FFFFFF;
+  --bg-2:      #F2F4F5;
+  --bg-3:      #E8EBEC;
+  --bg-foot:   #EDEFF0;
+  --bg-blur:   rgba(255,255,255,.92);
+  --text:      #12181D;
+  --text-2:    #3D4449;
+  --text-3:    #6E7579;
+  --head:      #12181D;
+  --edge:      #D7DBDC;
+  --edge-2:    #C4C9CA;
+  --accent-t:  var(--accent-d);
+  --brand-tx:  var(--signal);
+  --err-tx:    #8E1E15;
 }
 *,*::before,*::after{box-sizing:border-box}
 *{margin:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font-t);background:var(--ink);color:var(--paper);
+body{font-family:var(--font-t);background:var(--bg);color:var(--text);
   font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
 img,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
-:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px}
 .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut)}
 
 h1,h2,h3{font-family:var(--font-h);font-weight:600;line-height:1.16;
   text-transform:uppercase;letter-spacing:.01em}
 section{padding-block:clamp(56px,7vw,116px);position:relative}
-section.bt{border-top:1px solid var(--line)}
+section.bt{border-top:1px solid var(--edge)}
 
 /* ---------- ШТАМП СЕКЦИИ (вместо нумерации ГАНИН ГРУПП) ---------- */
 .stamp{font-family:var(--font-m);font-size:11.5px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:11px}
+  text-transform:uppercase;color:var(--text-3);display:flex;align-items:center;gap:11px}
 .stamp::before{content:"";width:22px;height:2px;background:var(--accent);flex:none}
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;
   gap:24px;flex-wrap:wrap;margin-bottom:clamp(28px,3.6vw,52px)}
-.sec-head h2{font-size:clamp(28px,4.2vw,58px);color:var(--white);max-width:24ch;text-wrap:balance}
-.sec-head .lead{max-width:46ch;color:var(--steel);font-size:15px;line-height:1.6}
+.sec-head h2{font-size:clamp(28px,4.2vw,58px);color:var(--head);max-width:24ch;text-wrap:balance}
+.sec-head .lead{max-width:46ch;color:var(--text-3);font-size:15px;line-height:1.6}
 
 /* ---------- КНОПКИ ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:11px;
@@ -66,19 +104,19 @@ section.bt{border-top:1px solid var(--line)}
   font-size:15px;letter-spacing:.12em;text-transform:uppercase;transition:.2s ease}
 .btn--solid{background:var(--accent);color:var(--white)}
 .btn--solid:hover{background:var(--accent-2)}
-.btn--line{border:1px solid var(--line-2);color:var(--paper)}
-.btn--line:hover{border-color:var(--paper)}
+.btn--line{border:1px solid var(--edge-2);color:var(--text)}
+.btn--line:hover{border-color:var(--text)}
 .btn--line.on-light{border-color:#C6C9C8;color:#12181D}
 .btn--line.on-light:hover{border-color:#12181D}
 .btn--sm{min-height:44px;padding:0 18px;font-size:13px}
 .link-more{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-m);
-  font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-2);
+  font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-t);
   transition:gap .2s}
 .link-more:hover{gap:15px}
 
 /* ---------- ШАПКА ---------- */
 header.site{position:fixed;inset:0 0 auto 0;z-index:100;
-  background:rgba(13,18,23,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  background:var(--bg-blur);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge)}
 .site-row{display:flex;align-items:center;gap:26px;min-height:74px}
 /* знак и логотип повторяют фирменный блок завода: красные буквы в белых
    плашках на синем поле, красное название, подпись белым по синему */
@@ -91,31 +129,41 @@ header.site{position:fixed;inset:0 0 auto 0;z-index:100;
   font-size:21px;line-height:1}
 .brand .word{display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
 .brand .word b{display:block;font-family:var(--font-h);font-weight:700;font-size:17px;
-  letter-spacing:.04em;text-transform:uppercase;color:var(--signal-2);line-height:1}
+  letter-spacing:.04em;text-transform:uppercase;color:var(--brand-tx);line-height:1}
 .brand .word small{display:inline-block;background:var(--accent);color:var(--white);
   font-family:var(--font-h);font-weight:600;font-size:10px;letter-spacing:.17em;
   text-transform:uppercase;padding:3px 8px 2px;margin-top:5px;line-height:1.2}
 nav.main{display:flex;gap:2px;margin-inline:auto}
 nav.main>div{position:relative}
 nav.main a.top{display:block;padding:10px 13px;font-size:13.5px;font-weight:500;
-  letter-spacing:.03em;color:var(--silver);transition:color .2s}
-nav.main a.top:hover{color:var(--white)}
-nav.main a.top.act{color:var(--white);position:relative}
+  letter-spacing:.03em;color:var(--text-2);transition:color .2s}
+nav.main a.top:hover{color:var(--head)}
+nav.main a.top.act{color:var(--head);position:relative}
 nav.main a.top.act::after{content:"";position:absolute;left:13px;right:13px;bottom:3px;
   height:2px;background:var(--accent)}
-nav.main .dd{position:absolute;top:100%;left:0;min-width:232px;background:var(--ink-2);
-  border:1px solid var(--line);padding:7px;display:none;z-index:110}
+nav.main .dd{position:absolute;top:100%;left:0;min-width:232px;background:var(--bg-2);
+  border:1px solid var(--edge);padding:7px;display:none;z-index:110}
 nav.main>div:hover .dd,nav.main>div:focus-within .dd{display:block}
-nav.main .dd a{display:block;padding:9px 12px;font-size:13.5px;color:var(--silver)}
-nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
+nav.main .dd a{display:block;padding:9px 12px;font-size:13.5px;color:var(--text-2)}
+nav.main .dd a:hover{background:var(--bg-3);color:var(--head)}
 .site-cta{display:flex;align-items:center;gap:12px;flex:none}
 .site-tel{text-align:right;line-height:1.25}
 .site-tel b{display:block;font-family:var(--font-h);font-weight:600;font-size:17px;
-  letter-spacing:.04em;color:var(--white)}
+  letter-spacing:.04em;color:var(--head)}
 .site-tel span{font-family:var(--font-m);font-size:9.5px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--steel)}
+  text-transform:uppercase;color:var(--text-3)}
 .burger{display:none;width:44px;height:44px;place-items:center;
-  border:1px solid var(--line-2);font-size:20px}
+  border:1px solid var(--edge-2);font-size:20px}
+
+/* переключатель темы: в тёмной теме показываем солнце (что будет по нажатию),
+   в светлой — луну. Иконки лежат друг на друге, видимая переключается темой. */
+.theme-tgl{width:44px;height:44px;display:grid;place-items:center;flex:none;
+  border:1px solid var(--edge-2);color:var(--text-2);transition:.2s}
+.theme-tgl:hover{border-color:var(--accent);color:var(--accent-t)}
+.theme-tgl svg{grid-area:1/1}
+.theme-tgl .i-moon{display:none}
+:root[data-theme="light"] .theme-tgl .i-sun{display:none}
+:root[data-theme="light"] .theme-tgl .i-moon{display:block}
 
 /* ---------- ПЕРВЫЙ ЭКРАН ---------- */
 .hero{min-height:min(100svh,940px);display:flex;align-items:flex-end;
@@ -155,7 +203,7 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 
 /* ---------- ШАПКА ВНУТРЕННЕЙ СТРАНИЦЫ ---------- */
 .phero{position:relative;overflow:hidden;padding:clamp(104px,13svh,150px) 0 clamp(34px,4.5vw,64px);
-  border-bottom:1px solid var(--line)}
+  border-bottom:1px solid var(--edge)}
 .phero-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 58%}
 .phero-shade{position:absolute;inset:0;background:
   linear-gradient(180deg,rgba(13,18,23,.88) 0%,rgba(13,18,23,.62) 42%,rgba(13,18,23,.94) 100%),
@@ -176,57 +224,68 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 .crumbs span[aria-current]{color:var(--silver)}
 .crumbs i{font-style:normal;color:var(--line-2)}
 
+/* Общие элементы, попадающие поверх фотографий: их подложка — затемнённый
+   снимок, а не фон страницы, поэтому в светлой теме они не перекрашиваются. */
+.hero .stamp,.phero .stamp{color:var(--steel)}
+/* в .wide штамп стоит внутри правила .wide p — цвет там светлее */
+.wide .stamp{color:var(--silver)}
+.hero .btn--line,.phero .btn--line,.wide .btn--line{color:var(--paper);border-color:var(--line-2)}
+.hero .btn--line:hover,.phero .btn--line:hover,.wide .btn--line:hover{border-color:var(--paper)}
+.hero .chip,.phero .chip,.wide .chip{color:var(--silver);border-color:var(--line-2)}
+.hero .chip.hot,.phero .chip.hot,.wide .chip.hot{color:var(--accent-2);border-color:var(--accent)}
+.wide .link-more{color:var(--accent-2)}
+
 /* ---------- ТАБЛИЦЫ ХАРАКТЕРИСТИК ---------- */
 /* обёртка нужна: широкая таблица прокручивается внутри себя,
    страница по горизонтали не едет */
 /* тени у краёв подсказывают, что таблица прокручивается вбок, и гаснут,
    когда прокручена до края: слои local двигаются со скроллом, scroll — нет */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);
-  scrollbar-color:var(--line-2) transparent;
+.tbl-wrap{overflow-x:auto;border:1px solid var(--edge);
+  scrollbar-color:var(--edge-2) transparent;
   background:
-    linear-gradient(90deg,var(--ink),transparent) 0 0/26px 100% no-repeat local,
-    linear-gradient(90deg,transparent,var(--ink)) 100% 0/26px 100% no-repeat local,
+    linear-gradient(90deg,var(--bg),transparent) 0 0/26px 100% no-repeat local,
+    linear-gradient(90deg,transparent,var(--bg)) 100% 0/26px 100% no-repeat local,
     radial-gradient(farthest-side at 0 50%,rgba(27,114,212,.45),transparent) 0 0/18px 100% no-repeat scroll,
     radial-gradient(farthest-side at 100% 50%,rgba(27,114,212,.45),transparent) 100% 0/18px 100% no-repeat scroll;}
 .tbl{width:100%;border-collapse:collapse;min-width:640px;font-size:14px}
 .tbl caption{text-align:left;padding:16px 18px;font-family:var(--font-m);font-size:11px;
-  letter-spacing:.13em;text-transform:uppercase;color:var(--steel);
-  border-bottom:1px solid var(--line);background:var(--ink-2)}
+  letter-spacing:.13em;text-transform:uppercase;color:var(--text-3);
+  border-bottom:1px solid var(--edge);background:var(--bg-2)}
 .tbl th{text-align:left;padding:13px 16px;font-family:var(--font-m);font-weight:500;
-  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--silver);
-  background:var(--ink-2);border-bottom:1px solid var(--line);white-space:nowrap}
-.tbl td{padding:13px 16px;border-bottom:1px solid var(--line);color:var(--silver);
+  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);
+  background:var(--bg-2);border-bottom:1px solid var(--edge);white-space:nowrap}
+.tbl td{padding:13px 16px;border-bottom:1px solid var(--edge);color:var(--text-2);
   vertical-align:middle}
-.tbl tbody tr:hover td{background:var(--ink-2)}
+.tbl tbody tr:hover td{background:var(--bg-2)}
 .tbl tbody tr:last-child td{border-bottom:0}
 .tbl .grade{font-family:var(--font-h);font-weight:600;font-size:17px;letter-spacing:.04em;
-  color:var(--white);white-space:nowrap}
-.tbl .muted{color:var(--steel);font-size:13px}
+  color:var(--head);white-space:nowrap}
+.tbl .muted{color:var(--text-3);font-size:13px}
 .tbl .ask{font-family:var(--font-m);font-size:11px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--accent-2);white-space:nowrap}
-.tbl .band td{background:var(--ink-3);font-family:var(--font-m);font-size:10.5px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--steel);padding:9px 16px}
-.tbl-note{margin-top:14px;font-size:13px;color:var(--steel);max-width:74ch}
+  text-transform:uppercase;color:var(--accent-t);white-space:nowrap}
+.tbl .band td{background:var(--bg-3);font-family:var(--font-m);font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);padding:9px 16px}
+.tbl-note{margin-top:14px;font-size:13px;color:var(--text-3);max-width:74ch}
 
 /* ---------- ТЕКСТОВЫЕ БЛОКИ ВНУТРЕННИХ СТРАНИЦ ---------- */
-.prose{max-width:74ch;font-size:15.5px;line-height:1.72;color:var(--silver)}
+.prose{max-width:74ch;font-size:15.5px;line-height:1.72;color:var(--text-2)}
 .prose p+p{margin-top:16px}
-.prose b{color:var(--white);font-weight:600}
+.prose b{color:var(--head);font-weight:600}
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3.4vw,64px);align-items:start}
 .light .prose{color:#3D4449}
 .light .prose b{color:#12181D}
 
 /* карточки-пункты (применения, преимущества) */
 .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--line);border:1px solid var(--line)}
-.note{background:var(--ink);padding:clamp(20px,2.2vw,30px);display:flex;
+  background:var(--edge);border:1px solid var(--edge)}
+.note{background:var(--bg);padding:clamp(20px,2.2vw,30px);display:flex;
   flex-direction:column;gap:9px;transition:background .25s}
-.note:hover{background:var(--ink-2)}
+.note:hover{background:var(--bg-2)}
 .note i{font-family:var(--font-m);font-style:normal;font-size:11px;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--accent-2)}
+  text-transform:uppercase;color:var(--accent-t)}
 .note b{font-family:var(--font-h);font-weight:600;font-size:18px;letter-spacing:.04em;
-  text-transform:uppercase;color:var(--white);line-height:1.25}
-.note p{font-size:13.5px;color:var(--steel);line-height:1.6}
+  text-transform:uppercase;color:var(--head);line-height:1.25}
+.note p{font-size:13.5px;color:var(--text-3);line-height:1.6}
 
 /* ---------- ЛЕНТА ГАРАНТИЙ ---------- */
 .bar{background:var(--accent-d);border-block:1px solid var(--accent-d)}
@@ -238,46 +297,46 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 .bar p::before{content:"";width:7px;height:7px;background:var(--accent-2);flex:none}
 
 /* ---------- ПРОДУКЦИЯ: СТРОКИ-РЕЕСТР ---------- */
-.reg{border-top:1px solid var(--line)}
+.reg{border-top:1px solid var(--edge)}
 .reg-row{display:grid;grid-template-columns:82px 190px 1fr auto;gap:clamp(16px,2.4vw,40px);
-  align-items:center;padding:clamp(16px,2vw,26px) 0;border-bottom:1px solid var(--line);
+  align-items:center;padding:clamp(16px,2vw,26px) 0;border-bottom:1px solid var(--edge);
   transition:background .22s,padding-left .22s}
-.reg-row:hover{background:linear-gradient(90deg,var(--ink-2),transparent 70%);padding-left:14px}
+.reg-row:hover{background:linear-gradient(90deg,var(--bg-2),transparent 70%);padding-left:14px}
 .reg-row .idx{font-family:var(--font-m);font-size:11.5px;letter-spacing:.14em;color:var(--accent)}
-.reg-row .pic{width:190px;aspect-ratio:16/10;object-fit:cover;border:1px solid var(--line-2);
+.reg-row .pic{width:190px;aspect-ratio:16/10;object-fit:cover;border:1px solid var(--edge-2);
   filter:saturate(.82)}
 .reg-row:hover .pic{filter:saturate(1)}
-.reg-row h3{font-size:clamp(20px,2.3vw,31px);color:var(--white)}
-.reg-row p{font-size:14px;color:var(--steel);margin-top:5px;max-width:56ch;line-height:1.55}
+.reg-row h3{font-size:clamp(20px,2.3vw,31px);color:var(--head)}
+.reg-row p{font-size:14px;color:var(--text-3);margin-top:5px;max-width:56ch;line-height:1.55}
 .reg-row .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
 .reg-row .go{font-family:var(--font-m);font-size:12px;letter-spacing:.1em;
-  color:var(--accent-2);white-space:nowrap;display:flex;align-items:center;gap:8px;transition:gap .2s}
+  color:var(--accent-t);white-space:nowrap;display:flex;align-items:center;gap:8px;transition:gap .2s}
 .reg-row:hover .go{gap:14px}
 /* правая ячейка строки: цена + ссылка. Цены закрыты — в .price стоит
    «по запросу»; если завод откроет прайс, сюда встаёт «от … ₽/м³» */
 .cell-r{display:flex;flex-direction:column;align-items:flex-end;gap:10px;text-align:right}
 .price{font-family:var(--font-m);font-size:10.5px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--steel)}
+  text-transform:uppercase;color:var(--text-3)}
 .price b{display:block;font-family:var(--font-h);font-size:17px;font-weight:600;
-  letter-spacing:.05em;color:var(--white);margin-bottom:3px}
+  letter-spacing:.05em;color:var(--head);margin-bottom:3px}
 .chip{display:inline-block;font-family:var(--font-m);font-size:11px;letter-spacing:.07em;
-  text-transform:uppercase;color:var(--silver);border:1px solid var(--line-2);padding:6px 10px}
-.chip.hot{border-color:var(--accent);color:var(--accent-2)}
+  text-transform:uppercase;color:var(--text-2);border:1px solid var(--edge-2);padding:6px 10px}
+.chip.hot{border-color:var(--accent);color:var(--accent-t)}
 .light .chip{border-color:#C6C9C8;color:#3D4449}
 .light .chip.hot{border-color:var(--accent);color:var(--accent-d)}
 
 /* ---------- ФАКТЫ КАЧЕСТВА ---------- */
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  background:var(--line);border:1px solid var(--line)}
-.fact{background:var(--ink);padding:clamp(22px,2.4vw,34px);display:flex;
+  background:var(--edge);border:1px solid var(--edge)}
+.fact{background:var(--bg);padding:clamp(22px,2.4vw,34px);display:flex;
   flex-direction:column;gap:9px;transition:background .25s}
-.fact:hover{background:var(--ink-2)}
+.fact:hover{background:var(--bg-2)}
 .fact .v{font-family:var(--font-h);font-weight:700;font-size:clamp(34px,4.4vw,60px);
-  line-height:1;color:var(--white);letter-spacing:.005em}
-.fact .v small{font-size:.42em;color:var(--accent-2);font-weight:600;letter-spacing:.04em}
+  line-height:1;color:var(--head);letter-spacing:.005em}
+.fact .v small{font-size:.42em;color:var(--accent-t);font-weight:600;letter-spacing:.04em}
 .fact b{font-family:var(--font-h);font-weight:600;font-size:17px;letter-spacing:.05em;
-  text-transform:uppercase;color:var(--white);line-height:1.25}
-.fact p{font-size:13.5px;color:var(--steel);line-height:1.6}
+  text-transform:uppercase;color:var(--head);line-height:1.25}
+.fact p{font-size:13.5px;color:var(--text-3);line-height:1.6}
 
 /* ---------- СВЕТЛАЯ ПОЛОСА ---------- */
 .light{background:var(--paper);color:#12181D}
@@ -348,29 +407,29 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 
 /* доставка */
 .delv{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,3.4vw,64px);align-items:center}
-.delv-list{display:grid;border-top:1px solid var(--line);margin-top:22px}
-.delv-list div{display:flex;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
+.delv-list{display:grid;border-top:1px solid var(--edge);margin-top:22px}
+.delv-list div{display:flex;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--edge)}
 .delv-list i{font-family:var(--font-m);font-style:normal;font-size:11px;
-  letter-spacing:.1em;color:var(--accent-2);flex:none;text-transform:uppercase}
-.delv-list span{font-size:14.5px;color:var(--silver)}
-.delv-photo{position:relative;border:1px solid var(--line-2)}
+  letter-spacing:.1em;color:var(--accent-t);flex:none;text-transform:uppercase}
+.delv-list span{font-size:14.5px;color:var(--text-2)}
+.delv-photo{position:relative;border:1px solid var(--edge-2)}
 .delv-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}
 .delv-photo .tag{position:absolute;left:0;bottom:0;background:var(--accent);color:#fff;
   font-family:var(--font-m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px}
 
 /* вопросы и ответы */
-.faq{max-width:960px;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
+.faq{max-width:960px;border-top:1px solid var(--edge)}
+.faq details{border-bottom:1px solid var(--edge)}
 .faq summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;
   justify-content:space-between;gap:20px;padding:19px 0;font-family:var(--font-h);
   font-weight:600;font-size:clamp(16px,1.6vw,21px);letter-spacing:.03em;
-  text-transform:uppercase;color:var(--white);transition:color .2s}
-.faq summary:hover{color:var(--accent-2)}
+  text-transform:uppercase;color:var(--head);transition:color .2s}
+.faq summary:hover{color:var(--accent-t)}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";font-family:var(--font-m);font-size:20px;
-  color:var(--accent-2);flex:none;transition:transform .2s}
+  color:var(--accent-t);flex:none;transition:transform .2s}
 .faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{padding:0 0 20px;font-size:14.5px;color:var(--steel);max-width:66ch;line-height:1.65}
+.faq details p{padding:0 0 20px;font-size:14.5px;color:var(--text-3);max-width:66ch;line-height:1.65}
 
 /* снимок изделия на карточке товара: фон подложки, картинка целиком */
 .prod-shot{position:relative;border:1px solid #C9CDCC;background:var(--paper-2);
@@ -471,34 +530,34 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 
 /* ---------- КАЛЬКУЛЯТОР-ТИЗЕР ---------- */
 .calc-teaser{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(24px,3vw,56px);
-  align-items:center;border:1px solid var(--line-2);
-  background:linear-gradient(135deg,var(--ink-2),var(--ink) 62%);padding:clamp(26px,3vw,48px)}
-.calc-teaser h2{font-size:clamp(26px,3.4vw,46px);color:var(--white);max-width:20ch;text-wrap:balance}
-.calc-teaser p{color:var(--steel);margin-top:14px;max-width:48ch;font-size:15px}
+  align-items:center;border:1px solid var(--edge-2);
+  background:linear-gradient(135deg,var(--bg-2),var(--bg) 62%);padding:clamp(26px,3vw,48px)}
+.calc-teaser h2{font-size:clamp(26px,3.4vw,46px);color:var(--head);max-width:20ch;text-wrap:balance}
+.calc-teaser p{color:var(--text-3);margin-top:14px;max-width:48ch;font-size:15px}
 .calc-face{border:1px solid var(--accent);padding:clamp(20px,2.2vw,30px);background:rgba(27,114,212,.07)}
 .calc-face .f-label{margin-top:0}
 .calc-face .rowin{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.calc-face .res{margin-top:20px;padding-top:18px;border-top:1px solid var(--line-2);
+.calc-face .res{margin-top:20px;padding-top:18px;border-top:1px solid var(--edge-2);
   display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
 .calc-face .res .v{font-family:var(--font-h);font-weight:700;font-size:clamp(34px,4vw,54px);
-  line-height:1;color:var(--white)}
-.calc-face .res .v small{font-size:.4em;color:var(--accent-2)}
+  line-height:1;color:var(--head)}
+.calc-face .res .v small{font-size:.4em;color:var(--accent-t)}
 .calc-face .res span{font-family:var(--font-m);font-size:10.5px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--steel);text-align:right;max-width:18ch}
+  text-transform:uppercase;color:var(--text-3);text-align:right;max-width:18ch}
 
 /* ---------- ШАГИ ЗАКАЗА ---------- */
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
-  background:var(--line);border:1px solid var(--line)}
-.step{background:var(--ink);padding:clamp(20px,2.2vw,30px);display:flex;flex-direction:column;gap:9px}
+  background:var(--edge);border:1px solid var(--edge)}
+.step{background:var(--bg);padding:clamp(20px,2.2vw,30px);display:flex;flex-direction:column;gap:9px}
 .step i{font-family:var(--font-m);font-style:normal;font-size:11px;letter-spacing:.14em;
-  color:var(--accent-2);text-transform:uppercase}
+  color:var(--accent-t);text-transform:uppercase}
 .step b{font-family:var(--font-h);font-weight:600;font-size:18px;letter-spacing:.04em;
-  text-transform:uppercase;color:var(--white)}
-.step span{font-size:13.5px;color:var(--steel);line-height:1.55}
+  text-transform:uppercase;color:var(--head)}
+.step span{font-size:13.5px;color:var(--text-3);line-height:1.55}
 
 /* ---------- КАРЬЕР (широкий блок с фото) ---------- */
 .wide{position:relative;overflow:hidden;min-height:clamp(380px,44vw,540px);
-  display:flex;align-items:flex-end;border:1px solid var(--line)}
+  display:flex;align-items:flex-end;border:1px solid var(--edge)}
 .wide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .wide::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,rgba(13,18,23,.93) 8%,rgba(13,18,23,.35) 70%),
@@ -510,56 +569,56 @@ nav.main .dd a:hover{background:var(--ink-3);color:var(--white)}
 
 /* ---------- ФОРМА ---------- */
 .f-label{display:block;font-family:var(--font-m);font-size:10.5px;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--steel);margin:16px 0 7px}
-.f-input{width:100%;min-height:50px;background:var(--ink);border:1px solid var(--line-2);
-  color:var(--paper);padding:12px 14px;font-size:15px;font-family:var(--font-t)}
+  text-transform:uppercase;color:var(--text-3);margin:16px 0 7px}
+.f-input{width:100%;min-height:50px;background:var(--bg);border:1px solid var(--edge-2);
+  color:var(--text);padding:12px 14px;font-size:15px;font-family:var(--font-t)}
 .f-input:focus{outline:none;border-color:var(--accent)}
 select.f-input{appearance:none;-webkit-appearance:none;cursor:pointer;
-  background-image:linear-gradient(45deg,transparent 50%,var(--steel) 50%),
-  linear-gradient(135deg,var(--steel) 50%,transparent 50%);
+  background-image:linear-gradient(45deg,transparent 50%,var(--text-3) 50%),
+  linear-gradient(135deg,var(--text-3) 50%,transparent 50%);
   background-position:calc(100% - 19px) 50%,calc(100% - 13px) 50%;
   background-size:6px 6px;background-repeat:no-repeat}
 .f-agree{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;
-  color:var(--steel);margin-top:16px}
-.f-agree a{color:var(--silver);text-decoration:underline;text-underline-offset:3px}
+  color:var(--text-3);margin-top:16px}
+.f-agree a{color:var(--text-2);text-decoration:underline;text-underline-offset:3px}
 .f-agree input{width:17px;height:17px;accent-color:var(--accent);margin-top:2px;flex:none}
-.form-card{border:1px solid var(--line-2);background:var(--ink-2);padding:clamp(22px,2.6vw,34px)}
-.form-card h3{font-size:24px;color:var(--white)}
+.form-card{border:1px solid var(--edge-2);background:var(--bg-2);padding:clamp(22px,2.6vw,34px)}
+.form-card h3{font-size:24px;color:var(--head)}
 
 /* ---------- ФИНАЛЬНЫЙ CTA ---------- */
-.final{background:linear-gradient(180deg,var(--ink-2),var(--ink));text-align:center;overflow:hidden}
-.final h2{font-size:clamp(32px,5.4vw,80px);color:var(--white);max-width:19ch;margin-inline:auto}
-.final h2 em{font-style:normal;color:var(--accent-2)}
-.final p{margin:20px auto 0;max-width:56ch;color:var(--steel);font-size:15px}
+.final{background:linear-gradient(180deg,var(--bg-2),var(--bg));text-align:center;overflow:hidden}
+.final h2{font-size:clamp(32px,5.4vw,80px);color:var(--head);max-width:19ch;margin-inline:auto}
+.final h2 em{font-style:normal;color:var(--accent-t)}
+.final p{margin:20px auto 0;max-width:56ch;color:var(--text-3);font-size:15px}
 .final .cta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:34px}
 .final .stamp{justify-content:center}
 
 /* ---------- ФУТЕР ---------- */
-footer.site{background:#0A0E12;border-top:1px solid var(--line);padding:clamp(44px,5.5vw,76px) 0 30px}
+footer.site{background:var(--bg-foot);border-top:1px solid var(--edge);padding:clamp(44px,5.5vw,76px) 0 30px}
 .foot-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(22px,3vw,48px)}
 .foot-grid h4{font-family:var(--font-m);font-weight:500;font-size:10.5px;letter-spacing:.19em;
-  text-transform:uppercase;color:var(--steel);margin-bottom:15px}
-.foot-grid a{display:block;padding:5px 0;font-size:14px;color:var(--silver);transition:color .2s}
-.foot-grid a:hover{color:var(--accent-2)}
+  text-transform:uppercase;color:var(--text-3);margin-bottom:15px}
+.foot-grid a{display:block;padding:5px 0;font-size:14px;color:var(--text-2);transition:color .2s}
+.foot-grid a:hover{color:var(--accent-t)}
 /* display обязателен: правило .foot-grid a выше по специфичности, чем .brand,
    и без него знак становится блоком и растягивается на всю колонку.
    В узкой колонке знак и название переносятся на две строки — даём им воздух. */
 .foot-brand .brand{display:flex;flex-wrap:wrap;row-gap:11px}
-.foot-brand p{margin-top:16px;font-size:13px;color:var(--steel);max-width:34ch;line-height:1.7}
-.legal{margin-top:clamp(32px,4vw,52px);padding-top:20px;border-top:1px solid var(--line);
-  display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;font-size:12.5px;color:var(--steel)}
-.legal a{color:var(--steel)}
-.legal a:hover{color:var(--paper)}
+.foot-brand p{margin-top:16px;font-size:13px;color:var(--text-3);max-width:34ch;line-height:1.7}
+.legal{margin-top:clamp(32px,4vw,52px);padding-top:20px;border-top:1px solid var(--edge);
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;font-size:12.5px;color:var(--text-3)}
+.legal a{color:var(--text-3)}
+.legal a:hover{color:var(--text)}
 
 /* ---------- ПЛАВАЮЩИЕ ---------- */
 .floats{position:fixed;right:16px;bottom:16px;display:grid;gap:9px;z-index:90;transition:.25s}
 /* на первом экране кнопки ложились поверх фактов — JS прячет их до прокрутки;
    без JS класс не вешается и кнопки просто видны всегда */
 .floats.off{opacity:0;pointer-events:none;transform:translateY(10px)}
-.floats a{width:52px;height:52px;display:grid;place-items:center;border:1px solid var(--line-2);
-  background:rgba(13,18,23,.92);backdrop-filter:blur(8px);color:var(--paper);
+.floats a{width:52px;height:52px;display:grid;place-items:center;border:1px solid var(--edge-2);
+  background:var(--bg-blur);backdrop-filter:blur(8px);color:var(--text);
   font-family:var(--font-m);font-size:10px;letter-spacing:.05em;transition:.2s}
-.floats a:hover{border-color:var(--accent);color:var(--accent-2)}
+.floats a:hover{border-color:var(--accent);color:var(--accent-t)}
 .floats a.hot{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .floats a.hot:hover{background:var(--accent-2);color:#fff}
 
@@ -567,23 +626,23 @@ footer.site{background:#0A0E12;border-top:1px solid var(--line);padding:clamp(44
 .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(8,11,14,.76);
   backdrop-filter:blur(6px);z-index:200;padding:20px}
 .modal:target{display:grid}
-.modal-card{width:100%;max-width:470px;background:var(--ink-2);border:1px solid var(--line-2);
+.modal-card{width:100%;max-width:470px;background:var(--bg-2);border:1px solid var(--edge-2);
   padding:32px;position:relative;max-height:92vh;overflow:auto}
-.modal-card h3{font-size:26px;color:var(--white)}
+.modal-card h3{font-size:26px;color:var(--head)}
 .modal-card .x{position:absolute;top:13px;right:13px;width:38px;height:38px;display:grid;
-  place-items:center;border:1px solid var(--line-2);color:var(--silver)}
-.modal-card .x:hover{border-color:var(--paper);color:var(--white)}
+  place-items:center;border:1px solid var(--edge-2);color:var(--text-2)}
+.modal-card .x:hover{border-color:var(--text);color:var(--head)}
 
 /* ---------- МОБИЛЬНОЕ МЕНЮ ---------- */
-.mmenu{position:fixed;inset:0;background:var(--ink);z-index:150;display:none;overflow:auto}
+.mmenu{position:fixed;inset:0;background:var(--bg);z-index:150;display:none;overflow:auto}
 .mmenu:target{display:block}
 .mmenu .head{display:flex;justify-content:space-between;align-items:center;
-  padding:15px var(--gut);border-bottom:1px solid var(--line)}
+  padding:15px var(--gut);border-bottom:1px solid var(--edge)}
 .mmenu nav{padding:8px var(--gut) 56px}
 .mmenu .top{display:block;padding:15px 0;font-family:var(--font-h);font-weight:600;font-size:21px;
-  letter-spacing:.05em;text-transform:uppercase;color:var(--white);border-bottom:1px solid var(--line)}
+  letter-spacing:.05em;text-transform:uppercase;color:var(--head);border-bottom:1px solid var(--edge)}
 .mmenu .tel-big{display:block;margin-top:26px;font-family:var(--font-h);font-weight:600;
-  font-size:26px;color:var(--accent-2);letter-spacing:.04em}
+  font-size:26px;color:var(--accent-t);letter-spacing:.04em}
 
 /* ---------- АДАПТИВ ---------- */
 @media (max-width:1180px){
@@ -656,6 +715,6 @@ footer.site{background:#0A0E12;border-top:1px solid var(--line);padding:clamp(44
 /* сообщение под формой и подсветка незаполненного поля */
 .f-note{margin-top:14px;padding:11px 14px;font-size:13.5px;line-height:1.5;
   border-left:3px solid var(--accent)}
-.f-note--ok{background:rgba(27,114,212,.12);color:var(--silver)}
-.f-note--err{background:rgba(217,55,43,.14);border-left-color:var(--signal);color:#F3C7C2}
+.f-note--ok{background:rgba(27,114,212,.12);color:var(--text-2)}
+.f-note--err{background:rgba(217,55,43,.14);border-left-color:var(--signal);color:var(--err-tx)}
 .f-input.invalid{border-color:var(--signal);box-shadow:0 0 0 2px rgba(217,55,43,.18)}

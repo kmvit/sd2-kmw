@@ -22,6 +22,24 @@
     calc();
   }
 
+  // переключатель темы. Значение хранится в localStorage и применяется
+  // ещё в <head>, до отрисовки — здесь остаётся только реакция на нажатие.
+  var root = document.documentElement;
+  var toggle = document.querySelector('.theme-tgl');
+  if (toggle) {
+    var sync = function(){
+      toggle.setAttribute('aria-pressed', root.dataset.theme === 'light' ? 'true' : 'false');
+    };
+    sync();
+    toggle.addEventListener('click', function(){
+      var light = root.dataset.theme !== 'light';
+      if (light) root.dataset.theme = 'light';
+      else root.removeAttribute('data-theme');
+      try { localStorage.setItem('sd2-theme', light ? 'light' : 'dark'); } catch (e) {}
+      sync();
+    });
+  }
+
   // формы: на статике отправлять некуда, поэтому проверяем заполнение
   // и показываем подтверждение. При подключении CMS обработчик заменяется
   // на её отправку — разметка и имена полей менять не придётся.

@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Тротуарная плитка и брусчатка в Пятигорске — пресс ZENITH — «Стройдеталь-2»</title>
+<script>
+/* Тема применяется до отрисовки страницы: иначе при выбранной светлой теме
+   на долю секунды мелькает тёмный фон. */
+try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.dataset.theme=_t}catch(e){}
+</script>
 <meta name="description" content="Морозостойкая тротуарная плитка завода «Стройдеталь-2» на немецком прессе ZENITH: брусчатка, Старый город, Ландхаус, Классико, Паркет, палисад. 9 базовых цветов и серия «Мегаполис», морозостойкость вдвое выше ГОСТ 17608-2017." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,6 +46,10 @@
     </nav>
     <div class="site-cta">
       <a class="site-tel" href="tel:+79288217211"><b>+7 928 821-72-11</b><span>Отдел продаж · пн–сб</span></a>
+      <button class="theme-tgl" type="button" aria-label="Переключить тему" aria-pressed="false" title="Светлая / тёмная тема">
+        <svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.9 1.9M17.2 17.2l1.9 1.9M19.1 4.9l-1.9 1.9M6.8 17.2l-1.9 1.9"/></svg>
+        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/></svg>
+      </button>
       <a class="btn btn--solid btn--sm" href="#request">Узнать цену</a>
       <a class="burger" href="#menu" aria-label="Меню">≡</a>
     </div>
@@ -162,7 +171,7 @@
       <p class="lead">Плитка разрушается не от нагрузки, а от воды в порах, которая замерзает и рвёт бетон изнутри. Мы боремся именно с этим.</p>
     </div>
 
-    <div class="lab-list" style="margin-top:0;border-top-color:#CDD1D0">
+    <div class="lab-list" style="margin-top:0;border-top-color:var(--edge-light)">
       <div><i>01</i><span>Экстремально низкое водоцементное отношение и высокое давление прессования — в плитке почти нет пор, куда попадает вода</span></div>
       <div><i>02</i><span>Пуццоланы и дорогостоящие поликарбоксилатные добавки — используем всегда, хотя ГОСТ этого не требует</span></div>
       <div><i>03</i><span>Только промытый песок с собственного карьера: 0,1 % загрязнений, оборудование Sandvik</span></div>
@@ -288,6 +297,24 @@
     };
     ['c-l','c-w','c-h'].forEach(function(id){ $(id).addEventListener('input', calc); });
     calc();
+  }
+
+  // переключатель темы. Значение хранится в localStorage и применяется
+  // ещё в <head>, до отрисовки — здесь остаётся только реакция на нажатие.
+  var root = document.documentElement;
+  var toggle = document.querySelector('.theme-tgl');
+  if (toggle) {
+    var sync = function(){
+      toggle.setAttribute('aria-pressed', root.dataset.theme === 'light' ? 'true' : 'false');
+    };
+    sync();
+    toggle.addEventListener('click', function(){
+      var light = root.dataset.theme !== 'light';
+      if (light) root.dataset.theme = 'light';
+      else root.removeAttribute('data-theme');
+      try { localStorage.setItem('sd2-theme', light ? 'light' : 'dark'); } catch (e) {}
+      sync();
+    });
   }
 
   // формы: на статике отправлять некуда, поэтому проверяем заполнение
