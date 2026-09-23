@@ -17,6 +17,7 @@
          python3 build.py --prod     # для боевого домена: индексация разрешена
 """
 
+import hashlib
 import re
 import sys
 from pathlib import Path
@@ -63,6 +64,28 @@ Sitemap: https://sd2-kmv.ru/sitemap.xml
 """
 
 
+def css_version():
+    """Метка версии стилей для ссылки на файл.
+
+    Без неё браузер и кэш nginx неделю отдают старый site.css: правки вёрстки
+    доходят до заказчика через раз, а тема переключается, не меняя цвета.
+    Метка считается от содержимого — меняется только при реальной правке.
+    """
+    css = (ROOT / "static" / "assets" / "site.css").read_bytes()
+    return "?v=" + hashlib.md5(css).hexdigest()[:8]
+
+
+def patch_404(version):
+    """404-я собирается отдельно от остальных, но метку версии получает тоже."""
+    page = ROOT / "404.html"
+    if not page.exists():
+        return
+    text = page.read_text(encoding="utf-8")
+    fixed = re.sub(r"(/static/assets/site\.css)(\?v=[0-9a-f]+)?", r"\1" + version, text)
+    if fixed != text:
+        page.write_text(fixed, encoding="utf-8")
+
+
 def parse_meta(text):
     """Отделяет блок метаданных от контента страницы."""
     m = re.match(r"\s*<!--meta\s*(.*?)-->\s*", text, re.S)
@@ -93,7 +116,7 @@ def build_form_options(preselect):
     return "".join(f"<option>{label}</option>" for _, label in ordered)
 
 
-def build_page(path, head, foot, scripts, prod=False):
+def build_page(path, head, foot, scripts, prod=False, version=""):
     meta, content = parse_meta(path.read_text(encoding="utf-8"))
     if "title" not in meta:
         sys.exit(f"{path.name}: в блоке meta нет title")
@@ -101,6 +124,7 @@ def build_page(path, head, foot, scripts, prod=False):
     html = head.replace("{{TITLE}}", meta["title"])
     html = html.replace("{{DESCRIPTION}}", meta.get("description", ""))
     html = html.replace("{{ROBOTS}}", "" if prod else NOINDEX_META)
+    html = html.replace("{{CSSVER}}", version)
 
     active = meta.get("nav", "")
     for key, placeholder in NAV_KEYS.items():
@@ -122,11 +146,13 @@ def main():
     scripts_file = PARTIALS / "scripts.html"
     scripts = scripts_file.read_text(encoding="utf-8") if scripts_file.exists() else ""
 
+    version = css_version()
+    patch_404(version)
     pages = sorted(PAGES.glob("*.html"))
     if not pages:
         sys.exit("В src/pages/ нет страниц")
     for page in pages:
-        print("собрано:", build_page(page, head, foot, scripts, prod))
+        print("собрано:", build_page(page, head, foot, scripts, prod, version))
 
     (ROOT / "robots.txt").write_text(ROBOTS_OPEN if prod else ROBOTS_CLOSED,
                                      encoding="utf-8")
