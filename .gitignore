@@ -3,5 +3,8 @@ __pycache__/
 *.pyc
 .venv/
 
+# локальные настройки инструментов
+.claude/
+
 # JPG-макеты для заказчика — пересобираются из вёрстки: python3 shots.py
 docs/mockups/

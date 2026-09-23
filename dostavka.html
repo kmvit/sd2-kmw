@@ -47,7 +47,6 @@
   </div>
 </header>
 
-<!-- ============ ШАПКА СТРАНИЦЫ ============ -->
 <section class="phero" id="top">
   <img class="phero-media" src="static/img/avtopark-sitrak.jpg" alt="Линейка автобетоносмесителей SITRAK завода «Стройдеталь-2» перед выездом на объекты" />
   <span class="phero-shade"></span>
@@ -74,7 +73,6 @@
   </div>
 </div>
 
-<!-- ============ ЗОНА ДОСТАВКИ ============ -->
 <section id="zone">
   <div class="wrap">
     <div class="sec-head">
@@ -111,7 +109,6 @@
   </div>
 </section>
 
-<!-- ============ КАК СЧИТАЕТСЯ ДОСТАВКА ============ -->
 <section class="bt" id="calc">
   <div class="wrap">
     <div class="sec-head">
@@ -130,7 +127,6 @@
   </div>
 </section>
 
-<!-- ============ БЕТОНОНАСОСЫ ============ -->
 <section class="bt" id="pumps">
   <div class="wrap">
     <div class="sec-head">
@@ -154,8 +150,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- тарифы насоса-миксера открыты на старом сайте — перенесены как
-               есть; актуальность подтвердить у завода при переносе в CMS -->
           <tr><td class="grade">Автобетононасос-миксер 32 м</td><td>32 метра</td><td class="muted">9 × 8 метров</td><td class="muted">До 8 м³ — за весь объём, далее за куб</td><td class="grade">3 200 ₽ + 400 ₽/м³</td></tr>
           <tr><td class="grade">Автобетононасос 15 м</td><td>15 метров</td><td class="muted">6 × 6 метров</td><td class="muted">За объём до 20 м³, далее за куб</td><td class="ask">По запросу</td></tr>
           <tr><td class="grade">Автобетононасос 25–36 м</td><td>25–36 метров</td><td class="muted">6 × 6 метров</td><td class="muted">За объём до 20 м³, далее за куб</td><td class="ask">По запросу</td></tr>
@@ -170,7 +164,6 @@
   </div>
 </section>
 
-<!-- ============ КОНТРОЛЬ ДОСТАВКИ ============ -->
 <section class="light" id="control">
   <div class="wrap">
     <div class="cols2">
@@ -191,16 +184,12 @@
   </div>
 </section>
 
-<!-- ============ ФИНАЛЬНЫЙ CTA + ФОРМА ============ -->
 <section class="final" id="request">
   <div class="wrap">
     <p class="stamp">Завод отвечает в рабочий день</p>
     <h2 style="margin-top:18px">Пришлите объём — вернёмся <em>с ценой и графиком</em></h2>
     <p>Или позвоните в отдел продаж: +7 928 821-72-11, пн–сб с 8:00 до 16:30.</p>
 
-    <!-- имена полей — под приём на бэкенде: name, phone, product, details, agree.
-         action пустой: на статике отправку перехватывает скрипт и показывает
-         демо-подтверждение; при подключении CMS сюда встаёт её обработчик -->
     <form class="form-card js-form" style="max-width:620px;margin:38px auto 0;text-align:left"
           method="post" action="" novalidate>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -213,7 +202,6 @@
         </div>
         <div><label class="f-label" for="r-vol">Объём и адрес</label><input class="f-input" id="r-vol" name="details" type="text" placeholder="20 м³, Пятигорск" /></div>
       </div>
-      <!-- по 152-ФЗ согласие — активное действие, галочка по умолчанию снята -->
       <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных и с <a href="politika.html">политикой конфиденциальности</a></span></label>
       <button class="btn btn--solid" style="width:100%;margin-top:20px" type="submit">Получить расчёт</button>
       <p class="f-note" hidden></p>
@@ -221,7 +209,6 @@
   </div>
 </section>
 
-<!-- ============ ФУТЕР ============ -->
 <footer class="site">
   <div class="wrap">
     <div class="foot-grid">

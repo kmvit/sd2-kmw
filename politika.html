@@ -47,10 +47,7 @@
   </div>
 </header>
 
-<!-- Черновик по 152-ФЗ для макета: перед публикацией текст согласовать
-     с юристом завода и дополнить реквизитами оператора. -->
 
-<!-- ============ ШАПКА СТРАНИЦЫ ============ -->
 <section class="phero" id="top">
   <img class="phero-media" src="static/img/zavod-820354.jpg" alt="Завод «Стройдеталь-2» на Черкесском шоссе в Пятигорске" />
   <span class="phero-shade"></span>
@@ -64,7 +61,6 @@
   </div>
 </section>
 
-<!-- ============ ТЕКСТ ПОЛИТИКИ ============ -->
 <section class="light" id="policy">
   <div class="wrap">
     <div class="cols2">
@@ -89,16 +85,12 @@
   </div>
 </section>
 
-<!-- ============ ФИНАЛЬНЫЙ CTA + ФОРМА ============ -->
 <section class="final" id="request">
   <div class="wrap">
     <p class="stamp">Завод отвечает в рабочий день</p>
     <h2 style="margin-top:18px">Пришлите объём — вернёмся <em>с ценой и графиком</em></h2>
     <p>Или позвоните в отдел продаж: +7 928 821-72-11, пн–сб с 8:00 до 16:30.</p>
 
-    <!-- имена полей — под приём на бэкенде: name, phone, product, details, agree.
-         action пустой: на статике отправку перехватывает скрипт и показывает
-         демо-подтверждение; при подключении CMS сюда встаёт её обработчик -->
     <form class="form-card js-form" style="max-width:620px;margin:38px auto 0;text-align:left"
           method="post" action="" novalidate>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -111,7 +103,6 @@
         </div>
         <div><label class="f-label" for="r-vol">Объём и адрес</label><input class="f-input" id="r-vol" name="details" type="text" placeholder="20 м³, Пятигорск" /></div>
       </div>
-      <!-- по 152-ФЗ согласие — активное действие, галочка по умолчанию снята -->
       <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных и с <a href="politika.html">политикой конфиденциальности</a></span></label>
       <button class="btn btn--solid" style="width:100%;margin-top:20px" type="submit">Получить расчёт</button>
       <p class="f-note" hidden></p>
@@ -119,7 +110,6 @@
   </div>
 </section>
 
-<!-- ============ ФУТЕР ============ -->
 <footer class="site">
   <div class="wrap">
     <div class="foot-grid">

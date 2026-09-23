@@ -77,6 +77,16 @@ def parse_meta(text):
     return meta, text[m.end():]
 
 
+def strip_comments(html):
+    """Убирает HTML-комментарии из собранной страницы.
+
+    В src/ комментарии нужны — там объясняется, почему свёрстано именно так и
+    что ещё предстоит уточнить у заказчика. В исходном коде готового сайта эти
+    заметки читать незачем, поэтому на сборке они вырезаются.
+    """
+    return re.sub(r"[ \t]*<!--(?!\[if).*?-->\n?", "", html, flags=re.S)
+
+
 def build_form_options(preselect):
     """Товар страницы идёт первым — он же выбран по умолчанию."""
     ordered = sorted(FORM_OPTIONS, key=lambda o: o[0] != preselect)
@@ -100,7 +110,8 @@ def build_page(path, head, foot, scripts, prod=False):
     tail = tail.replace("{{SCRIPTS}}", scripts)
 
     out = ROOT / path.name
-    out.write_text(html + "\n" + content.strip() + "\n\n" + tail, encoding="utf-8")
+    page = strip_comments(html + "\n" + content.strip() + "\n\n" + tail)
+    out.write_text(page, encoding="utf-8")
     return out.name
 
 
