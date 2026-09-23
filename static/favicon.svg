@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#1B72D4"/>
+  <g fill="#fff">
+    <rect x="3.84" y="23.36" width="17.28" height="17.28"/>
+    <rect x="23.36" y="23.36" width="17.28" height="17.28"/>
+    <rect x="42.88" y="23.36" width="17.28" height="17.28"/>
+  </g>
+  <g fill="#D9372B" font-family="'Fira Sans Condensed','Arial Narrow',sans-serif"
+     font-weight="700" font-size="14" text-anchor="middle">
+    <text x="12.48" y="36.8">С</text>
+    <text x="32" y="36.8">Д</text>
+    <text x="51.52" y="36.8">2</text>
+  </g>
+</svg>

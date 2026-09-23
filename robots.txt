@@ -1,0 +1,4 @@
+# Тестовая площадка — сайт закрыт от индексации.
+# Боевой robots.txt собирается командой: python3 build.py --prod
+User-agent: *
+Disallow: /

@@ -1,0 +1,82 @@
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  // мини-калькулятор: объём = Д×Ш×Т, запас 5 %, миксер 7 м³.
+  // Есть не на всех страницах — без него остальной скрипт должен работать.
+  if ($('c-l')) {
+    var num = function(v){ return parseFloat(String(v).replace(',','.')) || 0; };
+    var fmt = function(v){ return v.toFixed(1).replace('.',','); };
+    var mixers = function(n){
+      if (n === 1) return '1 миксер';
+      if (n >= 2 && n <= 4) return n + ' миксера';
+      return n + ' миксеров';
+    };
+    var calc = function(){
+      var v = num($('c-l').value) * num($('c-w').value) * num($('c-h').value);
+      var r = v * 1.05;
+      $('c-res-v').innerHTML = fmt(v) + ' <small>м³</small>';
+      $('c-res-t').textContent = 'с запасом 5 % — ' + fmt(r) + ' м³ · ' + mixers(Math.ceil(r / 7));
+    };
+    ['c-l','c-w','c-h'].forEach(function(id){ $(id).addEventListener('input', calc); });
+    calc();
+  }
+
+  // формы: на статике отправлять некуда, поэтому проверяем заполнение
+  // и показываем подтверждение. При подключении CMS обработчик заменяется
+  // на её отправку — разметка и имена полей менять не придётся.
+  document.querySelectorAll('.js-form').forEach(function(form){
+    var note = form.querySelector('.f-note');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var bad = null;
+      form.querySelectorAll('[required]').forEach(function(f){
+        var empty = f.type === 'checkbox' ? !f.checked : !f.value.trim();
+        f.classList.toggle('invalid', empty);
+        if (empty && !bad) bad = f;
+      });
+      if (bad) {
+        if (note) {
+          note.hidden = false;
+          note.className = 'f-note f-note--err';
+          note.textContent = bad.type === 'checkbox'
+            ? 'Отметьте согласие на обработку персональных данных.'
+            : 'Заполните обязательные поля — имя и телефон.';
+        }
+        bad.focus();
+        return;
+      }
+      // селект возвращаем к первому пункту, а не обнуляем: пустое значение
+      // оставило бы поле «Что нужно» без подписи
+      form.querySelectorAll('input:not([type="checkbox"]), textarea')
+        .forEach(function(f){ f.value = ''; });
+      form.querySelectorAll('select').forEach(function(f){ f.selectedIndex = 0; });
+      var box = form.querySelector('[type="checkbox"]');
+      if (box) box.checked = false;
+      if (note) {
+        note.hidden = false;
+        note.className = 'f-note f-note--ok';
+        note.textContent = 'Заявка отправлена — менеджер перезвонит в рабочее время. '
+          + '(Демонстрация: на макете форма не уходит на сервер.)';
+      }
+    });
+    form.querySelectorAll('[required]').forEach(function(f){
+      f.addEventListener('input', function(){ f.classList.remove('invalid'); });
+      f.addEventListener('change', function(){ f.classList.remove('invalid'); });
+    });
+  });
+
+  // плавающие кнопки прячутся, пока виден первый экран: на главной они
+  // перекрывали ленту фактов, на внутренних — ленту гарантий
+  var fl = document.querySelector('.floats');
+  if (fl) {
+    var first = document.querySelector('.hero, .phero');
+    var onScroll = function(){
+      var limit = first ? first.offsetHeight * 0.75 : 0;
+      fl.classList.toggle('off', window.scrollY < limit);
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+})();
+</script>

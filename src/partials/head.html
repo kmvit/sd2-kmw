@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="static/assets/site.css" />
+<link rel="icon" href="favicon.ico" sizes="32x32" />
+<link rel="icon" href="static/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="static/apple-touch-icon.png" />
+<meta name="theme-color" content="#0D1217" />
+{{ROBOTS}}</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-row">
+    <a class="brand" href="index.html" aria-label="Стройдеталь-2, на главную">
+      <span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span>
+      <span class="word"><b>Стройдеталь-2</b><small>Завод с 1962 года</small></span>
+    </a>
+    <nav class="main">
+      <div>
+        <a class="top{{ACT_PRODUCTS}}" href="index.html#products">Продукция ▾</a>
+        <div class="dd">
+          <a href="beton.html">Бетон и раствор</a>
+          <a href="zhbi.html">ЖБИ и тротуарная плитка</a>
+          <a href="asfalt.html">Асфальтобетон</a>
+          <a href="karer.html">Щебень и песок</a>
+        </div>
+      </div>
+      <div><a class="top{{ACT_DOSTAVKA}}" href="dostavka.html">Доставка</a></div>
+      <div><a class="top{{ACT_LAB}}" href="laboratoriya.html">Лаборатория</a></div>
+      <div><a class="top{{ACT_KARER}}" href="karer.html">Карьер</a></div>
+      <div><a class="top{{ACT_OBEKTY}}" href="obekty.html">Объекты</a></div>
+      <div><a class="top{{ACT_KONTAKTY}}" href="kontakty.html">Контакты</a></div>
+    </nav>
+    <div class="site-cta">
+      <a class="site-tel" href="tel:+79288217211"><b>+7 928 821-72-11</b><span>Отдел продаж · пн–сб</span></a>
+      <a class="btn btn--solid btn--sm" href="#request">Узнать цену</a>
+      <a class="burger" href="#menu" aria-label="Меню">≡</a>
+    </div>
+  </div>
+</header>

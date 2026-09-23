@@ -1,0 +1,98 @@
+<!-- ============ ФИНАЛЬНЫЙ CTA + ФОРМА ============ -->
+<section class="final" id="request">
+  <div class="wrap">
+    <p class="stamp">Завод отвечает в рабочий день</p>
+    <h2 style="margin-top:18px">Пришлите объём — вернёмся <em>с ценой и графиком</em></h2>
+    <p>Или позвоните в отдел продаж: +7 928 821-72-11, пн–сб с 8:00 до 16:30.</p>
+
+    <!-- имена полей — под приём на бэкенде: name, phone, product, details, agree.
+         action пустой: на статике отправку перехватывает скрипт и показывает
+         демо-подтверждение; при подключении CMS сюда встаёт её обработчик -->
+    <form class="form-card js-form" style="max-width:620px;margin:38px auto 0;text-align:left"
+          method="post" action="" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div><label class="f-label" for="r-name">Как к вам обращаться</label><input class="f-input" id="r-name" name="name" type="text" placeholder="Имя" autocomplete="name" required /></div>
+        <div><label class="f-label" for="r-tel">Телефон</label><input class="f-input" id="r-tel" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" required /></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div><label class="f-label" for="r-prod">Что нужно</label>
+          <select class="f-input" id="r-prod" name="product">{{FORM_OPTIONS}}</select>
+        </div>
+        <div><label class="f-label" for="r-vol">Объём и адрес</label><input class="f-input" id="r-vol" name="details" type="text" placeholder="20 м³, Пятигорск" /></div>
+      </div>
+      <!-- по 152-ФЗ согласие — активное действие, галочка по умолчанию снята -->
+      <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных и с <a href="politika.html">политикой конфиденциальности</a></span></label>
+      <button class="btn btn--solid" style="width:100%;margin-top:20px" type="submit">Получить расчёт</button>
+      <p class="f-note" hidden></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ ФУТЕР ============ -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="index.html" aria-label="Стройдеталь-2">
+          <span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span>
+          <span class="word"><b>Стройдеталь-2</b><small>Завод с 1962 года</small></span>
+        </a>
+        <p>ЗАО «Стройдеталь-2» — бетонный завод полного цикла на Кавказских Минеральных Водах. Свой карьер, своё производство, своя лаборатория.</p>
+      </div>
+      <div>
+        <h4>Продукция</h4>
+        <a href="beton.html">Бетон и раствор</a>
+        <a href="zhbi.html">ЖБИ и тротуарная плитка</a>
+        <a href="asfalt.html">Асфальтобетон</a>
+        <a href="karer.html">Щебень и песок</a>
+      </div>
+      <div>
+        <h4>Завод</h4>
+        <a href="laboratoriya.html">Лаборатория</a>
+        <a href="karer.html">Карьер</a>
+        <a href="obekty.html">Объекты</a>
+        <a href="dostavka.html">Доставка и бетононасосы</a>
+        <a href="index.html#faq">Вопросы и ответы</a>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <a href="tel:+79288217211">+7 928 821-72-11</a>
+        <a href="tel:+79288217202">+7 928 821-72-02</a>
+        <a href="kontakty.html">Пятигорск, Черкесское шоссе, 2</a>
+        <a href="kontakty.html">пн–сб, 8:00–16:30</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>ЗАО «Стройдеталь-2», 1962–2026</span>
+      <span><a href="politika.html">Политика конфиденциальности</a> · <a href="kontakty.html">Реквизиты и договор</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="floats">
+  <a class="hot" href="#request" aria-label="Оставить заявку">Заявка</a>
+  <a href="tel:+79288217211" aria-label="Позвонить">Тел.</a>
+</div>
+
+<div class="mmenu" id="menu">
+  <div class="head">
+    <span class="brand"><span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span><span class="word"><b>Стройдеталь-2</b><small>Завод с 1962 года</small></span></span>
+    <a href="#top" aria-label="Закрыть меню" style="font-size:26px">×</a>
+  </div>
+  <nav>
+    <a class="top" href="beton.html">Бетон и раствор</a>
+    <a class="top" href="zhbi.html">ЖБИ и плитка</a>
+    <a class="top" href="asfalt.html">Асфальтобетон</a>
+    <a class="top" href="karer.html">Щебень и песок</a>
+    <a class="top" href="dostavka.html">Доставка</a>
+    <a class="top" href="laboratoriya.html">Лаборатория</a>
+    <a class="top" href="obekty.html">Объекты</a>
+    <a class="top" href="kontakty.html">Контакты</a>
+    <a class="tel-big" href="tel:+79288217211">+7 928 821-72-11</a>
+    <a class="btn btn--solid" href="#request" style="margin-top:22px">Узнать цену</a>
+  </nav>
+</div>
+
+{{SCRIPTS}}
+</body>
+</html>

@@ -2,3 +2,6 @@
 __pycache__/
 *.pyc
 .venv/
+
+# JPG-макеты для заказчика — пересобираются из вёрстки: python3 shots.py
+docs/mockups/
