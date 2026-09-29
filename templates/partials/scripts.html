@@ -1,0 +1,85 @@
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  // мини-калькулятор: объём = Д×Ш×Т, запас 5 %, миксер 7 м³.
+  // Есть не на всех страницах — без него остальной скрипт должен работать.
+  if ($('c-l')) {
+    var num = function(v){ return parseFloat(String(v).replace(',','.')) || 0; };
+    var fmt = function(v){ return v.toFixed(1).replace('.',','); };
+    var mixers = function(n){
+      if (n === 1) return '1 миксер';
+      if (n >= 2 && n <= 4) return n + ' миксера';
+      return n + ' миксеров';
+    };
+    var calc = function(){
+      var v = num($('c-l').value) * num($('c-w').value) * num($('c-h').value);
+      var r = v * 1.05;
+      $('c-res-v').innerHTML = fmt(v) + ' <small>м³</small>';
+      $('c-res-t').textContent = 'с запасом 5 % — ' + fmt(r) + ' м³ · ' + mixers(Math.ceil(r / 7));
+    };
+    ['c-l','c-w','c-h'].forEach(function(id){ $(id).addEventListener('input', calc); });
+    calc();
+  }
+
+  // переключатель темы. Значение хранится в localStorage и применяется
+  // ещё в <head>, до отрисовки — здесь остаётся только реакция на нажатие.
+  var root = document.documentElement;
+  var toggle = document.querySelector('.theme-tgl');
+  if (toggle) {
+    var sync = function(){
+      toggle.setAttribute('aria-pressed', root.dataset.theme === 'light' ? 'true' : 'false');
+    };
+    sync();
+    toggle.addEventListener('click', function(){
+      var light = root.dataset.theme !== 'light';
+      if (light) root.dataset.theme = 'light';
+      else root.removeAttribute('data-theme');
+      try { localStorage.setItem('sd2-theme', light ? 'light' : 'dark'); } catch (e) {}
+      sync();
+    });
+  }
+
+  // Формы уходят на сервер обычной отправкой. Скрипт только подсвечивает
+  // незаполненные поля: так посетитель видит ошибку сразу, не дожидаясь
+  // ответа сервера. Если всё заполнено — не мешаем форме отправиться.
+  document.querySelectorAll('.js-form').forEach(function(form){
+    var note = form.querySelector('.f-note');
+    form.addEventListener('submit', function(e){
+      var bad = null;
+      form.querySelectorAll('[required]').forEach(function(f){
+        var empty = f.type === 'checkbox' ? !f.checked : !f.value.trim();
+        f.classList.toggle('invalid', empty);
+        if (empty && !bad) bad = f;
+      });
+      if (!bad) return;                     // пусть уходит на сервер
+      e.preventDefault();
+      if (note) {
+        note.hidden = false;
+        note.className = 'f-note f-note--err';
+        note.textContent = bad.type === 'checkbox'
+          ? 'Отметьте согласие на обработку персональных данных.'
+          : 'Заполните обязательные поля — имя и телефон.';
+      }
+      bad.focus();
+    });
+    form.querySelectorAll('[required]').forEach(function(f){
+      f.addEventListener('input', function(){ f.classList.remove('invalid'); });
+      f.addEventListener('change', function(){ f.classList.remove('invalid'); });
+    });
+  });
+
+  // плавающие кнопки прячутся, пока виден первый экран: на главной они
+  // перекрывали ленту фактов, на внутренних — ленту гарантий
+  var fl = document.querySelector('.floats');
+  if (fl) {
+    var first = document.querySelector('.hero, .phero');
+    var onScroll = function(){
+      var limit = first ? first.offsetHeight * 0.75 : 0;
+      fl.classList.toggle('off', window.scrollY < limit);
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+})();
+</script>

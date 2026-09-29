@@ -1,0 +1,34 @@
+{% load static %}
+<header class="site">
+  <div class="wrap site-row">
+    <a class="brand" href="{% url 'home' %}" aria-label="{{ site.company }}, на главную">
+      <span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span>
+      <span class="word"><b>Стройдеталь-2</b><small>Завод с {{ site.founded_year }} года</small></span>
+    </a>
+    <nav class="main">
+      <div>
+        <a class="top{% if active == 'products' %} act{% endif %}" href="{% url 'home' %}#products">Продукция ▾</a>
+        <div class="dd">
+          <a href="{% url 'beton' %}">Бетон и раствор</a>
+          <a href="{% url 'zhbi' %}">ЖБИ и тротуарная плитка</a>
+          <a href="{% url 'asfalt' %}">Асфальтобетон</a>
+          <a href="{% url 'karer' %}">Щебень и песок</a>
+        </div>
+      </div>
+      <div><a class="top{% if active == 'dostavka' %} act{% endif %}" href="{% url 'dostavka' %}">Доставка</a></div>
+      <div><a class="top{% if active == 'lab' %} act{% endif %}" href="{% url 'laboratoriya' %}">Лаборатория</a></div>
+      <div><a class="top{% if active == 'karer' %} act{% endif %}" href="{% url 'karer' %}">Карьер</a></div>
+      <div><a class="top{% if active == 'obekty' %} act{% endif %}" href="{% url 'obekty' %}">Объекты</a></div>
+      <div><a class="top{% if active == 'kontakty' %} act{% endif %}" href="{% url 'kontakty' %}">Контакты</a></div>
+    </nav>
+    <div class="site-cta">
+      <a class="site-tel" href="tel:{{ site.phone_main_link }}"><b>{{ site.phone_main }}</b><span>{{ site.phone_note }}</span></a>
+      <button class="theme-tgl" type="button" aria-label="Переключить тему" aria-pressed="false" title="Светлая / тёмная тема">
+        <svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.9 1.9M17.2 17.2l1.9 1.9M19.1 4.9l-1.9 1.9M6.8 17.2l-1.9 1.9"/></svg>
+        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/></svg>
+      </button>
+      <a class="btn btn--solid btn--sm" href="#request">Узнать цену</a>
+      <a class="burger" href="#menu" aria-label="Меню">≡</a>
+    </div>
+  </div>
+</header>

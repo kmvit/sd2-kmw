@@ -1,0 +1,18 @@
+<div class="mmenu" id="menu">
+  <div class="head">
+    <span class="brand"><span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span><span class="word"><b>Стройдеталь-2</b><small>Завод с {{ site.founded_year }} года</small></span></span>
+    <a href="#top" aria-label="Закрыть меню" style="font-size:26px">×</a>
+  </div>
+  <nav>
+    <a class="top" href="{% url 'beton' %}">Бетон и раствор</a>
+    <a class="top" href="{% url 'zhbi' %}">ЖБИ и плитка</a>
+    <a class="top" href="{% url 'asfalt' %}">Асфальтобетон</a>
+    <a class="top" href="{% url 'karer' %}">Щебень и песок</a>
+    <a class="top" href="{% url 'dostavka' %}">Доставка</a>
+    <a class="top" href="{% url 'laboratoriya' %}">Лаборатория</a>
+    <a class="top" href="{% url 'obekty' %}">Объекты</a>
+    <a class="top" href="{% url 'kontakty' %}">Контакты</a>
+    <a class="tel-big" href="tel:{{ site.phone_main_link }}">{{ site.phone_main }}</a>
+    <a class="btn btn--solid" href="#request" style="margin-top:22px">Узнать цену</a>
+  </nav>
+</div>

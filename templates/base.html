@@ -1,0 +1,36 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title_tag|default:"Завод «Стройдеталь-2»" }}{% endif %}</title>
+<script>
+/* Тема применяется до отрисовки страницы: иначе при выбранной светлой теме
+   на долю секунды мелькает тёмный фон. */
+try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.dataset.theme=_t}catch(e){}
+</script>
+{% if page.seo_description %}<meta name="description" content="{{ page.seo_description }}" />{% endif %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="{% static 'assets/site.css' %}" />
+<link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32" />
+<link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}" />
+<meta name="theme-color" content="#0D1217" />
+{% if site.noindex %}<meta name="robots" content="noindex, nofollow" />
+{% endif %}</head>
+<body>
+
+{% include "partials/header.html" %}
+
+{% block content %}{% endblock %}
+
+{% include "partials/request_form.html" %}
+{% include "partials/footer.html" %}
+{% include "partials/floats.html" %}
+{% include "partials/mmenu.html" %}
+{% include "partials/scripts.html" %}
+{% if site.metrika_id %}{% include "partials/metrika.html" %}{% endif %}
+</body>
+</html>

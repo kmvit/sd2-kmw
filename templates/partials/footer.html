@@ -1,0 +1,39 @@
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="{% url 'home' %}" aria-label="Стройдеталь-2">
+          <span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span>
+          <span class="word"><b>Стройдеталь-2</b><small>Завод с {{ site.founded_year }} года</small></span>
+        </a>
+        <p>{{ site.company }} — бетонный завод полного цикла на Кавказских Минеральных Водах. Свой карьер, своё производство, своя лаборатория.</p>
+      </div>
+      <div>
+        <h4>Продукция</h4>
+        <a href="{% url 'beton' %}">Бетон и раствор</a>
+        <a href="{% url 'zhbi' %}">ЖБИ и тротуарная плитка</a>
+        <a href="{% url 'asfalt' %}">Асфальтобетон</a>
+        <a href="{% url 'karer' %}">Щебень и песок</a>
+      </div>
+      <div>
+        <h4>Завод</h4>
+        <a href="{% url 'laboratoriya' %}">Лаборатория</a>
+        <a href="{% url 'karer' %}">Карьер</a>
+        <a href="{% url 'obekty' %}">Объекты</a>
+        <a href="{% url 'dostavka' %}">Доставка и бетононасосы</a>
+        <a href="{% url 'home' %}#faq">Вопросы и ответы</a>
+      </div>
+      <div>
+        <h4>Контакты</h4>
+        <a href="tel:{{ site.phone_main_link }}">{{ site.phone_main }}</a>
+        {% if site.phone_extra %}<a href="tel:{{ site.phone_extra_link }}">{{ site.phone_extra }}</a>{% endif %}
+        <a href="{% url 'kontakty' %}">{{ site.address }}</a>
+        <a href="{% url 'kontakty' %}">{{ site.work_hours }}</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>{{ site.company }}, {{ site.founded_year }}–{% now "Y" %}</span>
+      <span><a href="{% url 'politika' %}">Политика конфиденциальности</a> · <a href="{% url 'kontakty' %}">Реквизиты и договор</a></span>
+    </div>
+  </div>
+</footer>

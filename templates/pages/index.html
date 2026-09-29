@@ -1,0 +1,396 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{# ============ ПЕРВЫЙ ЭКРАН ============ #}
+<section class="hero" id="top">
+  <img class="hero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}"
+       alt="Бетонный завод «Стройдеталь-2» в Пятигорске" />
+  <span class="hero-shade"></span>
+  <div class="wrap hero-inner">
+    <p class="stamp">{{ page.stamp }}</p>
+    <h1>{{ page.h1|safe }}</h1>
+    <p class="sub">{{ page.subtitle }}</p>
+    <p class="hero-also">Также с завода: <a href="#products">ЖБИ и плитка · асфальтобетон · щебень и песок</a></p>
+    <div class="cta-row">
+      <a class="btn btn--solid" href="#request">Узнать цену и сроки</a>
+      <a class="btn btn--line" href="#calc">Рассчитать объём бетона</a>
+    </div>
+    <div class="hero-facts">
+      {% for card in cards.hero %}<div><span>{{ card.title }}</span><b>{{ card.value }}</b></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============ ЛЕНТА ГАРАНТИЙ ============ #}
+<div class="bar">
+  <div class="wrap">
+    {% for card in cards.bar %}<p>{{ card.title }} <b>{{ card.value }}</b></p>{% endfor %}
+  </div>
+</div>
+
+{# ============ ПРОДУКЦИЯ ============ #}
+{% with s=sections.products %}{% if s %}
+<section id="products">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+
+    <div class="reg">
+      {% for d in directions %}
+      <a class="reg-row" href="{% if d.url_name %}{% url d.url_name %}{% else %}#{{ d.anchor|default:'request' }}{% endif %}">
+        <span class="idx">{{ forloop.counter|stringformat:"02d" }}</span>
+        {% if d.photo %}<img class="pic" src="{{ d.photo.url }}" alt="{{ d.title }}" />{% endif %}
+        <span>
+          <h3>{{ d.title }}</h3>
+          <p>{{ d.text }}</p>
+          <span class="tags">
+            {% for label, hot in d.chip_list %}<span class="chip{% if hot %} hot{% endif %}">{{ label }}</span>{% endfor %}
+          </span>
+        </span>
+        <span class="cell-r">
+          <span class="price"><b>{{ d.price_value }}</b>{{ d.price_note }}</span>
+          <span class="go">{{ d.link_label }}</span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ИЗ ЧЕГО СКЛАДЫВАЕТСЯ ЦЕНА ============ #}
+{% with s=sections.price %}{% if s %}
+<section class="bt" id="price">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="steps">
+      {% for card in cards.price %}
+      <div class="step"><i>{{ card.icon }}</i><b>{{ card.title }}</b><span>{{ card.text }}</span></div>
+      {% endfor %}
+    </div>
+    <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px">
+      <a class="btn btn--solid" href="#request">Получить расчёт за рабочий день</a>
+      <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">Спросить менеджера</a>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ПОЧЕМУ НАШ БЕТОН ============ #}
+{% with s=sections.quality %}{% if s %}
+<section class="bt" id="quality">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="facts">
+      {% for card in cards.quality %}
+      <div class="fact">
+        <span class="v">{{ card.value }}{% if card.sup %} <small>{{ card.sup }}</small>{% endif %}</span>
+        <b>{{ card.title }}</b>
+        <p>{{ card.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ЛАБОРАТОРИЯ ============ #}
+{% with s=sections.lab %}{% if s %}
+<section class="light" id="lab">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="lab">
+      <div>
+        <p class="big">{{ s.note|safe }}</p>
+        <div class="lab-list">
+          {% for card in cards.lab %}<div><i>{{ card.icon }}</i><span>{{ card.title }}</span></div>{% endfor %}
+        </div>
+        <a class="link-more" href="{% url 'laboratoriya' %}" style="margin-top:26px">Как устроен контроль качества →</a>
+      </div>
+      <div class="lab-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-681455.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ СЛОВО СОБСТВЕННИКА ============ #}
+{% with s=sections.director %}{% if s %}
+<section class="light" id="director" style="padding-top:0">
+  <div class="wrap">
+    <div class="dir">
+      <div class="lab-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/team/gg-director.jpg' %}{% endif %}"
+             alt="{{ s.photo_caption }}" style="aspect-ratio:3/4;object-position:50% 30%" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <p class="big" style="margin-top:22px">{{ s.lead|safe }}</p>
+        {% for card in cards.director %}
+        <div class="dir-sign">
+          <b>{{ card.title }}</b>
+          <span>{{ card.icon }}</span>
+        </div>
+        {% endfor %}
+        <a class="link-more" href="{% url 'kontakty' %}#director" style="margin-top:24px">Написать директору напрямую →</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ОБЪЕКТЫ ============ #}
+{% with s=sections.built %}{% if s %}
+<section class="light" id="built" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="built">
+      {% for o in objects %}
+      <div class="bi"><i>{{ o.category }}</i><b>{{ o.title }}</b><span>{{ o.place }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ СЕРТИФИКАЦИЯ ============ #}
+{% with s=sections.certs %}{% if s %}
+<section class="light" id="certs" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="certs">
+      {% for c in certificates %}
+      <a class="cert" href="{{ c.scan.url }}" target="_blank" rel="noopener">
+        <span class="sheet">
+          <img src="{% if c.thumb %}{{ c.thumb.url }}{% else %}{{ c.scan.url }}{% endif %}" alt="{{ c.title }}" loading="lazy" />
+          <span class="zoom">Открыть ↗</span>
+        </span>
+        <span class="body">
+          <b>{{ c.title }}</b>
+          <i>{{ c.gost }}</i>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+    {% if s.note %}<p class="certs-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ПАРТНЁРЫ ============ #}
+{% with s=sections.brands %}{% if s %}
+<section class="light" id="brands" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="brands">
+      {% for p in partners %}
+      <div class="brand-cell">
+        {% if p.logo %}<img src="{{ p.logo.url }}" alt="{{ p.title }}" loading="lazy" />{% endif %}
+        <span>{{ p.caption|safe }}</span>
+      </div>
+      {% endfor %}
+      <div class="brand-cell" style="justify-content:center">
+        <span style="margin:0;color:#9AA1A6">Список<br>неполный</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ КАЛЬКУЛЯТОР ============ #}
+{% with s=sections.calc %}{% if s %}
+<section class="bt" id="calc">
+  <div class="wrap">
+    <div class="calc-teaser">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn btn--solid" href="#request">Отправить расчёт в заявку</a>
+          <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">Спросить менеджера</a>
+        </div>
+      </div>
+
+      {# расчёт демонстрационный: объём = Д×Ш×Т, запас 5 %, миксер 7 м³ #}
+      <form class="calc-face" onsubmit="return false">
+        <p class="stamp" style="margin-bottom:16px">Плита перекрытия</p>
+        <div class="rowin">
+          <div><label class="f-label" for="c-l">Длина, м</label><input class="f-input" id="c-l" type="text" value="12" inputmode="decimal" /></div>
+          <div><label class="f-label" for="c-w">Ширина, м</label><input class="f-input" id="c-w" type="text" value="8" inputmode="decimal" /></div>
+        </div>
+        <div class="rowin">
+          <div><label class="f-label" for="c-h">Толщина, м</label><input class="f-input" id="c-h" type="text" value="0,2" inputmode="decimal" /></div>
+          <div><label class="f-label" for="c-m">Марка</label>
+            <select class="f-input" id="c-m">
+              {% for g in grades %}<option>{{ g.title }} ({{ g.grade_class }})</option>{% empty %}
+              <option>М300 (В22,5)</option><option>М350 (В25)</option><option>М400 (В30)</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="res">
+          <span class="v" id="c-res-v">19,2 <small>м³</small></span>
+          <span id="c-res-t">с запасом 5 % — 20,2 м³ · 3 миксера</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ КАРЬЕР ============ #}
+{% with s=sections.quarry %}{% if s %}
+<section class="bt" id="quarry">
+  <div class="wrap">
+    <div class="wide">
+      <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-704230.jpg' %}{% endif %}" alt="{{ s.title|striptags }}" />
+      <div class="inner">
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="tags">
+          {% for card in cards.quarry %}<span class="chip{% if card.icon == 'hot' %} hot{% endif %}">{{ card.title }}</span>{% endfor %}
+        </div>
+        <a class="link-more" href="{% url 'karer' %}" style="margin-top:24px">Прайс щебня и песка →</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ДОСТАВКА ============ #}
+{% with s=sections.delivery %}{% if s %}
+<section class="bt" id="delivery">
+  <div class="wrap">
+    <div class="delv">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.6vw,50px);color:var(--head)">{{ s.title|safe }}</h2>
+        <p style="color:var(--text-3);margin-top:14px;max-width:52ch;font-size:15px">{{ s.lead }}</p>
+        <div class="delv-list">
+          {% for card in cards.delivery %}<div><i>{{ card.icon }}</i><span>{{ card.title }}</span></div>{% endfor %}
+        </div>
+        <a class="link-more" href="{% url 'dostavka' %}" style="margin-top:24px">Зона доставки и тарифы →</a>
+      </div>
+      <div class="delv-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/avtopark-sitrak.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ КАК ЗАКАЗАТЬ ============ #}
+{% with s=sections.order %}{% if s %}
+<section class="bt" id="order">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="steps">
+      {% for card in cards.order %}
+      <div class="step"><i>{{ card.icon }}</i><b>{{ card.title }}</b><span>{{ card.text }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ ВОПРОСЫ И ОТВЕТЫ ============ #}
+{% with s=sections.faq %}{% if s %}
+<section class="bt" id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+      </div>
+      <p class="lead">{{ s.lead }}</p>
+    </div>
+    <div class="faq">
+      {% for item in faq %}
+      <details>
+        <summary>{{ item.question }}</summary>
+        <p>{{ item.answer|linebreaksbr }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{# ============ КОНТАКТЫ И КАРТА ============ #}
+{% with s=sections.contacts %}{% if s %}
+<section class="light" id="contacts">
+  <div class="wrap">
+    <div class="cont">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;color:#12181D;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="lab-list" style="margin-top:24px">
+          <div><i>Адрес</i><span>{{ site.address_full|default:site.address }}</span></div>
+          <div><i>Режим</i><span>{{ site.work_hours }}</span></div>
+          <div><i>Отдел продаж</i><span><a class="cont-tel" href="tel:{{ site.phone_main_link }}">{{ site.phone_main }}</a></span></div>
+          {% if site.phone_extra %}<div><i>Доп. номер</i><span><a class="cont-tel" href="tel:{{ site.phone_extra_link }}">{{ site.phone_extra }}</a></span></div>{% endif %}
+          {% if s.note %}<div><i>Документы</i><span>{{ s.note }}</span></div>{% endif %}
+        </div>
+      </div>
+      <div class="map">
+        <iframe src="https://yandex.ru/map-widget/v1/?ll={{ site.map_lon }}%2C{{ site.map_lat }}&z={{ site.map_zoom }}&pt={{ site.map_lon }},{{ site.map_lat }},pm2rdm"
+                title="Схема проезда: {{ site.address }}" loading="lazy"></iframe>
+        <span class="tag">{{ site.address }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

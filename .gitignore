@@ -8,3 +8,9 @@ __pycache__/
 
 # JPG-макеты для заказчика — пересобираются из вёрстки: python3 shots.py
 docs/mockups/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+*.log

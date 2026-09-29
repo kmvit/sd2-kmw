@@ -1,0 +1,37 @@
+<!-- Форма заявки. После отправки страница перезагружается с якорем #request-ok:
+     так работает схема «отправил — перешёл», и обновление страницы не шлёт заявку повторно. -->
+<section class="final" id="request">
+  <div class="wrap">
+    <p class="stamp">Завод отвечает в рабочий день</p>
+    <h2 style="margin-top:18px">Пришлите объём — вернёмся <em>с ценой и графиком</em></h2>
+    <p>Или позвоните в отдел продаж: {{ site.phone_main }}, {{ site.work_hours }}.</p>
+
+    <form class="form-card js-form" style="max-width:620px;margin:38px auto 0;text-align:left"
+          method="post" action="{% url 'lead_create' %}" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div><label class="f-label" for="r-name">Как к вам обращаться</label>
+          <input class="f-input" id="r-name" name="name" type="text" placeholder="Имя" autocomplete="name" required /></div>
+        <div><label class="f-label" for="r-tel">Телефон</label>
+          <input class="f-input" id="r-tel" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" required /></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div><label class="f-label" for="r-prod">Что нужно</label>
+          <select class="f-input" id="r-prod" name="product">
+            {% for option in product_options %}<option{% if option == product_default %} selected{% endif %}>{{ option }}</option>{% endfor %}
+          </select>
+        </div>
+        <div><label class="f-label" for="r-vol">Объём и адрес</label>
+          <input class="f-input" id="r-vol" name="details" type="text" placeholder="20 м³, Пятигорск" /></div>
+      </div>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+      <!-- по 152-ФЗ согласие — активное действие, галочка по умолчанию снята -->
+      <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных и с <a href="{% url 'politika' %}">политикой конфиденциальности</a></span></label>
+      <button class="btn btn--solid" style="width:100%;margin-top:20px" type="submit">Получить расчёт</button>
+      <p class="f-note{% if lead_errors %} f-note--err{% elif lead_sent %} f-note--ok{% endif %}"{% if not lead_errors and not lead_sent %} hidden{% endif %}>
+        {% if lead_errors %}{{ lead_errors|join:" " }}{% elif lead_sent %}Заявка отправлена — менеджер перезвонит в рабочее время.{% endif %}
+      </p>
+    </form>
+  </div>
+</section>
