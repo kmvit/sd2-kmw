@@ -1,0 +1,93 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Доставка и бетононасосы" cta1="Рассчитать доставку" cta2="Услуги бетононасоса" cta2_url="#pumps" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.zone %}{% if s %}
+<section id="zone">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Направления доставки от завода на Черкесском шоссе</caption>
+        <thead><tr><th>Направление</th><th>Населённые пункты</th><th>Стоимость рейса</th></tr></thead>
+        <tbody>
+          {% for item in zones %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td class="muted">{{ item.settlements }}</td>
+            {% include "partials/price_cell.html" %}
+          </tr>
+          {% endfor %}
+          <tr class="band"><td colspan="3">Кисловодск и пункты до 100 км от завода — по согласованию с диспетчерской</td></tr>
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.calc %}{% if s %}
+<section class="bt" id="calc">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="steps">
+      {% for card in cards.calc %}
+      <div class="step"><i>{{ card.icon }}</i><b>{{ card.title }}</b><span>{{ card.text }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.pumps %}{% if s %}
+<section class="bt" id="pumps">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Автобетононасосы и линейные насосы · требования к площадке</caption>
+        <thead>
+          <tr><th>Техника</th><th>Длина подачи</th><th>Площадка под насос</th>
+              <th>Как считается</th><th>Стоимость</th></tr>
+        </thead>
+        <tbody>
+          {% for item in pumps %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td>{{ item.reach }}</td>
+            <td class="muted">{{ item.pad }}</td>
+            <td class="muted">{{ item.billing }}</td>
+            {% if item.price_text and site.show_prices %}<td class="grade">{{ item.price_text }}</td>
+            {% else %}{% include "partials/price_cell.html" %}{% endif %}
+          </tr>
+          {% endfor %}
+          <tr class="band"><td colspan="5">Дополнительно оплачивается: переезд насоса в пределах стройплощадки — 500 ₽, пробег свыше 40 км — 60 ₽/км</td></tr>
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.control %}{% if s %}
+<section class="light" id="control">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
+      </div>
+      <div class="lab-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-525081.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

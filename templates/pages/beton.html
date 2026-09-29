@@ -1,0 +1,145 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Бетон и раствор" cta2="Рассчитать объём" cta2_url="/#calc" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.grades %}{% if s %}
+<section id="grades">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Тяжёлый бетон · ГОСТ 7473-2010 · отпуск с запасом прочности 10–15 %</caption>
+        <thead>
+          <tr><th>Марка</th><th>Класс</th><th>Водонепроницаемость</th><th>Морозостойкость</th>
+              <th>Подвижность</th><th>Цена за м³</th></tr>
+        </thead>
+        <tbody>
+          {% regroup grades by group as bands %}
+          {% for band in bands %}
+            {% if band.grouper %}<tr class="band"><td colspan="6">{{ band.grouper }}</td></tr>{% endif %}
+            {% for item in band.list %}
+            <tr>
+              <td class="grade">{{ item.title }}</td>
+              <td>{{ item.grade_class }}</td>
+              <td>{{ item.water|safe }}</td>
+              <td>{{ item.frost }}</td>
+              <td class="muted">{{ item.mobility }}</td>
+              {% include "partials/price_cell.html" %}
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.special %}{% if s %}
+<section class="bt" id="special">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="notes">
+      {% for card in cards.special %}
+      <div class="note"><i>{{ card.icon }}</i><b>{{ card.title }}</b><p>{{ card.text }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.mortar %}{% if s %}
+<section class="bt" id="mortar">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Растворы · ГОСТ 28013-98</caption>
+        <thead>
+          <tr><th>Наименование</th><th>Марка</th><th>Подвижность</th><th>Назначение</th>
+              <th>Цена за м³</th></tr>
+        </thead>
+        <tbody>
+          {% regroup mortars by group as bands %}
+          {% for band in bands %}
+            {% if band.grouper %}<tr class="band"><td colspan="5">{{ band.grouper }}</td></tr>{% endif %}
+            {% for item in band.list %}
+            <tr>
+              <td class="grade">{{ item.title }}</td>
+              <td>{{ item.grade }}</td>
+              <td class="muted">{{ item.mobility }}</td>
+              <td class="muted">{{ item.purpose }}</td>
+              {% include "partials/price_cell.html" %}
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.water %}{% if s %}
+<section class="light" id="water">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
+        <a class="link-more" href="{% url 'laboratoriya' %}" style="margin-top:26px">Как мы это контролируем в лаборатории →</a>
+      </div>
+      <div class="lab-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/beton-2.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.check %}{% if s %}
+<section class="bt" id="check">
+  <div class="wrap">
+    <div class="calc-teaser">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn btn--solid" href="#request">Договориться об испытании</a>
+          <a class="btn btn--line" href="{% url 'laboratoriya' %}">О лаборатории</a>
+        </div>
+      </div>
+      <div class="calc-face">
+        <p class="stamp" style="margin-bottom:16px">Что проверяем</p>
+        <div class="lab-list" style="margin-top:0;border-top-color:var(--edge-2)">
+          {% for card in cards.check %}
+          <div{% if forloop.last %} style="border-bottom:0"{% endif %}><i>{{ card.icon }}</i><span style="color:var(--text-2)">{{ card.title }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.delivery %}{% if s %}
+<section class="bt" id="delivery">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="steps">
+      {% for card in cards.delivery %}
+      <div class="step"><i>{{ card.icon }}</i><b>{{ card.title }}</b><span>{{ card.text }}</span></div>
+      {% endfor %}
+    </div>
+    <a class="link-more" href="{% url 'dostavka' %}" style="margin-top:26px">Зона доставки, тарифы и бетононасосы →</a>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

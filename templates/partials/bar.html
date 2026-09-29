@@ -1,0 +1,8 @@
+{# Лента фактов под шапкой — плитки блока «bar» #}
+{% if cards.bar %}
+<div class="bar">
+  <div class="wrap">
+    {% for card in cards.bar %}<p>{{ card.title }} <b>{{ card.value }}</b></p>{% endfor %}
+  </div>
+</div>
+{% endif %}

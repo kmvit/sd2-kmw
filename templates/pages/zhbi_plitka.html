@@ -1,0 +1,111 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+<section class="phero" id="top">
+  <img class="phero-media" src="{% if group.photo %}{{ group.photo.url }}{% else %}{% static 'img/zavod-318509.jpg' %}{% endif %}" alt="{{ group.title }}" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="{% url 'home' %}">Главная</a><i>·</i>
+      <a href="{% url 'zhbi' %}">ЖБИ и плитка</a><i>·</i>
+      <span aria-current="page">Тротуарная плитка</span>
+    </nav>
+    <h1>Тротуарная плитка <em>на прессе ZENITH</em></h1>
+    <p class="sub">Надоело менять плитку каждые пять лет? Низкое водоцементное отношение
+      и высокое давление прессования дают морозостойкость, вдвое превышающую требования
+      ГОСТ 17608-2017 — пожалуй, самую высокую в регионе.</p>
+    <div class="cta-row">
+      <a class="btn btn--solid" href="#models">Модели и размеры</a>
+      <a class="btn btn--line" href="#request">Рассчитать по площади</a>
+    </div>
+  </div>
+</section>
+
+<div class="bar">
+  <div class="wrap">
+    <p>Морозостойкость <b>×2 к ГОСТ</b></p>
+    <p>Цветов <b>{{ colors|length }} базовых</b></p>
+    <p>Песок <b>свой, мытый</b></p>
+    <p>Производство <b>100 % автоматика</b></p>
+  </div>
+</div>
+
+<section id="models">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Номенклатура</p>
+        <h2 style="margin-top:14px">Модели, размеры<br>и расход на поддон</h2>
+      </div>
+      <p class="lead">Любая модель выпускается во всех базовых цветах. Цену считаем по площади
+        мощения и цвету — присылайте квадратуру, вернём расчёт с доставкой.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Тротуарная плитка · ГОСТ 17608-2017 · пресс ZENITH Maschinenfabrik GmbH</caption>
+        <thead>
+          <tr><th>Модель</th><th>Размер, мм</th><th>Толщина</th><th>В упаковке</th>
+              <th>Вес поддона</th><th>Цена за м²</th></tr>
+        </thead>
+        <tbody>
+          {% for item in models %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td class="muted">{{ item.size }}</td>
+            <td>{{ item.thickness }}</td>
+            <td>{{ item.per_pack }}</td>
+            <td class="muted">{{ item.pallet_weight }}</td>
+            {% include "partials/price_cell.html" %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">Толщина 40 мм — для пешеходных зон и дорожек, 60 мм — для въездов
+      и площадок под легковой транспорт. Фактура моделей «Квадрат», «Старый город»,
+      «Ландхаус» и «Классико» — гладкая.</p>
+  </div>
+</section>
+
+<section class="bt" id="colors">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Цвет и фактура</p>
+        <h2 style="margin-top:14px">Девять цветов<br>и серия «Мегаполис»</h2>
+      </div>
+      <p class="lead">Базовые цвета доступны для любой модели. Серия «Мегаполис» изготавливается
+        смешиванием двух-трёх цветов в фактурном слое — рисунок мощения каждый раз свой.</p>
+    </div>
+    <div class="tags" style="display:flex;flex-wrap:wrap;gap:8px">
+      {% for c in colors %}<span class="chip">{{ c.title }}</span>{% endfor %}
+    </div>
+    <p class="stamp" style="margin-top:34px">Восемь смешений серии «Мегаполис»</p>
+    <div class="tags" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+      {% for c in mixes %}<span class="chip hot">{{ c.title }}</span>{% endfor %}
+    </div>
+    <p class="tbl-note">Оттенки серии «Мегаполис» покажем по фотографиям образцов — запросите
+      их вместе с расчётом или посмотрите вживую на заводе.</p>
+  </div>
+</section>
+
+{% if group.description %}
+<section class="light" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Почему она служит дольше</p>
+        <h2 style="margin-top:14px">Из чего складывается<br>морозостойкость</h2>
+      </div>
+      <p class="lead">Плитка разрушается не от нагрузки, а от воды в порах, которая замерзает
+        и рвёт бетон изнутри. Мы боремся именно с этим.</p>
+    </div>
+    <div class="prose" style="max-width:none">{{ group.description|safe }}</div>
+    <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:30px">
+      <a class="btn btn--solid" href="#request">Рассчитать плитку по площади</a>
+      <a class="btn btn--line on-light" href="{% url 'karer' %}">О нашем карьере</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

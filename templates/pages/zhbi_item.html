@@ -1,0 +1,109 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{# у группы ЖБИ нет отдельных полей шапки — берём их из самой группы #}
+<section class="phero" id="top">
+  <img class="phero-media" src="{% if group.photo %}{{ group.photo.url }}{% else %}{% static 'img/zavod-318509.jpg' %}{% endif %}" alt="{{ group.title }}" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="{% url 'home' %}">Главная</a><i>·</i>
+      <a href="{% url 'zhbi' %}">ЖБИ и плитка</a><i>·</i>
+      <span aria-current="page">{{ group.title }}</span>
+    </nav>
+    <h1>{{ group.title }}</h1>
+    {% if group.summary %}<p class="sub">{{ group.summary }}</p>{% endif %}
+    <div class="cta-row">
+      <a class="btn btn--solid" href="#request">Узнать цену и наличие</a>
+      <a class="btn btn--line" href="{% url 'zhbi' %}">Весь каталог</a>
+    </div>
+  </div>
+</section>
+
+<div class="bar">
+  <div class="wrap">
+    {% if group.kinds_label %}<p>В группе <b>{{ group.kinds_label }}</b></p>{% endif %}
+    {% if group.gost %}<p>Изготовление <b>{{ group.gost }}</b></p>{% endif %}
+    <p>Контроль <b>своя лаборатория</b></p>
+    <p>Отгрузка <b>со склада завода</b></p>
+  </div>
+</div>
+
+{% if group.description %}
+<section id="about">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">Назначение</p>
+        <h2 style="margin-top:14px">Где применяется</h2>
+      </div>
+      <div class="prose">{{ group.description|safe }}</div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if rows %}
+<section class="bt" id="specs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Характеристики</p>
+        <h2 style="margin-top:14px">Типоразмеры<br>и параметры</h2>
+      </div>
+      <p class="lead">Цену считаем под объём партии и адрес доставки — пришлите нужные позиции,
+        вернём расчёт в течение рабочего дня.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>{{ group.title }}{% if group.gost %} · {{ group.gost }}{% endif %}</caption>
+        <thead>
+          <tr>
+            <th>Наименование</th>
+            {% for name, label in columns %}<th>{{ label }}</th>{% endfor %}
+            <th>Цена</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% regroup rows by item.band as bands %}
+          {% for band in bands %}
+            {% if band.grouper %}<tr class="band"><td colspan="{{ columns|length|add:2 }}">{{ band.grouper }}</td></tr>{% endif %}
+            {% for row in band.list %}
+            <tr>
+              <td class="grade">{{ row.item.title }}</td>
+              {% for cell in row.cells %}<td class="muted">{{ cell|default:"—" }}</td>{% endfor %}
+              {% with item=row.item %}{% include "partials/price_cell.html" %}{% endwith %}
+            </tr>
+            {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if group.note %}<p class="tbl-note">{{ group.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="light" id="other">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Каталог</p>
+        <h2 style="margin-top:14px">Другие изделия</h2>
+      </div>
+      <p class="lead">Всё производится на одной площадке — можно взять несколько позиций
+        одной отгрузкой.</p>
+    </div>
+    <div class="cat">
+      {% for g in other_groups %}
+      <a class="cat-item" href="{{ g.get_absolute_url }}">
+        <span class="ph">{% if g.photo %}<img src="{{ g.photo.url }}" alt="{{ g.title }}" loading="lazy" />{% endif %}</span>
+        <span class="kinds">{{ g.kinds_label }}</span>
+        <b>{{ g.title }}</b>
+        <span class="go">Смотреть →</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

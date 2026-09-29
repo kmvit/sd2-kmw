@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Политика конфиденциальности" cta1="На главную" cta1_url="/" %}
+
+{% with s=sections.policy %}{% if s %}
+<section class="light" id="policy">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <div class="prose" style="margin-top:20px">{{ s.note|safe }}{{ page.body|safe }}</div>
+      </div>
+      <div>
+        <p class="stamp">Ваши права</p>
+        <div class="lab-list" style="margin-top:20px;border-top-color:var(--edge-light)">
+          {% for card in cards.policy %}<div><i>{{ card.icon }}</i><span>{{ card.title }}</span></div>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

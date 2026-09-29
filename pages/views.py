@@ -61,7 +61,8 @@ def page_extras(slug):
                 'mortars': Mortar.objects.filter(**published)}
     if slug == 'zhbi':
         return {'groups': ZhbiGroup.objects.filter(**published),
-                'blocks': WallBlock.objects.filter(**published)}
+                'blocks': WallBlock.objects.filter(**published),
+                'greenhouses': ProjectObject.objects.filter(is_greenhouse=True, **published)}
     if slug == 'asfalt':
         return {'mixes': AsphaltMix.objects.filter(**published)}
     if slug == 'karer':
@@ -113,17 +114,47 @@ def make_page_view(template, active, slug):
     return view
 
 
+# Колонки таблицы характеристик: поле модели → подпись в шапке.
+# Порядок здесь задаёт порядок колонок на странице.
+ZHBI_COLUMNS = [
+    ('concrete_class', 'Класс бетона'),
+    ('frost', 'Морозостойкость'),
+    ('volume', 'Объём бетона, м³'),
+    ('weight', 'Вес, кг'),
+    ('length', 'Длина, мм'),
+    ('width', 'Ширина, мм'),
+    ('height', 'Высота, мм'),
+    ('diameter', 'Диаметр, мм'),
+    ('capacity', 'Несущая способность'),
+    ('color', 'Цвет'),
+]
+
+
 def zhbi_item(request, slug):
-    """Страница группы изделий ЖБИ с таблицей характеристик."""
+    """Страница группы изделий ЖБИ.
+
+    Набор колонок у групп разный: у колец важен диаметр, у перемычек — несущая
+    способность. Поэтому таблица собирается здесь: пустые колонки не выводим,
+    чтобы страница не пестрела прочерками.
+    """
     group = get_object_or_404(ZhbiGroup, slug=slug, published=True)
     items = list(group.items.filter(published=True))
-    # колонку показываем, только если она заполнена хотя бы у одной позиции:
-    # у колец важен диаметр, у перемычек — несущая способность
-    columns = [name for name in ('concrete_class', 'frost', 'volume', 'weight', 'length',
-                                 'width', 'height', 'diameter', 'color', 'capacity')
+    columns = [(name, label) for name, label in ZHBI_COLUMNS
                if any(getattr(item, name) for item in items)]
+    rows = [{'item': item, 'cells': [getattr(item, name) for name, _ in columns]}
+            for item in items]
+
     ctx = page_context(request, 'zhbi_item', 'products')
-    ctx.update({'group': group, 'items': items, 'columns': columns, 'page': group})
+    ctx.update({'group': group, 'rows': rows, 'columns': columns,
+                'page': group, 'other_groups': ZhbiGroup.objects.filter(published=True)
+                                                        .exclude(pk=group.pk)[:8]})
+    # у плитки и блоков позиции лежат в своих справочниках
+    if group.custom_template == 'zhbi_plitka':
+        ctx.update({'models': PavingModel.objects.filter(published=True),
+                    'colors': PavingColor.objects.filter(published=True, is_mix=False),
+                    'mixes': PavingColor.objects.filter(published=True, is_mix=True)})
+    elif group.custom_template == 'zhbi_bloki':
+        ctx['blocks'] = WallBlock.objects.filter(published=True)
     return render(request, f'pages/{group.custom_template or "zhbi_item"}.html', ctx)
 
 

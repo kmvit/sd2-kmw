@@ -1,0 +1,22 @@
+{% load static %}
+{# Шапка внутренней страницы: фото, хлебные крошки, заголовок и кнопки.
+   Крошки передаются через include — они у каждой страницы свои. #}
+<section class="phero" id="top">
+  <img class="phero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}"
+       alt="{{ page.admin_title }} — завод «Стройдеталь-2»" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="{% url 'home' %}">Главная</a><i>·</i>
+      {% if parent_title %}<a href="{{ parent_url }}">{{ parent_title }}</a><i>·</i>{% endif %}
+      <span aria-current="page">{{ crumb|default:page.admin_title }}</span>
+    </nav>
+    {% if page.stamp %}<p class="stamp">{{ page.stamp }}</p>{% endif %}
+    <h1>{{ page.h1|safe }}</h1>
+    <p class="sub">{{ page.subtitle }}</p>
+    <div class="cta-row">
+      <a class="btn btn--solid" href="{{ cta1_url|default:'#request' }}">{{ cta1|default:'Узнать цену и сроки' }}</a>
+      {% if cta2 %}<a class="btn btn--line" href="{{ cta2_url }}">{{ cta2 }}</a>{% endif %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Лаборатория" cta1="Запросить протокол испытаний" cta2="Проверить чужой бетон" cta2_url="#compare" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.control %}{% if s %}
+<section id="control">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="notes">
+      {% for card in cards.control %}
+      <div class="note"><i>{{ card.icon }}</i><b>{{ card.title }}</b><p>{{ card.text }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.docs %}{% if s %}
+<section class="light" id="docs">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
+        <div class="tags" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:22px">
+          {% for card in cards.docs %}<span class="chip{% if card.icon == 'hot' %} hot{% endif %}">{{ card.title }}</span>{% endfor %}
+        </div>
+      </div>
+      <div class="lab-photo">
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-681455.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.compare %}{% if s %}
+<section class="bt" id="compare">
+  <div class="wrap">
+    <div class="calc-teaser">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn btn--solid" href="#request">Договориться об испытании</a>
+          <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">Спросить лабораторию</a>
+        </div>
+      </div>
+      <div class="calc-face">
+        <p class="stamp" style="margin-bottom:16px">Параметры сравнения</p>
+        <div class="lab-list" style="margin-top:0;border-top-color:var(--edge-2)">
+          {% for card in cards.compare %}
+          <div{% if forloop.last %} style="border-bottom:0"{% endif %}><i>{{ card.icon }}</i><span style="color:var(--text-2)">{{ card.title }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.why %}{% if s %}
+<section class="bt" id="why">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="steps">
+      {% for card in cards.why %}
+      <div class="step"><i>{{ card.icon }}</i><b>{{ card.title }}</b><span>{{ card.text }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

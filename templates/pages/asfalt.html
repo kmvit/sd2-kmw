@@ -1,0 +1,82 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Асфальтобетон" cta2="Виды смесей" cta2_url="#types" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.types %}{% if s %}
+<section id="types">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Асфальтобетонные смеси · ГОСТ 9128-2009</caption>
+        <thead>
+          <tr><th>Вид смеси</th><th>Тип</th><th>Марка</th><th>Область применения</th>
+              <th>Цена за тонну</th></tr>
+        </thead>
+        <tbody>
+          {% for item in mixes %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td>{{ item.mix_type }}</td>
+            <td>{{ item.grade }}</td>
+            <td class="muted">{{ item.purpose }}</td>
+            {% include "partials/price_cell.html" %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.price %}{% if s %}
+<section class="light" id="price">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
+        <a class="link-more" href="{% url 'laboratoriya' %}" style="margin-top:26px">Как мы контролируем качество →</a>
+      </div>
+      <div>
+        <div class="lab-list" style="margin-top:0;border-top-color:var(--edge-light)">
+          {% for card in cards.price %}<div><i>{{ card.icon }}</i><span>{{ card.title }}</span></div>{% endfor %}
+        </div>
+        <div class="certs-note" style="margin-top:24px">Асфальтобетонное производство — сопутствующее направление завода. Основные мощности — бетон, ЖБИ и инертные материалы, поэтому график отгрузки асфальта согласуем заранее.</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.alternative %}{% if s %}
+<section class="bt" id="alternative">
+  <div class="wrap">
+    <div class="calc-teaser">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn btn--solid" href="{% url 'zhbi' %}">Смотреть плитку и бордюр</a>
+          <a class="btn btn--line" href="#request">Сравнить по цене</a>
+        </div>
+      </div>
+      <div class="calc-face">
+        <p class="stamp" style="margin-bottom:16px">Плитка против асфальта</p>
+        <div class="lab-list" style="margin-top:0;border-top-color:var(--edge-2)">
+          {% for card in cards.alternative %}
+          <div{% if forloop.last %} style="border-bottom:0"{% endif %}><i>{{ card.icon }}</i><span style="color:var(--text-2)">{{ card.title }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

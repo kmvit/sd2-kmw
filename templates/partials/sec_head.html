@@ -1,0 +1,8 @@
+{# Заголовок блока: штамп, заголовок, вводный текст справа #}
+<div class="sec-head">
+  <div>
+    {% if s.stamp %}<p class="stamp">{{ s.stamp }}</p>{% endif %}
+    <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+  </div>
+  {% if s.lead %}<p class="lead">{{ s.lead }}</p>{% endif %}
+</div>

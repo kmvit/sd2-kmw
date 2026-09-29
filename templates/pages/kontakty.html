@@ -1,0 +1,121 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Контакты" cta1=site.phone_main cta1_url="tel:"|add:site.phone_main_link cta2="Схема проезда" cta2_url="#map" %}
+
+{% with s=sections.map %}{% if s %}
+<section class="light" id="map">
+  <div class="wrap">
+    <div class="cont">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;color:#12181D;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="lab-list" style="margin-top:24px">
+          <div><i>Адрес</i><span>{{ site.address_full|default:site.address }}</span></div>
+          <div><i>Отдел продаж</i><span><a class="cont-tel" href="tel:{{ site.phone_main_link }}">{{ site.phone_main }}</a></span></div>
+          {% if site.phone_extra %}<div><i>Второй номер</i><span><a class="cont-tel" href="tel:{{ site.phone_extra_link }}">{{ site.phone_extra }}</a></span></div>{% endif %}
+          <div><i>Карьер</i><span>Отгрузка щебня и песка — <a href="{% url 'karer' %}" style="color:var(--accent-d);text-decoration:underline;text-underline-offset:3px">начальник карьера, +7 928 340-81-67</a></span></div>
+        </div>
+      </div>
+      <div class="map">
+        <iframe src="https://yandex.ru/map-widget/v1/?ll={{ site.map_lon }}%2C{{ site.map_lat }}&z={{ site.map_zoom }}&pt={{ site.map_lon }},{{ site.map_lat }},pm2rdm"
+                title="Схема проезда: {{ site.address }}" loading="lazy"></iframe>
+        <span class="tag">Завод · {{ site.address }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.hours %}{% if s %}
+<section class="bt" id="hours">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Часы работы участков завода</caption>
+        <thead><tr><th>Участок</th><th>Понедельник — суббота</th><th>Воскресенье</th><th>Телефон</th></tr></thead>
+        <tbody>
+          {% for row in schedule %}
+          <tr>
+            <td class="grade">{{ row.title }}</td>
+            <td>{{ row.weekdays }}</td>
+            <td class="muted">{{ row.sunday }}</td>
+            <td class="ask">{{ row.phone }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.team %}{% if s %}
+<section class="light" id="team">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="team">
+      {% for m in team %}
+      <div class="person">
+        <span class="ph"{% if not m.photo %} style="display:grid;place-items:center;background:var(--paper-2)"{% endif %}>
+          {% if m.photo %}<img src="{{ m.photo.url }}" alt="{{ m.name }}, {{ m.position|lower }}" loading="lazy" />
+          {% else %}<span style="font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9AA1A6;text-align:center;padding:12px">Фото<br>уточняется</span>{% endif %}
+        </span>
+        <span class="body">
+          <i>{{ m.position }}</i>
+          <b>{{ m.name }}</b>
+          {% if m.full_name or m.note %}<span class="sm">{{ m.full_name }}{% if m.full_name and m.note %} · {% endif %}{{ m.note }}</span>{% endif %}
+          <span class="tels">
+            {% for p in m.phones.all %}<a href="tel:{{ p.link }}">{{ p.number }}</a>
+            {% empty %}<span class="sm">Телефон уточняется</span>{% endfor %}
+          </span>
+          {% if m.email %}<span class="mail">{{ m.email }}</span>{% endif %}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+<section class="light" id="docs" style="padding-top:0">
+  <div class="wrap">
+    <div class="cols2">
+      {% with s=sections.docs %}{% if s %}
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;color:#12181D;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:20px"><p>{{ s.note }}</p></div>
+        <div class="docs" style="margin-top:22px">
+          {% for d in documents %}
+          <a href="{% if d.file %}{{ d.file.url }}{% else %}#request{% endif %}"{% if d.file %} download{% endif %}>
+            <i>{{ d.get_kind_display }}</i><span>{{ d.title }}</span></a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}{% endwith %}
+
+      {% with s=sections.director %}{% if s %}
+      <div id="director">
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;color:#12181D;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:20px"><p>{{ s.note|safe }}</p></div>
+        <form class="form-card js-form" style="margin-top:22px" method="post" action="{% url 'director_create' %}" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}" />
+          <label class="f-label" for="b-text">Текст обращения</label>
+          <textarea class="f-input" id="b-text" name="message" rows="5" style="resize:vertical" placeholder="Михаил Алексеевич, сообщаю Вам, что…" required></textarea>
+          <label class="f-label" for="b-tel">Как с вами связаться (необязательно)</label>
+          <input class="f-input" id="b-tel" name="contact" type="text" placeholder="Телефон или почта" autocomplete="tel" />
+          <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
+          <button class="btn btn--solid" style="width:100%;margin-top:18px" type="submit">Отправить директору</button>
+          <p class="f-agree" style="margin-top:14px">Можно и анонимно: если не оставите контакты, мы не узнаем, кто написал.</p>
+        </form>
+      </div>
+      {% endif %}{% endwith %}
+    </div>
+  </div>
+</section>
+{% endblock %}

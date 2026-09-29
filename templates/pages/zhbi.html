@@ -1,0 +1,99 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="ЖБИ и тротуарная плитка" cta1="Смотреть каталог" cta1_url="#catalog" cta2="Запросить прайс" cta2_url="#request" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.catalog %}{% if s %}
+<section class="light" id="catalog">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="cat">
+      {% for g in groups %}
+      <a class="cat-item" href="{{ g.get_absolute_url }}">
+        <span class="ph">{% if g.photo %}<img src="{{ g.photo.url }}" alt="{{ g.title }}" loading="lazy" />{% endif %}</span>
+        <span class="kinds">{{ g.kinds_label }}</span>
+        <b>{{ g.title }}</b>
+        <span class="go">Смотреть →</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% if s.note %}<p class="certs-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.zenith %}{% if s %}
+<section class="bt" id="zenith">
+  <div class="wrap">
+    <div class="wide">
+      <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-318509.jpg' %}{% endif %}" alt="{{ s.title|striptags }}" />
+      <div class="inner">
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
+        <p>{{ s.lead }}</p>
+        <div class="tags">
+          {% for card in cards.zenith %}<span class="chip{% if card.icon == 'hot' %} hot{% endif %}">{{ card.title }}</span>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.blocks %}{% if s %}
+<section class="bt" id="blocks">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Блоки стеновые бетонные · ГОСТ 6133-2019 · объёмное вибропрессование</caption>
+        <thead>
+          <tr><th>Вид блока</th><th>Марка</th><th>Морозостойкость</th><th>Теплопроводность</th>
+              <th>Размер, мм</th><th>Вес</th><th>Цена</th></tr>
+        </thead>
+        <tbody>
+          {% for item in blocks %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td>{{ item.grade }}</td>
+            <td>{{ item.frost }}</td>
+            <td class="muted">{{ item.conductivity }}</td>
+            <td class="muted">{{ item.size }}</td>
+            <td>{{ item.weight }}</td>
+            {% include "partials/price_cell.html" %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.teplicy %}{% if s %}
+<section class="light" id="teplicy">
+  <div class="wrap">
+    <div class="cols2">
+      <div>
+        <p class="stamp">{{ s.stamp }}</p>
+        <h2 style="margin-top:14px;font-size:clamp(26px,3.4vw,46px)">{{ s.title|safe }}</h2>
+        <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
+        <div class="tags" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:20px">
+          {% for card in cards.teplicy %}<span class="chip{% if card.icon == 'hot' %} hot{% endif %}">{{ card.title }}</span>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <p class="stamp">Наши тепличные комплексы</p>
+        <div class="lab-list" style="margin-top:20px;border-top-color:var(--edge-light)">
+          {% for o in greenhouses %}
+          <div><i>{{ forloop.counter|stringformat:"02d" }}</i><span>{{ o.title }} — {{ o.place }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

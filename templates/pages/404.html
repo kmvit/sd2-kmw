@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+<section class="phero" id="top" style="min-height:62vh">
+  <img class="phero-media" src="{% static 'img/zavod-30834.jpg' %}" alt="Завод «Стройдеталь-2» в Пятигорске" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <p class="stamp">Ошибка 404</p>
+    <h1 style="margin-top:14px">Такой страницы<br><em>на сайте нет</em></h1>
+    <p class="sub">Возможно, адрес набран с опечаткой или страница переехала. Ниже — основные
+      разделы; если ищете конкретную продукцию, позвоните в отдел продаж, подскажем сразу.</p>
+    <div class="cta-row">
+      <a class="btn btn--solid" href="{% url 'home' %}">На главную</a>
+      <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">{{ site.phone_main }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="bt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Куда дальше</p>
+        <h2 style="margin-top:14px">Разделы сайта</h2>
+      </div>
+      <p class="lead">Бетон и раствор, железобетон и плитка, асфальт, щебень и песок — всё
+        производится на одной площадке в Пятигорске.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><i>Продукция</i><b><a href="{% url 'beton' %}" style="color:var(--head)">Бетон и раствор</a></b><span>Марки М100–М1000, растворы, доставка миксерами по КМВ.</span></div>
+      <div class="step"><i>Продукция</i><b><a href="{% url 'zhbi' %}" style="color:var(--head)">ЖБИ и плитка</a></b><span>19 групп изделий и тротуарная плитка на прессе ZENITH.</span></div>
+      <div class="step"><i>Продукция</i><b><a href="{% url 'karer' %}" style="color:var(--head)">Щебень и песок</a></b><span>Собственный карьер: открытый прайс, самовывоз.</span></div>
+      <div class="step"><i>Завод</i><b><a href="{% url 'kontakty' %}" style="color:var(--head)">Контакты</a></b><span>{{ site.address }}. Режим работы и телефоны.</span></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

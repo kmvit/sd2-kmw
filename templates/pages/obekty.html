@@ -1,0 +1,67 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+{% include "partials/phero.html" with crumb="Объекты" cta1="Обсудить свой объект" cta2="Марки и характеристики" cta2_url="/produkciya/beton/" %}
+{% include "partials/bar.html" %}
+
+{% with s=sections.built %}{% if s %}
+<section class="light" id="built">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="built">
+      {% for o in objects %}
+      <div class="bi"><i>{{ o.category }}</i><b>{{ o.title }}</b><span>{{ o.place }}</span></div>
+      {% endfor %}
+    </div>
+    {% if s.note %}<p class="certs-note">{{ s.note }}</p>{% endif %}
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.teplicy %}{% if s %}
+<section class="bt" id="teplicy">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="notes">
+      {% for o in greenhouses %}
+      <div class="note"><i>{{ o.category }}</i><b>{{ o.title }}</b><p>{{ o.text }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.capacity %}{% if s %}
+<section class="bt" id="capacity">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="facts">
+      {% for card in cards.capacity %}
+      <div class="fact">
+        <span class="v">{{ card.value }}{% if card.sup %} <small>{{ card.sup }}</small>{% endif %}</span>
+        <b>{{ card.title }}</b>
+        <p>{{ card.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:34px">
+      <a class="btn btn--solid" href="#request">Обсудить поставку на объект</a>
+      <a class="btn btn--line" href="{% url 'dostavka' %}">График и доставка</a>
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+
+{% with s=sections.history %}{% if s %}
+<section class="bt" id="history">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="steps">
+      {% for e in timeline %}
+      <div class="step"><i>{{ e.year }}</i><b>{{ e.title }}</b><span>{{ e.text }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}{% endwith %}
+{% endblock %}

@@ -15,10 +15,16 @@ from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from catalog.models import Direction
-from content.models import Certificate, Faq, Partner, ProjectObject
-from core.models import Card, Page, Section, SiteSettings
-from pages.seed import directories, home
+from catalog.models import (Aggregate, AsphaltMix, ConcreteGrade, ConcretePump,
+                            DeliveryZone, Direction, Mortar, PavingColor, PavingModel,
+                            WallBlock)
+from content.models import (Certificate, Faq, MemberPhone, Partner, ProjectObject,
+                            TeamMember, TimelineEvent, WorkSchedule)
+from core.models import Card, Document, Page, Section, SiteSettings
+from catalog.models import ZhbiGroup, ZhbiItem
+from pages.seed import catalog as catalog_data
+from pages.seed import directories, home, inner
+from pages.seed import zhbi_groups
 
 STATIC = Path(settings.BASE_DIR) / 'static'
 
@@ -46,13 +52,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options['reset']:
             for model in (Card, Section, Page, Direction, Certificate, Partner,
-                          ProjectObject, Faq):
+                          ProjectObject, Faq, ConcreteGrade, Mortar, Aggregate,
+                          AsphaltMix, WallBlock, PavingModel, PavingColor,
+                          DeliveryZone, ConcretePump, TeamMember, Document,
+                          WorkSchedule, TimelineEvent, ZhbiItem, ZhbiGroup):
                 model.objects.all().delete()
             self.stdout.write('контент очищен')
 
         SiteSettings.get()
         self.seed_page(home)
+        for module in inner.ALL_PAGES:
+            self.seed_page(type('M', (), module))
         self.seed_directories()
+        self.seed_catalog()
+        self.seed_zhbi()
+        self.seed_team()
         self.stdout.write(self.style.SUCCESS('готово'))
 
     # ------------------------------------------------------------------ страницы
@@ -126,3 +140,125 @@ class Command(BaseCommand):
             Faq.objects.get_or_create(question=question,
                                       defaults={'answer': answer, 'order': i * 10})
         self.stdout.write(f'вопросы: {Faq.objects.count()}')
+
+    # ------------------------------------------------------------------ прайсы
+
+    def seed_catalog(self):
+        rows = catalog_data
+        for i, (group, title, cls, water, frost, mob, price, label) in enumerate(rows.CONCRETE, 1):
+            ConcreteGrade.objects.get_or_create(
+                title=title, grade_class=cls,
+                defaults={'group': group, 'water': water, 'frost': frost, 'mobility': mob,
+                          'price': price, 'price_label': label, 'price_prefix': '',
+                          'order': i * 10})
+        for i, (group, title, grade, mob, purpose, price, label) in enumerate(rows.MORTARS, 1):
+            Mortar.objects.get_or_create(
+                title=title, grade=grade,
+                defaults={'group': group, 'mobility': mob, 'purpose': purpose, 'price': price,
+                          'price_label': label, 'price_prefix': '', 'order': i * 10})
+        for i, (group, title, fr, gost, spec, price, label) in enumerate(rows.AGGREGATES, 1):
+            Aggregate.objects.get_or_create(
+                title=title, fraction=fr,
+                defaults={'group': group, 'gost': gost, 'spec': spec, 'price': price,
+                          'price_label': label or 'По запросу', 'order': i * 10})
+        for i, (title, mtype, grade, purpose, price, label) in enumerate(rows.ASPHALT, 1):
+            AsphaltMix.objects.get_or_create(
+                title=title,
+                defaults={'mix_type': mtype, 'grade': grade, 'purpose': purpose, 'price': price,
+                          'price_label': label, 'price_prefix': '', 'order': i * 10})
+        for i, (title, grade, frost, cond, size, weight) in enumerate(rows.BLOCKS, 1):
+            WallBlock.objects.get_or_create(
+                title=title,
+                defaults={'grade': grade, 'frost': frost, 'conductivity': cond, 'size': size,
+                          'weight': weight, 'price_label': 'Договорная', 'price_prefix': '',
+                          'order': i * 10})
+        for i, (title, size, thick, pack, pallet) in enumerate(rows.PAVING, 1):
+            PavingModel.objects.get_or_create(
+                title=title, thickness=thick,
+                defaults={'size': size, 'per_pack': pack, 'pallet_weight': pallet,
+                          'price_label': 'Договорная', 'price_prefix': '', 'order': i * 10})
+        for i, (title, is_mix) in enumerate(rows.COLORS, 1):
+            PavingColor.objects.get_or_create(title=title,
+                                              defaults={'is_mix': is_mix, 'order': i * 10})
+        for i, (title, settlements) in enumerate(rows.ZONES, 1):
+            DeliveryZone.objects.get_or_create(
+                title=title, defaults={'settlements': settlements, 'price_label': 'По запросу',
+                                       'price_prefix': '', 'order': i * 10})
+        for i, (title, reach, pad, billing, price_text) in enumerate(rows.PUMPS, 1):
+            ConcretePump.objects.get_or_create(
+                title=title,
+                defaults={'reach': reach, 'pad': pad, 'billing': billing,
+                          'price_text': price_text, 'price_label': 'По запросу',
+                          'price_prefix': '', 'order': i * 10})
+        self.stdout.write(f'прайсы: бетон {ConcreteGrade.objects.count()}, '
+                          f'растворы {Mortar.objects.count()}, '
+                          f'карьер {Aggregate.objects.count()}, '
+                          f'плитка {PavingModel.objects.count()}, '
+                          f'блоки {WallBlock.objects.count()}')
+
+    # --------------------------------------------------------- люди и документы
+
+    def seed_team(self):
+        for i, (name, full, position, note, phones, email, photo) in enumerate(
+                directories.TEAM, 1):
+            member, created = TeamMember.objects.get_or_create(
+                name=name,
+                defaults={'full_name': full, 'position': position, 'note': note,
+                          'email': email, 'order': i * 10})
+            if attach(member.photo, photo):
+                member.save()
+            if created:
+                for j, number in enumerate(phones, 1):
+                    MemberPhone.objects.create(member=member, number=number, order=j * 10)
+        self.stdout.write(f'команда: {TeamMember.objects.count()}')
+
+        for i, (title, kind) in enumerate(directories.DOCUMENTS, 1):
+            Document.objects.get_or_create(title=title,
+                                           defaults={'kind': kind, 'order': i * 10})
+        for i, (title, weekdays, sunday, phone) in enumerate(directories.SCHEDULE, 1):
+            WorkSchedule.objects.get_or_create(
+                title=title, defaults={'weekdays': weekdays, 'sunday': sunday,
+                                       'phone': phone, 'order': i * 10})
+        for i, (year, title, text) in enumerate(directories.TIMELINE, 1):
+            TimelineEvent.objects.get_or_create(
+                year=year, defaults={'title': title, 'text': text, 'order': i * 10})
+        self.stdout.write(f'документы: {Document.objects.count()}, '
+                          f'режим работы: {WorkSchedule.objects.count()}, '
+                          f'история: {TimelineEvent.objects.count()}')
+
+    # ---------------------------------------------------------------- ЖБИ
+
+    # У плитки и стеновых блоков позиции лежат в своих справочниках
+    # (модели плитки, блоки), поэтому их страницы собираются своим шаблоном.
+    CUSTOM_TEMPLATES = {
+        'trotuarnaya-plitka': 'zhbi_plitka',
+        'stenovye-bloki': 'zhbi_bloki',
+    }
+
+    def seed_zhbi(self):
+        for i, data in enumerate(zhbi_groups.GROUPS, 1):
+            group, created = ZhbiGroup.objects.get_or_create(
+                slug=data['slug'],
+                defaults={'title': data['title'], 'kinds_label': data['kinds'],
+                          'gost': data['gost'], 'description': data['description'],
+                          'legacy_url': data['legacy'], 'order': i * 10,
+                          'custom_template': self.CUSTOM_TEMPLATES.get(data['slug'], ''),
+                          'seo_title': f"{data['title']} в Пятигорске — завод «Стройдеталь-2»",
+                          'seo_description': data['description'][:300]})
+            if attach(group.photo, data['photo']):
+                group.save()
+            if created:
+                for j, item in enumerate(data['items'], 1):
+                    ZhbiItem.objects.create(
+                        group=group, order=j * 10,
+                        title=item.get('title', ''), band=item.get('band', ''),
+                        concrete_class=item.get('concrete_class', ''),
+                        frost=item.get('frost', ''), volume=item.get('volume', ''),
+                        weight=item.get('weight', ''), length=item.get('length', ''),
+                        width=item.get('width', ''), height=item.get('height', ''),
+                        diameter=item.get('diameter', ''), color=item.get('color', ''),
+                        capacity=item.get('capacity', ''),
+                        price_label=item.get('price_label', 'Договорная'),
+                        price_prefix='')
+        self.stdout.write(f'ЖБИ: групп {ZhbiGroup.objects.count()}, '
+                          f'позиций {ZhbiItem.objects.count()}')

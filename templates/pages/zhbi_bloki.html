@@ -1,0 +1,67 @@
+{% extends "base.html" %}{% load static %}
+
+{% block content %}
+<section class="phero" id="top">
+  <img class="phero-media" src="{% if group.photo %}{{ group.photo.url }}{% else %}{% static 'img/zavod-318509.jpg' %}{% endif %}" alt="{{ group.title }}" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Хлебные крошки">
+      <a href="{% url 'home' %}">Главная</a><i>·</i>
+      <a href="{% url 'zhbi' %}">ЖБИ и плитка</a><i>·</i>
+      <span aria-current="page">{{ group.title }}</span>
+    </nav>
+    <h1>Стеновые блоки <em>объёмного вибропрессования</em></h1>
+    <p class="sub">Шесть видов блоков на оборудовании МАСТЕК по ГОСТ 6133-2019. С 2015 года
+      участок работает в две смены — спрос растёт даже в кризис.</p>
+    <div class="cta-row">
+      <a class="btn btn--solid" href="#request">Узнать цену и наличие</a>
+      <a class="btn btn--line" href="{% url 'zhbi' %}">Весь каталог</a>
+    </div>
+  </div>
+</section>
+
+<div class="bar">
+  <div class="wrap">
+    <p>Блоков <b>до 3 млн в год</b></p>
+    <p>Изготовление <b>{{ group.gost|default:"ГОСТ 6133-2019" }}</b></p>
+    <p>Видов <b>{{ blocks|length }}</b></p>
+    <p>Отгрузка <b>со склада завода</b></p>
+  </div>
+</div>
+
+<section id="specs">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="stamp">Характеристики</p>
+        <h2 style="margin-top:14px">Виды блоков<br>и параметры</h2>
+      </div>
+      <p class="lead">Усиленный блок в 1,4 раза прочнее облегчённого, а лёгкий
+        керамзитопеплобетонный — в 3,3 раза теплее остальных.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <caption>Блоки стеновые бетонные · ГОСТ 6133-2019 · объёмное вибропрессование</caption>
+        <thead>
+          <tr><th>Вид блока</th><th>Марка</th><th>Морозостойкость</th><th>Теплопроводность</th>
+              <th>Размер, мм</th><th>Вес</th><th>Цена</th></tr>
+        </thead>
+        <tbody>
+          {% for item in blocks %}
+          <tr>
+            <td class="grade">{{ item.title }}</td>
+            <td>{{ item.grade }}</td>
+            <td>{{ item.frost }}</td>
+            <td class="muted">{{ item.conductivity }}</td>
+            <td class="muted">{{ item.size }}</td>
+            <td>{{ item.weight }}</td>
+            {% include "partials/price_cell.html" %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">Паспорт качества установленного ГОСТом образца выдаём на каждую партию.</p>
+  </div>
+</section>
+{% endblock %}

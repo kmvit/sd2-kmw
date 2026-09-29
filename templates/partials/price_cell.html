@@ -1,0 +1,2 @@
+{# Ячейка цены: если цена не задана или показ цен выключен — подпись «по запросу» #}
+{% if item.price and site.show_prices %}<td class="grade">{% if item.price_prefix %}{{ item.price_prefix }} {% endif %}{{ item.price }} ₽</td>{% else %}<td class="ask">{{ item.price_label|default:"По запросу" }}</td>{% endif %}
