@@ -1,27 +1,35 @@
 #!/usr/bin/env bash
-# Выкладка вёрстки на тестовую площадку.
+# Выкладка сайта на сервер.
 #
-#   ./deploy.sh            пересобрать и залить (сайт закрыт от индексации)
-#   ./deploy.sh --prod     то же, но собрать боевую версию — индексация открыта
+#   ./deploy.sh              обновить код, зависимости, миграции и статику
+#   ./deploy.sh --seed       дополнительно залить контент (первый запуск)
 #
-# На сервер уезжает только то, что нужно браузеру: страницы, static/, иконки
-# и robots.txt. Исходники, сборщик и макеты остаются в репозитории.
+# На сервер уезжает только код: база, медиафайлы и виртуальное окружение
+# живут там и не перезаписываются.
 set -euo pipefail
 
 HOST="${SD2_HOST:-root@201.24.62.135}"
-DEST="${SD2_DEST:-/opt/sd2-kmv}"
+DEST="${SD2_DEST:-/opt/sd2}"
 cd "$(dirname "$0")"
 
-python3 build.py "$@"
-
-rsync -az --delete --delete-excluded \
-  --include='*.html' \
-  --include='favicon.ico' \
-  --include='robots.txt' \
-  --include='static/***' \
-  --exclude='*' \
+rsync -az --delete \
+  --include='manage.py' --include='requirements.txt' \
+  --include='sd2_site/***' --include='core/***' --include='catalog/***' \
+  --include='content/***' --include='leads/***' --include='calc/***' \
+  --include='pages/***' --include='templates/***' --include='static/***' \
+  --exclude='__pycache__' --exclude='*.pyc' --exclude='*' \
   ./ "$HOST:$DEST/"
 
-ssh "$HOST" "chown -R www-data:www-data $DEST && find $DEST -type d -exec chmod 755 {} + && find $DEST -type f -exec chmod 644 {} +"
+ssh "$HOST" "cd $DEST && \
+  .venv/bin/pip install -q -r requirements.txt && \
+  .venv/bin/python manage.py migrate --noinput && \
+  .venv/bin/python manage.py collectstatic --noinput --clear >/dev/null && \
+  chown -R www-data:www-data $DEST/media $DEST/staticfiles $DEST/db.sqlite3"
 
+if [[ "${1:-}" == "--seed" ]]; then
+  ssh "$HOST" "cd $DEST && .venv/bin/python manage.py seed_content && \
+    .venv/bin/python manage.py seed_redirects && chown www-data:www-data $DEST/db.sqlite3"
+fi
+
+ssh "$HOST" "systemctl restart sd2 && sleep 2 && systemctl is-active sd2"
 echo "выложено: $HOST:$DEST"
