@@ -10,8 +10,10 @@
 from django.contrib.redirects.models import Redirect
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
+from django.utils.encoding import escape_uri_path
 
 from catalog.models import ZhbiGroup
+from core.models import Document
 
 # старый адрес → новый
 SECTIONS = {
@@ -34,6 +36,32 @@ RETIRED = [
     '/zhelezobeton/shchelevye-poly-korovnikov-i-svinarnikov',
 ]
 
+# Файлы старого сайта, которые есть в индексе Яндекса → документ на новом сайте.
+# Ведут на файл документа, загруженный в media; договор на старом сайте лежал
+# в двух редакциях — обе ведут на действующую.
+LEGACY_FILES = {
+    '/Бетон СтройДеталь-2.doc': 'Реквизиты ЗАО «Стройдеталь-2»',
+    '/Образец  договора поставки продукции ПРЕДОПЛАТА юр лица.doc':
+        'Типовой договор поставки продукции',
+    '/uploads/article/files/Форма договора поставки (предоплата).doc':
+        'Типовой договор поставки продукции',
+    '/Приложение к договору Форма заявки.docx': 'Приложение к договору: форма заявки',
+    '/uploads/article/files/Приложение к договору Форма Доверенности.docx':
+        'Приложение к договору: форма доверенности',
+    '/uploads/article/files/anketa_SD2.doc': 'Анкета соискателя',
+    '/Сводная_ведомость_резальтатов_проведения.pdf':
+        'Сводная ведомость специальной оценки условий труда',
+    '/Перечень_рекомендаций_мероприятий.pdf': 'Перечень мероприятий по улучшению условий труда',
+    '/zayavlenie-o-politike-bezopastnosti.pdf':
+        'Заявление о политике в области промышленной безопасности',
+}
+
+# Снято с публикации: пустой новый адрес — Django отдаёт 410 Gone,
+# и поисковик убирает файл из индекса, а не ждёт его возвращения.
+GONE = [
+    '/uploads/article/files/price_alform.xlsx',   # старый прайс, цены на сайте закрыты
+]
+
 
 class Command(BaseCommand):
     help = 'Заводит 301-редиректы со старых адресов сайта'
@@ -49,11 +77,24 @@ class Command(BaseCommand):
             pairs[group.legacy_url] = group.get_absolute_url()
         for old in RETIRED:
             pairs[old] = '/produkciya/zhbi/'
+        # тот же адрес со слешем на конце: внешние ссылки бывают и такими
+        for old, new in list(pairs.items()):
+            if old + '/' != new:
+                pairs.setdefault(old + '/', new)
+        for old, title in LEGACY_FILES.items():
+            doc = Document.objects.filter(title=title).exclude(file='').first()
+            if doc:
+                pairs[old] = doc.file.url
+            else:
+                self.stderr.write(f'нет файла у документа «{title}» — {old} пропущен')
+        for old in GONE:
+            pairs[old] = ''
 
         created = 0
         for old, new in pairs.items():
-            _, made = Redirect.objects.get_or_create(
-                site=site, old_path=old, defaults={'new_path': new})
+            # middleware сравнивает путь в закодированном виде: кириллица и пробелы — через %
+            _, made = Redirect.objects.update_or_create(
+                site=site, old_path=escape_uri_path(old), defaults={'new_path': new})
             created += made
         self.stdout.write(self.style.SUCCESS(
             f'редиректов: {Redirect.objects.count()} (новых {created})'))

@@ -6,11 +6,7 @@
   <img class="phero-media" src="{% if group.photo %}{{ group.photo.url }}{% else %}{% static 'img/zavod-318509.jpg' %}{% endif %}" alt="{{ group.title }}" />
   <span class="phero-shade"></span>
   <div class="wrap">
-    <nav class="crumbs" aria-label="Хлебные крошки">
-      <a href="{% url 'home' %}">Главная</a><i>·</i>
-      <a href="{% url 'zhbi' %}">ЖБИ и плитка</a><i>·</i>
-      <span aria-current="page">{{ group.title }}</span>
-    </nav>
+    {% url 'zhbi' as zhbi_url %}{% include "partials/crumbs.html" with current=group.title parent_title="ЖБИ и плитка" parent_url=zhbi_url %}
     <h1>{{ group.title }}</h1>
     {% if group.summary %}<p class="sub">{{ group.summary }}</p>{% endif %}
     <div class="cta-row">

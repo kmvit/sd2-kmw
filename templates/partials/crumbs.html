@@ -1,0 +1,7 @@
+{# Хлебные крошки с микроразметкой BreadcrumbList — Яндекс показывает их в сниппете вместо адреса.
+   Параметры: current — текущая страница; parent_title и parent_url — промежуточный раздел, если есть #}
+<nav class="crumbs" aria-label="Хлебные крошки" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="{% url 'home' %}"><span itemprop="name">Главная</span></a><meta itemprop="position" content="1" /></span><i>·</i>
+      {% if parent_title %}<span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="{{ parent_url }}"><span itemprop="name">{{ parent_title }}</span></a><meta itemprop="position" content="2" /></span><i>·</i>
+      {% endif %}<span aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name">{{ current }}</span><meta itemprop="position" content="{% if parent_title %}3{% else %}2{% endif %}" /></span>
+    </nav>

@@ -3,13 +3,24 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title_tag|default:"Завод «Стройдеталь-2»" }}{% endif %}</title>
+{% firstof page.seo_title page.title_tag "Завод «Стройдеталь-2»" as page_title %}
+<title>{{ page_title }}</title>
 <script>
 /* Тема применяется до отрисовки страницы: иначе при выбранной светлой теме
    на долю секунды мелькает тёмный фон. */
 try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.dataset.theme=_t}catch(e){}
 </script>
 {% if page.seo_description %}<meta name="description" content="{{ page.seo_description }}" />{% endif %}
+{# canonical без GET-параметров: адреса с utm и yclid не считаются отдельными страницами #}
+{% block canonical %}<link rel="canonical" href="{{ site_base }}{{ request.path }}" />{% endblock %}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Стройдеталь-2" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:title" content="{{ page_title }}" />
+{% if page.seo_description %}<meta property="og:description" content="{{ page.seo_description }}" />
+{% endif %}<meta property="og:url" content="{{ site_base }}{{ request.path }}" />
+<meta property="og:image" content="{{ site_base }}{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}" />
+<script type="application/ld+json">{{ site_schema|safe }}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />

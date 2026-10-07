@@ -127,7 +127,7 @@ class Aggregate(Ordered, Priced):
 
 
 class AsphaltMix(Ordered, Priced):
-    """Асфальтобетонная смесь по ГОСТ 9128-2009."""
+    """Асфальтобетонная смесь по ГОСТ Р 58406.2-2020."""
 
     title = models.CharField('Вид смеси', max_length=120)
     mix_type = models.CharField('Тип', max_length=40, blank=True, help_text='тип Б')
@@ -169,6 +169,10 @@ class PavingModel(Ordered, Priced):
     thickness = models.CharField('Толщина', max_length=40, blank=True, help_text='60 мм')
     per_pack = models.CharField('В упаковке', max_length=40, blank=True, help_text='9,6 м²')
     pallet_weight = models.CharField('Вес поддона', max_length=40, blank=True, help_text='1,3 т')
+    description = models.TextField(
+        'Описание', blank=True,
+        help_text='Чем модель хороша и с чем сочетается — выводится карточкой под таблицей. '
+                  'У модели в двух толщинах заполняйте одну строку')
 
     class Meta(Ordered.Meta):
         verbose_name = 'Модель плитки'

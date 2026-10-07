@@ -6,11 +6,7 @@
        alt="{{ page.admin_title }} — завод «Стройдеталь-2»" />
   <span class="phero-shade"></span>
   <div class="wrap">
-    <nav class="crumbs" aria-label="Хлебные крошки">
-      <a href="{% url 'home' %}">Главная</a><i>·</i>
-      {% if parent_title %}<a href="{{ parent_url }}">{{ parent_title }}</a><i>·</i>{% endif %}
-      <span aria-current="page">{{ crumb|default:page.admin_title }}</span>
-    </nav>
+    {% include "partials/crumbs.html" with current=crumb|default:page.admin_title %}
     {% if page.stamp %}<p class="stamp">{{ page.stamp }}</p>{% endif %}
     <h1>{{ page.h1|safe }}</h1>
     <p class="sub">{{ page.subtitle }}</p>

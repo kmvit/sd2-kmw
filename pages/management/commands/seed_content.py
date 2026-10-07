@@ -3,6 +3,14 @@
 
     python manage.py seed_content            дополнить недостающее
     python manage.py seed_content --reset    очистить контент и залить заново
+    python manage.py seed_content --update-texts   переписать тексты и SEO из этих файлов
+
+Без флагов существующие записи не меняются — правки из админки сохраняются.
+--update-texts нужен, когда тексты переписаны в коде (например, после работы
+с семантикой): он перезаписывает заголовки, подзаголовки, вводные тексты блоков,
+SEO-поля страниц и групп ЖБИ, плитки блоков (по их месту в блоке), описания
+направлений и моделей плитки, населённые пункты зон доставки. Правки этих полей
+в админке при этом теряются.
 
 Повторный запуск безопасен: записи ищутся по ключевым полям. Заявки команда
 не трогает ни при каком запуске — это данные клиентов, а не контент.
@@ -30,7 +38,7 @@ STATIC = Path(settings.BASE_DIR) / 'static'
 
 
 def attach(field, rel_path):
-    """Положить картинку из вёрстки в media, если её там ещё нет."""
+    """Положить файл из вёрстки (фото, документ) в media, если его там ещё нет."""
     if not rel_path or field:
         return False
     source = STATIC / rel_path
@@ -47,6 +55,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--reset', action='store_true',
                             help='Очистить контент перед заливкой (заявки не трогает)')
+        parser.add_argument('--update-texts', action='store_true',
+                            help='Перезаписать тексты и SEO уже заведённых страниц, '
+                                 'блоков и групп ЖБИ')
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -59,6 +70,7 @@ class Command(BaseCommand):
                 model.objects.all().delete()
             self.stdout.write('контент очищен')
 
+        self.update_texts = options['update_texts']
         SiteSettings.get()
         self.seed_page(home)
         for module in inner.ALL_PAGES:
@@ -76,37 +88,58 @@ class Command(BaseCommand):
         photo = data.pop('photo', '')
         page, created = Page.objects.get_or_create(
             slug=data['slug'], defaults={k: v for k, v in data.items() if k != 'slug'})
+        if self.update_texts and not created:
+            self.overwrite(page, data, ('h1', 'stamp', 'subtitle', 'seo_title', 'seo_description'))
         if attach(page.photo, photo):
             page.save()
         self.stdout.write(f'страница: {page.admin_title}{" (создана)" if created else ""}')
 
         for i, (key, stamp, title, lead, note, photo, caption) in enumerate(module.SECTIONS, 1):
-            section, _ = Section.objects.get_or_create(
-                page=page, key=key,
-                defaults={'stamp': stamp, 'title': title, 'lead': lead, 'note': note,
-                          'photo_caption': caption, 'order': i * 10})
+            texts = {'stamp': stamp, 'title': title, 'lead': lead, 'note': note,
+                     'photo_caption': caption}
+            section, made = Section.objects.get_or_create(
+                page=page, key=key, defaults={**texts, 'order': i * 10})
+            if self.update_texts and not made:
+                self.overwrite(section, texts, texts)
             if attach(section.photo, photo):
                 section.save()
         self.stdout.write(f'  блоков: {page.sections.count()}')
 
         for key, rows in module.CARDS.items():
             for i, (icon, value, sup, title, text) in enumerate(rows, 1):
+                texts = {'icon': icon, 'value': value, 'sup': sup, 'title': title, 'text': text}
+                if self.update_texts:
+                    # заголовок мог поменяться — ищем плитку по месту в блоке
+                    card = Card.objects.filter(page=page, section=key, order=i * 10).first()
+                    if card:
+                        self.overwrite(card, texts, texts)
+                        continue
                 Card.objects.get_or_create(
                     page=page, section=key, title=title,
-                    defaults={'icon': icon, 'value': value, 'sup': sup,
-                              'text': text, 'order': i * 10})
+                    defaults={**texts, 'order': i * 10})
         self.stdout.write(f'  плиток: {page.cards.count()}')
+
+    def overwrite(self, obj, data, fields):
+        """Переписать текстовые поля записи и сказать, какие изменились."""
+        changed = [f for f in fields if f in data and getattr(obj, f) != data[f]]
+        for f in changed:
+            setattr(obj, f, data[f])
+        if changed:
+            obj.save(update_fields=changed)
+            self.stdout.write(f'  обновлено «{obj}»: {", ".join(changed)}')
 
     # -------------------------------------------------------------- справочники
 
     def seed_directories(self):
         for i, row in enumerate(directories.DIRECTIONS, 1):
             title, text, chips, price, note, url_name, link, photo = row
-            obj, _ = Direction.objects.get_or_create(
+            obj, made = Direction.objects.get_or_create(
                 title=title,
                 defaults={'text': text, 'chips': chips, 'price_value': price,
                           'price_note': note, 'url_name': url_name, 'link_label': link,
                           'order': i * 10})
+            if self.update_texts and not made:
+                self.overwrite(obj, {'text': text}, ('text',))
             if attach(obj.photo, photo):
                 obj.save()
         self.stdout.write(f'направления: {Direction.objects.count()}')
@@ -173,17 +206,23 @@ class Command(BaseCommand):
                           'weight': weight, 'price_label': 'Договорная', 'price_prefix': '',
                           'order': i * 10})
         for i, (title, size, thick, pack, pallet) in enumerate(rows.PAVING, 1):
-            PavingModel.objects.get_or_create(
+            text = rows.PAVING_TEXT.get((title, thick), '')
+            model, made = PavingModel.objects.get_or_create(
                 title=title, thickness=thick,
                 defaults={'size': size, 'per_pack': pack, 'pallet_weight': pallet,
+                          'description': text,
                           'price_label': 'Договорная', 'price_prefix': '', 'order': i * 10})
+            if self.update_texts and not made:
+                self.overwrite(model, {'description': text}, ('description',))
         for i, (title, is_mix) in enumerate(rows.COLORS, 1):
             PavingColor.objects.get_or_create(title=title,
                                               defaults={'is_mix': is_mix, 'order': i * 10})
         for i, (title, settlements) in enumerate(rows.ZONES, 1):
-            DeliveryZone.objects.get_or_create(
+            zone, made = DeliveryZone.objects.get_or_create(
                 title=title, defaults={'settlements': settlements, 'price_label': 'По запросу',
                                        'price_prefix': '', 'order': i * 10})
+            if self.update_texts and not made:
+                self.overwrite(zone, {'settlements': settlements}, ('settlements',))
         for i, (title, reach, pad, billing, price_text) in enumerate(rows.PUMPS, 1):
             ConcretePump.objects.get_or_create(
                 title=title,
@@ -212,9 +251,11 @@ class Command(BaseCommand):
                     MemberPhone.objects.create(member=member, number=number, order=j * 10)
         self.stdout.write(f'команда: {TeamMember.objects.count()}')
 
-        for i, (title, kind) in enumerate(directories.DOCUMENTS, 1):
-            Document.objects.get_or_create(title=title,
-                                           defaults={'kind': kind, 'order': i * 10})
+        for i, (title, kind, path) in enumerate(directories.DOCUMENTS, 1):
+            doc, _ = Document.objects.get_or_create(title=title,
+                                                    defaults={'kind': kind, 'order': i * 10})
+            if attach(doc.file, path):
+                doc.save()
         for i, (title, weekdays, sunday, phone) in enumerate(directories.SCHEDULE, 1):
             WorkSchedule.objects.get_or_create(
                 title=title, defaults={'weekdays': weekdays, 'sunday': sunday,
@@ -243,8 +284,18 @@ class Command(BaseCommand):
                           'gost': data['gost'], 'description': data['description'],
                           'legacy_url': data['legacy'], 'order': i * 10,
                           'custom_template': self.CUSTOM_TEMPLATES.get(data['slug'], ''),
-                          'seo_title': f"{data['title']} в Пятигорске — завод «Стройдеталь-2»",
-                          'seo_description': data['description'][:300]})
+                          'summary': data.get('summary', ''),
+                          'seo_title': data.get('seo_title') or
+                                       f"{data['title']} в Пятигорске — завод «Стройдеталь-2»",
+                          'seo_description': data.get('seo_description') or
+                                             data['description'][:300]})
+            if self.update_texts and not created:
+                self.overwrite(group, {
+                    'summary': data.get('summary', ''), 'description': data['description'],
+                    'gost': data['gost'],
+                    'seo_title': data.get('seo_title', ''),
+                    'seo_description': data.get('seo_description', '')},
+                    ('summary', 'description', 'gost', 'seo_title', 'seo_description'))
             if attach(group.photo, data['photo']):
                 group.save()
             if created:

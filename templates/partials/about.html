@@ -1,0 +1,9 @@
+{# Текстовый блок о продукции: штамп, заголовок, вводный текст и развёрнутый текст из примечания #}
+{% with s=sections.about %}{% if s %}
+<section class="bt" id="about">
+  <div class="wrap">
+    {% include "partials/sec_head.html" %}
+    <div class="prose" style="margin-top:28px">{{ s.note|safe }}</div>
+  </div>
+</section>
+{% endif %}{% endwith %}

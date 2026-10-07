@@ -10,7 +10,7 @@
     {% include "partials/sec_head.html" %}
     <div class="tbl-wrap">
       <table class="tbl">
-        <caption>Инертные материалы · самовывоз · цены с карьера</caption>
+        <caption>Инертные материалы · цены с карьера, без доставки</caption>
         <thead>
           <tr><th>Наименование</th><th>Фракция</th><th>ГОСТ</th><th>Характеристики</th>
               <th>Цена за тонну</th></tr>
@@ -88,4 +88,5 @@
   </div>
 </section>
 {% endif %}{% endwith %}
+{% include "partials/about.html" %}
 {% endblock %}
