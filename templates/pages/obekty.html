@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load static %}
 
 {% block content %}
-{% include "partials/phero.html" with crumb="Объекты" cta1="Обсудить свой объект" cta2="Марки и характеристики" cta2_url="/produkciya/beton/" %}
+{% url 'beton' as beton_url %}{% include "partials/phero.html" with crumb="Объекты" cta1="Обсудить свой объект" cta2="Марки и характеристики" cta2_url=beton_url %}
 {% include "partials/bar.html" %}
 
 {% with s=sections.built %}{% if s %}

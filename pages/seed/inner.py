@@ -172,16 +172,16 @@ ZHBI = dict(
         ('about', 'Завод ЖБИ на КМВ', 'Железобетонные изделия<br>от производителя',
          'С железобетона в 1962 году начался завод. Сегодня это 293 изделия в 19 группах — '
          'для частных домов, инженерных сетей и дорог.',
-         '<p><b>Для частного дома</b> берут <a href="/produkciya/zhbi/fbs-bloki/">блоки ФБС</a> '
-         'под ленточный фундамент и подвал, <a href="/produkciya/zhbi/stenovye-bloki/">стеновые '
+         '<p><b>Для частного дома</b> берут <a href="/zhelezobeton/cena-na-FBS-bloki-fundamentnye">блоки ФБС</a> '
+         'под ленточный фундамент и подвал, <a href="/zhelezobeton/betonnye-stenovye-bloki">стеновые '
          'блоки (шлакоблок)</a> для стен, гаражей и заборов, '
-         '<a href="/produkciya/zhbi/kolca-kolodcev/">кольца для колодца</a> с плитами днища '
+         '<a href="/zhelezobeton/cena-na-kolca-ZHBI-kanalizacii">кольца для колодца</a> с плитами днища '
          'и перекрытия — под септик, колодец и канализацию.</p>'
-         '<p><b>Для благоустройства и дорог</b> — <a href="/produkciya/zhbi/bordyury/">бордюр '
-         'тротуарный и дорожный</a>, <a href="/produkciya/zhbi/trotuarnaya-plitka/">тротуарная '
-         'плитка и брусчатка</a>, <a href="/produkciya/zhbi/plity-dorozhnye/">дорожные плиты</a>, '
-         'водоотводные лотки — <a href="/produkciya/zhbi/lotki-teleskopicheskie/">телескопические</a> '
-         'и <a href="/produkciya/zhbi/lotki-prikromochnye/">прикромочные</a>.</p>'
+         '<p><b>Для благоустройства и дорог</b> — <a href="/zhelezobeton/bordyury-BR-trotuarnye-sadovye-magistralnye">бордюр '
+         'тротуарный и дорожный</a>, <a href="/zhelezobeton/trotuarnaya-plitka-i-bruschatka">тротуарная '
+         'плитка и брусчатка</a>, <a href="/zhelezobeton/ceny-na-dorozhnye-plity-PDN-PAG">дорожные плиты</a>, '
+         'водоотводные лотки — <a href="/zhelezobeton/vodootvodnye-lotki-teleskopicheskie">телескопические</a> '
+         'и <a href="/zhelezobeton/lotok-prikormochnyj">прикромочные</a>.</p>'
          '<p>Все изделия делаем из бетона собственного завода и проверяем в своей лаборатории. '
          'Цену и наличие на складе уточняйте в отделе продаж — ответим в течение рабочего дня.</p>',
          '', ''),

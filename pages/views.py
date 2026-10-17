@@ -8,6 +8,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils.encoding import escape_uri_path
 from django.views.decorators.http import require_POST
 
 from catalog.models import (Aggregate, AsphaltMix, ConcreteGrade, ConcretePump,
@@ -19,17 +20,20 @@ from core.models import Document, Page, SiteSettings
 from leads.forms import DirectorMessageForm, LeadForm
 from leads.notify import notify_director, notify_lead
 
+from .legacy import SECTIONS
+
 # (адрес, имя маршрута, шаблон, какой пункт меню подсветить)
+# Разделы старого сайта — на прежних адресах (pages/legacy.py), новые — со слешем.
 PAGES = [
-    ('',                     'home',         'index',        'products'),
-    ('produkciya/beton/',    'beton',        'beton',        'products'),
-    ('produkciya/zhbi/',     'zhbi',         'zhbi',         'products'),
-    ('produkciya/asfalt/',   'asfalt',       'asfalt',       'products'),
-    ('produkciya/inertnye/', 'karer',        'karer',        'karer'),
+    ('',                                  'home',         'index',        'products'),
+    (SECTIONS['beton'].lstrip('/'),       'beton',        'beton',        'products'),
+    (SECTIONS['zhbi'].lstrip('/'),        'zhbi',         'zhbi',         'products'),
+    (SECTIONS['asfalt'].lstrip('/'),      'asfalt',       'asfalt',       'products'),
+    (SECTIONS['karer'].lstrip('/'),       'karer',        'karer',        'karer'),
     ('dostavka/',            'dostavka',     'dostavka',     'dostavka'),
     ('laboratoriya/',        'laboratoriya', 'laboratoriya', 'lab'),
     ('obekty/',              'obekty',       'obekty',       'obekty'),
-    ('kontakty/',            'kontakty',     'kontakty',     'kontakty'),
+    (SECTIONS['kontakty'].lstrip('/'),    'kontakty',     'kontakty',     'kontakty'),
     ('politika/',            'politika',     'politika',     ''),
 ]
 
@@ -131,13 +135,15 @@ ZHBI_COLUMNS = [
 
 
 def zhbi_item(request, slug):
-    """Страница группы изделий ЖБИ.
+    """Страница группы изделий ЖБИ — по адресу карточки со старого сайта.
 
     Набор колонок у групп разный: у колец важен диаметр, у перемычек — несущая
     способность. Поэтому таблица собирается здесь: пустые колонки не выводим,
     чтобы страница не пестрела прочерками.
     """
-    group = get_object_or_404(ZhbiGroup, slug=slug, published=True)
+    groups = ZhbiGroup.objects.filter(published=True)
+    group = (groups.filter(legacy_url=f'/zhelezobeton/{slug}').first()
+             or get_object_or_404(groups, slug=slug, legacy_url=''))
     items = list(group.items.filter(published=True))
     columns = [(name, label) for name, label in ZHBI_COLUMNS
                if any(getattr(item, name) for item in items)]
@@ -204,9 +210,9 @@ def robots_txt(request):
 
 def sitemap_xml(request):
     base = f'{request.scheme}://{request.get_host()}'
-    locs = [path for path, name, _tpl, _active in PAGES if name != 'politika']
-    locs += [f'produkciya/zhbi/{g.slug}/' for g in ZhbiGroup.objects.filter(published=True)]
-    items = ''.join(f'  <url><loc>{base}/{loc}</loc></url>\n' for loc in locs)
+    locs = ['/' + path for path, name, _tpl, _active in PAGES if name != 'politika']
+    locs += [g.get_absolute_url() for g in ZhbiGroup.objects.filter(published=True)]
+    items = ''.join(f'  <url><loc>{base}{escape_uri_path(loc)}</loc></url>\n' for loc in locs)
     return HttpResponse(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + items + '</urlset>\n',

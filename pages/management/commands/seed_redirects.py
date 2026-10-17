@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Карта 301-редиректов со старого сайта.
+"""Карта 301-редиректов для переезда со старого сайта.
 
     python manage.py seed_redirects
 
-Без неё переезд обнуляет поисковый трафик: старые адреса собирали его годами,
-а страницы каталога ЖБИ — это почти два десятка точек входа. Адреса берутся
-из поля «Адрес на старом сайте» у групп изделий плюс список разделов ниже.
+Разделы и карточки ЖБИ работают на прежних адресах (pages/legacy.py,
+«Адрес на старом сайте» у групп) — переклеивать их поисковику не нужно.
+Редиректы закрывают остальное: те же адреса со слешем на конце, снятые
+с производства карточки, файлы из индекса и черновые адреса /produkciya/…,
+которые были у редизайна на тестовой площадке.
 """
 from django.contrib.redirects.models import Redirect
 from django.contrib.sites.models import Site
@@ -14,15 +16,7 @@ from django.utils.encoding import escape_uri_path
 
 from catalog.models import ZhbiGroup
 from core.models import Document
-
-# старый адрес → новый
-SECTIONS = {
-    '/cena-betona-s-dostavkoj': '/produkciya/beton/',
-    '/ZHB-zavod-ZHBI': '/produkciya/zhbi/',
-    '/asfaltobeton': '/produkciya/asfalt/',
-    '/karer-shchebnya-i-peska': '/produkciya/inertnye/',
-    '/kontakty': '/kontakty/',
-}
+from pages.legacy import DRAFT_SECTIONS, DRAFT_ZHBI_PREFIX, SECTIONS
 
 # Карточки, снятые с производства: на старом сайте они уже отдавали 301
 # на каталог — сохраняем это поведение, чтобы адреса не начали отдавать 404.
@@ -67,7 +61,7 @@ GONE = [
 
 
 class Command(BaseCommand):
-    help = 'Заводит 301-редиректы со старых адресов сайта'
+    help = 'Заводит 301-редиректы для переезда со старого сайта'
 
     def handle(self, *args, **options):
         site = Site.objects.get_current()
@@ -75,15 +69,23 @@ class Command(BaseCommand):
         site.name = 'Стройдеталь-2'
         site.save()
 
-        pairs = dict(SECTIONS)
+        catalog = SECTIONS['zhbi']
+        live = list(SECTIONS.values())          # эти адреса отдают страницы сами
+        pairs = dict(DRAFT_SECTIONS)
         for group in ZhbiGroup.objects.exclude(legacy_url=''):
-            pairs[group.legacy_url] = group.get_absolute_url()
+            live.append(group.legacy_url)
+            draft = f'{DRAFT_ZHBI_PREFIX}{group.slug}/'
+            pairs[draft] = pairs[draft.rstrip('/')] = group.legacy_url
         for old in RETIRED:
-            pairs[old] = '/produkciya/zhbi/'
+            pairs[old] = catalog
         # тот же адрес со слешем на конце: внешние ссылки бывают и такими
-        for old, new in list(pairs.items()):
-            if old + '/' != new:
-                pairs.setdefault(old + '/', new)
+        for path in live + RETIRED:
+            pairs.setdefault(path + '/', catalog if path in RETIRED else path)
+        for draft in list(DRAFT_SECTIONS):
+            pairs.setdefault(draft.rstrip('/'), DRAFT_SECTIONS[draft])
+        # прежняя карта вела со старых адресов на черновые — эти строки больше не нужны
+        Redirect.objects.filter(site=site, old_path__in=[escape_uri_path(p) for p in live]).delete()
+        pairs = {old: new for old, new in pairs.items() if old not in live}
         for old, title in LEGACY_FILES.items():
             doc = Document.objects.filter(title=title).exclude(file='').first()
             if doc:

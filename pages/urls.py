@@ -11,7 +11,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('produkciya/zhbi/<slug:slug>/', views.zhbi_item, name='zhbi_item'),
+    # карточки ЖБИ — на адресах старого сайта: /zhelezobeton/<как было>
+    path('zhelezobeton/<str:slug>', views.zhbi_item, name='zhbi_item'),
     path('zayavka/', views.lead_create, name='lead_create'),
     path('pismo-direktoru/', views.director_create, name='director_create'),
     path('robots.txt', views.robots_txt, name='robots'),

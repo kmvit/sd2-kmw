@@ -202,9 +202,8 @@ class PavingColor(Ordered):
 class ZhbiGroup(Ordered):
     """Группа изделий ЖБИ — плитка каталога и своя страница товара.
 
-    `legacy_url` хранит адрес карточки на старом сайте: по нему команда
-    заводит 301-редирект, иначе при переезде потеряется поисковый трафик,
-    который эти страницы собирали годами.
+    `legacy_url` — адрес карточки на старом сайте: страница открывается
+    по нему же, чтобы не терять поисковый трафик, который она собирала годами.
     """
 
     title = models.CharField('Название', max_length=200)
@@ -219,7 +218,9 @@ class ZhbiGroup(Ordered):
     gost = models.CharField('ГОСТ или ТУ', max_length=120, blank=True)
     note = models.TextField('Примечание под таблицей', blank=True)
     legacy_url = models.CharField('Адрес на старом сайте', max_length=200, blank=True,
-                                  help_text='Например /zhelezobeton/progony — для 301-редиректа')
+                                  help_text='Например /zhelezobeton/progony — страница открывается '
+                                            'по этому адресу, чтобы не терять поисковый трафик. '
+                                            'Не менять после запуска')
     custom_template = models.CharField(
         'Свой шаблон', max_length=60, blank=True,
         help_text='Для групп с особой вёрсткой — например плитка с моделями и цветами. '
@@ -235,7 +236,8 @@ class ZhbiGroup(Ordered):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('zhbi_item', args=[self.slug])
+        # страница живёт по адресу старого сайта, если он был
+        return self.legacy_url or reverse('zhbi_item', args=[self.slug])
 
 
 class ZhbiItem(Ordered, Priced):
