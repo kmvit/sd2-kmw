@@ -1,7 +1,8 @@
 {% load static %}
-{# Шапка внутренней страницы: фото, хлебные крошки, заголовок и кнопки.
-   Крошки передаются через include — они у каждой страницы свои. #}
-<section class="phero" id="top">
+{% comment %}
+Шапка внутренней страницы: фото, хлебные крошки, заголовок и кнопки.
+Крошки передаются через include — они у каждой страницы свои.
+{% endcomment %}<section class="phero" id="top">
   <img class="phero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}"
        alt="{{ page.admin_title }} — завод «Стройдеталь-2»" />
   <span class="phero-shade"></span>
