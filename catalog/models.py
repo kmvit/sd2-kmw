@@ -129,10 +129,15 @@ class Aggregate(Ordered, Priced):
 class AsphaltMix(Ordered, Priced):
     """Асфальтобетонная смесь по ГОСТ Р 58406.2-2020."""
 
-    title = models.CharField('Вид смеси', max_length=120)
-    mix_type = models.CharField('Тип', max_length=40, blank=True, help_text='тип Б')
-    grade = models.CharField('Марка', max_length=40, blank=True, help_text='марка II')
-    purpose = models.CharField('Область применения', max_length=300, blank=True)
+    # Обозначение по ГОСТ Р 58406.2-2020 само описывает смесь: А 16 Вн — крупность
+    # зерна 16 мм, В/Н/О — верхний, нижний слой или основание, л/н/т — лёгкие,
+    # нормальные или тяжёлые условия движения.
+    title = models.CharField('Марка смеси', max_length=120, help_text='А 16 Вн')
+    mix_type = models.CharField('Слой', max_length=40, blank=True, help_text='верхний слой')
+    grade = models.CharField('Условия движения', max_length=40, blank=True,
+                             help_text='нормальные')
+    purpose = models.CharField('Область применения', max_length=300, blank=True,
+                               help_text='Если заполнено — выводится под маркой')
 
     class Meta(Ordered.Meta):
         verbose_name = 'Асфальтобетонная смесь'

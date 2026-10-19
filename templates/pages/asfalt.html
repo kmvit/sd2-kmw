@@ -12,16 +12,14 @@
       <table class="tbl">
         <caption>Асфальтобетонные смеси · ГОСТ Р 58406.2-2020</caption>
         <thead>
-          <tr><th>Вид смеси</th><th>Тип</th><th>Марка</th><th>Область применения</th>
-              <th>Цена за тонну</th></tr>
+          <tr><th>Марка смеси</th><th>Слой</th><th>Условия движения</th><th>Цена за тонну</th></tr>
         </thead>
         <tbody>
           {% for item in mixes %}
           <tr>
-            <td class="grade">{{ item.title }}</td>
+            <td class="grade">{{ item.title }}{% if item.purpose %}<br><span class="muted">{{ item.purpose }}</span>{% endif %}</td>
             <td>{{ item.mix_type }}</td>
             <td>{{ item.grade }}</td>
-            <td class="muted">{{ item.purpose }}</td>
             {% include "partials/price_cell.html" %}
           </tr>
           {% endfor %}
