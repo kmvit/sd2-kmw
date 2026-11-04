@@ -128,7 +128,7 @@ TEAM = [
 # название, тип файла, файл в static (перенесены со старого сайта)
 DOCUMENTS = [
     ('Реквизиты ЗАО «Стройдеталь-2»', 'word', 'docs/rekvizity-sd2.doc'),
-    ('Типовой договор поставки продукции', 'word', 'docs/dogovor-postavki.doc'),
+    ('Типовой договор поставки продукции', 'word', 'docs/dogovor-postavki.docx'),
     ('Приложение к договору: форма заявки', 'word', 'docs/forma-zayavki.docx'),
     ('Приложение к договору: форма доверенности', 'word', 'docs/forma-doverennosti.docx'),
     ('Анкета соискателя', 'word', 'docs/anketa-soiskatelya.doc'),

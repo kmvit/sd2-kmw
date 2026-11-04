@@ -271,6 +271,11 @@ class Command(BaseCommand):
         for i, (title, kind, path) in enumerate(directories.DOCUMENTS, 1):
             doc, _ = Document.objects.get_or_create(title=title,
                                                     defaults={'kind': kind, 'order': i * 10})
+            if self.update_texts and title == 'Типовой договор поставки продукции':
+                source = STATIC / path
+                if source.exists() and Path(doc.file.name).name != source.name:
+                    with source.open('rb') as fp:
+                        doc.file.save(source.name, File(fp))
             if attach(doc.file, path):
                 doc.save()
         for i, (title, weekdays, sunday, phone) in enumerate(directories.SCHEDULE, 1):
