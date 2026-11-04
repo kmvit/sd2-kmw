@@ -44,7 +44,7 @@
       {% for d in directions %}
       <a class="reg-row" href="{% if d.url_name %}{% url d.url_name %}{% else %}#{{ d.anchor|default:'request' }}{% endif %}">
         <span class="idx">{{ forloop.counter|stringformat:"02d" }}</span>
-        {% if d.photo %}<img class="pic" src="{{ d.photo.url }}" alt="{{ d.title }}" />{% endif %}
+        {% if d.photo %}<img class="pic" src="{{ d.photo.url }}" alt="{{ d.title }}"{% if d.url_name == 'beton' %} style="object-position:center 82%"{% endif %} />{% endif %}
         <span>
           <h3>{{ d.title }}</h3>
           <p>{{ d.text }}</p>

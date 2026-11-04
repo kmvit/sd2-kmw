@@ -140,6 +140,11 @@ class Command(BaseCommand):
                           'order': i * 10})
             if self.update_texts and not made:
                 self.overwrite(obj, {'text': text}, ('text',))
+                if title == 'Бетон и раствор с доставкой' and photo:
+                    source = STATIC / photo
+                    if source.exists() and Path(obj.photo.name).name != source.name:
+                        with source.open('rb') as fp:
+                            obj.photo.save(source.name, File(fp))
             if attach(obj.photo, photo):
                 obj.save()
         self.stdout.write(f'направления: {Direction.objects.count()}')
@@ -224,6 +229,13 @@ class Command(BaseCommand):
             if self.update_texts and not made:
                 self.overwrite(zone, {'settlements': settlements}, ('settlements',))
         for i, (title, reach, pad, billing, price_text) in enumerate(rows.PUMPS, 1):
+            if self.update_texts:
+                pump = ConcretePump.objects.filter(order=i * 10).first()
+                if pump:
+                    self.overwrite(pump, {'title': title, 'reach': reach, 'pad': pad,
+                                          'billing': billing, 'price_text': price_text},
+                                   ('title', 'reach', 'pad', 'billing', 'price_text'))
+                    continue
             ConcretePump.objects.get_or_create(
                 title=title,
                 defaults={'reach': reach, 'pad': pad, 'billing': billing,
