@@ -90,6 +90,11 @@ class Command(BaseCommand):
             slug=data['slug'], defaults={k: v for k, v in data.items() if k != 'slug'})
         if self.update_texts and not created:
             self.overwrite(page, data, ('h1', 'stamp', 'subtitle', 'seo_title', 'seo_description'))
+            if page.slug == 'beton' and photo:
+                source = STATIC / photo
+                if source.exists() and Path(page.photo.name).name != source.name:
+                    with source.open('rb') as fp:
+                        page.photo.save(source.name, File(fp))
         if attach(page.photo, photo):
             page.save()
         self.stdout.write(f'страница: {page.admin_title}{" (создана)" if created else ""}')
