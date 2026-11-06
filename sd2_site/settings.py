@@ -25,6 +25,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or 'django-insecure-z^p-8qx@!_&
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
+ASSISTANT_ENABLED = os.environ.get('ASSISTANT_ENABLED', '0') == '1'
+ASSISTANT_BASE_URL = os.environ.get('ASSISTANT_BASE_URL', 'https://ganin-group.ru').rstrip('/')
 
 ALLOWED_HOSTS = os.environ.get(
     'DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,77dbc7754866.vps.myjino.ru,sd2-kmv.ru,www.sd2-kmv.ru'

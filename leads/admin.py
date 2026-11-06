@@ -41,3 +41,15 @@ class DirectorMessageAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+    def _is_director(self, request):
+        return request.user.is_authenticated and request.user.groups.filter(name='Директор').exists()
+
+    def has_module_permission(self, request):
+        return self._is_director(request)
+
+    def has_view_permission(self, request, obj=None):
+        return self._is_director(request)
+
+    def has_change_permission(self, request, obj=None):
+        return self._is_director(request)

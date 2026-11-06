@@ -8,6 +8,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import escape_uri_path
 from django.views.decorators.http import require_POST
 
@@ -168,6 +169,9 @@ def _back(request, fragment=''):
     """Вернуться на страницу, с которой отправляли форму."""
     target = (request.POST.get('next') or request.META.get('HTTP_REFERER')
               or reverse('home')).split('#')[0].split('?')[0]
+    if not url_has_allowed_host_and_scheme(target, allowed_hosts={request.get_host()},
+                                           require_https=request.is_secure()):
+        target = reverse('home')
     return HttpResponseRedirect(f'{target}{fragment}')
 
 

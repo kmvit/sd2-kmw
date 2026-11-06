@@ -41,6 +41,8 @@ class LeadForm(HoneypotMixin, forms.ModelForm):
 
 
 class DirectorMessageForm(HoneypotMixin, forms.ModelForm):
+    agree = forms.BooleanField(required=True, error_messages={'required': 'Подтвердите согласие на обработку обращения'})
+
     class Meta:
         model = DirectorMessage
         fields = ['message', 'contact']

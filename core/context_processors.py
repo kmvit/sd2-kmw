@@ -8,6 +8,7 @@
 import json
 
 from django.templatetags.static import static
+from django.conf import settings as django_settings
 
 from .models import SiteSettings
 
@@ -16,7 +17,9 @@ def site(request):
     settings = SiteSettings.get()
     base = f'{request.scheme}://{request.get_host()}'
     return {'site': settings, 'site_base': base,
-            'site_schema': organization_schema(settings, base)}
+            'site_schema': organization_schema(settings, base),
+            'assistant_enabled': django_settings.ASSISTANT_ENABLED,
+            'assistant_base_url': django_settings.ASSISTANT_BASE_URL}
 
 
 def organization_schema(s, base):
