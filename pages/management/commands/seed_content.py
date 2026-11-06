@@ -173,6 +173,11 @@ class Command(BaseCommand):
         self.stdout.write(f'партнёры: {Partner.objects.count()}')
 
         for i, (category, title, place, greenhouse, text) in enumerate(directories.OBJECTS, 1):
+            if self.update_texts and title in ('ТМ «Ботаника»', 'Агрокомплекс «Сунжа»'):
+                obj = ProjectObject.objects.filter(order=i * 10).first()
+                if obj:
+                    self.overwrite(obj, {'title': title}, ('title',))
+                    continue
             ProjectObject.objects.get_or_create(
                 title=title, place=place,
                 defaults={'category': category, 'is_greenhouse': greenhouse,
@@ -180,6 +185,11 @@ class Command(BaseCommand):
         self.stdout.write(f'объекты: {ProjectObject.objects.count()}')
 
         for i, (question, answer) in enumerate(directories.FAQ, 1):
+            if self.update_texts and question == 'Какой минимальный объём бетона привезёте?':
+                obj = Faq.objects.filter(question=question).first()
+                if obj:
+                    self.overwrite(obj, {'answer': answer}, ('answer',))
+                    continue
             Faq.objects.get_or_create(question=question,
                                       defaults={'answer': answer, 'order': i * 10})
         self.stdout.write(f'вопросы: {Faq.objects.count()}')
