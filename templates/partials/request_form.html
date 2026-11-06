@@ -27,7 +27,7 @@
       </div>
       <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
       <!-- по 152-ФЗ согласие — активное действие, галочка по умолчанию снята -->
-      <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных и с <a href="{% url 'politika' %}">политикой конфиденциальности</a></span></label>
+      <label class="f-agree"><input type="checkbox" name="agree" required /><span>Согласен на обработку персональных данных — <a href="{% url 'soglasie' %}">текст согласия</a></span></label>
       <button class="btn btn--solid" style="width:100%;margin-top:20px" type="submit">Получить расчёт</button>
       <p class="f-note{% if lead_errors %} f-note--err{% elif lead_sent %} f-note--ok{% endif %}"{% if not lead_errors and not lead_sent %} hidden{% endif %}>
         {% if lead_errors %}{{ lead_errors|join:" " }}{% elif lead_sent %}Заявка отправлена — менеджер перезвонит в рабочее время.{% endif %}

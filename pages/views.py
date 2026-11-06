@@ -36,6 +36,7 @@ PAGES = [
     ('obekty/',              'obekty',       'obekty',       'obekty'),
     (SECTIONS['kontakty'].lstrip('/'),    'kontakty',     'kontakty',     'kontakty'),
     ('politika/',            'politika',     'politika',     ''),
+    ('soglasie/',            'soglasie',     'soglasie',     ''),
 ]
 
 # Что предлагается в поле «Что нужно» формы заявки
@@ -208,13 +209,14 @@ def robots_txt(request):
     text = ('User-agent: *\n'
             'Disallow: /admin/\n'
             'Disallow: /politika/\n'
+            'Disallow: /soglasie/\n'
             f'Sitemap: {base}/sitemap.xml\n')
     return HttpResponse(text, content_type='text/plain')
 
 
 def sitemap_xml(request):
     base = f'{request.scheme}://{request.get_host()}'
-    locs = ['/' + path for path, name, _tpl, _active in PAGES if name != 'politika']
+    locs = ['/' + path for path, name, _tpl, _active in PAGES if name not in {'politika', 'soglasie'}]
     locs += [g.get_absolute_url() for g in ZhbiGroup.objects.filter(published=True)]
     items = ''.join(f'  <url><loc>{base}{escape_uri_path(loc)}</loc></url>\n' for loc in locs)
     return HttpResponse(
