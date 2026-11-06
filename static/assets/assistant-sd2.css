@@ -15,8 +15,6 @@
 .gg-assistant__actions{padding:9px 16px;border-top:1px solid var(--line)}
 .gg-assistant__lead-toggle{color:#91c4ff;font-size:13px}
 .gg-assistant__chat-consent{padding:5px 16px 12px}
-.gg-assistant .gg-assistant__chat-consent input{display:none}
-.gg-assistant .gg-assistant__chat-consent{font-size:11px;line-height:1.35}
 .gg-assistant__agree{gap:8px;color:var(--silver);line-height:1.4}
 .gg-assistant__agree input{flex:none;width:16px;height:16px;accent-color:var(--accent)}
 .gg-assistant__form{gap:8px;padding:0 16px 16px}
