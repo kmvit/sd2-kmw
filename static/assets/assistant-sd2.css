@@ -1,12 +1,11 @@
 /* Оформление подключаемого ассистента в дизайн-системе Стройдеталь-2. */
 .gg-assistant{right:16px;bottom:16px;color:var(--paper);font:14px/1.45 var(--font-t)}
-.gg-assistant .gg-assistant__toggle{display:grid;place-items:center;width:56px;height:56px;padding:0;border:1px solid var(--accent);border-radius:4px;background:var(--accent);color:#fff;box-shadow:0 8px 24px #0006;font-size:0;line-height:0}
-.gg-assistant__toggle::before{content:'Чат';font:600 12px/1 var(--font-m);letter-spacing:.03em}
+.gg-assistant .gg-assistant__toggle{display:inline-flex;align-items:center;justify-content:center;min-height:54px;width:auto;height:auto;padding:0 22px;border:1px solid var(--accent);border-radius:0;background:var(--accent);color:#fff;box-shadow:0 8px 24px #0006;font:500 15px/1.2 var(--font-h);letter-spacing:.12em;text-transform:uppercase}
 .gg-assistant__toggle:hover{background:var(--accent-2)}
 .gg-assistant.is-open .gg-assistant__toggle{visibility:hidden}
 .gg-assistant.is-open .gg-assistant__panel{bottom:0}
 .gg-assistant button:focus-visible,.gg-assistant input:focus-visible,.gg-assistant textarea:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
-.gg-assistant .gg-assistant__panel{bottom:66px;width:min(390px,calc(100vw - 32px));height:auto;max-height:min(570px,calc(100dvh - 100px));padding:0;border:1px solid var(--line-2);border-radius:6px;background:var(--ink-2);color:var(--paper);box-shadow:0 18px 48px #0009}
+.gg-assistant .gg-assistant__panel{bottom:66px;width:min(390px,calc(100vw - 32px));height:auto;max-height:min(570px,calc(100dvh - 100px));padding:0;border:1px solid var(--line-2);border-radius:0;background:var(--ink-2);color:var(--paper);box-shadow:0 18px 48px #0009}
 .gg-assistant__head{gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--ink);font:600 16px/1.3 var(--font-h);text-transform:uppercase;letter-spacing:.02em}
 .gg-assistant__close{min-width:36px;min-height:36px;border-radius:3px;font-size:22px}
 .gg-assistant__messages{flex:1 1 auto;min-height:0;max-height:280px;padding:16px;gap:10px}

@@ -13,6 +13,10 @@
   };
   const items = questions[page];
   const root = document.querySelector('.gg-assistant');
+  const greeting = root?.querySelector('.gg-assistant__messages .gg-assistant__message');
+  if (greeting) greeting.textContent = 'Здравствуйте! Чем могу помочь? Задайте вопрос — постараюсь ответить или подскажу, к кому обратиться.';
+  const heading = root?.querySelector('.gg-assistant__head span');
+  if (heading) heading.textContent = 'Ассистент Стройдеталь-2';
   const input = root?.querySelector('.gg-assistant__form .gg-assistant__input');
   const actions = root?.querySelector('.gg-assistant__actions');
   if (!items || !input || !actions) return;
