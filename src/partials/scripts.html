@@ -84,17 +84,5 @@
     });
   });
 
-  // плавающие кнопки прячутся, пока виден первый экран: на главной они
-  // перекрывали ленту фактов, на внутренних — ленту гарантий
-  var fl = document.querySelector('.floats');
-  if (fl) {
-    var first = document.querySelector('.hero, .phero');
-    var onScroll = function(){
-      var limit = first ? first.offsetHeight * 0.75 : 0;
-      fl.classList.toggle('off', window.scrollY < limit);
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
-  }
 })();
 </script>

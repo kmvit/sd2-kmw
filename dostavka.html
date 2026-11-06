@@ -13,7 +13,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
-<link rel="stylesheet" href="static/assets/site.css?v=2677dce1" />
+<link rel="stylesheet" href="static/assets/site.css?v=ea9178d7" />
 <link rel="icon" href="favicon.ico" sizes="32x32" />
 <link rel="icon" href="static/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="static/apple-touch-icon.png" />
@@ -258,11 +258,6 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
   </div>
 </footer>
 
-<div class="floats">
-  <a class="hot" href="#request" aria-label="Оставить заявку">Заявка</a>
-  <a href="tel:+79288217211" aria-label="Позвонить">Тел.</a>
-</div>
-
 <div class="mmenu" id="menu">
   <div class="head">
     <span class="brand"><span class="mark" aria-hidden="true"><span>С</span><span>Д</span><span>2</span></span><span class="word"><b>Стройдеталь-2</b><small>Завод с 1962 года</small></span></span>
@@ -368,18 +363,6 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
     });
   });
 
-  // плавающие кнопки прячутся, пока виден первый экран: на главной они
-  // перекрывали ленту фактов, на внутренних — ленту гарантий
-  var fl = document.querySelector('.floats');
-  if (fl) {
-    var first = document.querySelector('.hero, .phero');
-    var onScroll = function(){
-      var limit = first ? first.offsetHeight * 0.75 : 0;
-      fl.classList.toggle('off', window.scrollY < limit);
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
-  }
 })();
 </script>
 

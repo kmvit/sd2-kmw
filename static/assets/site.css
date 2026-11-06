@@ -610,18 +610,6 @@ footer.site{background:var(--bg-foot);border-top:1px solid var(--edge);padding:c
 .legal a{color:var(--text-3)}
 .legal a:hover{color:var(--text)}
 
-/* ---------- ПЛАВАЮЩИЕ ---------- */
-.floats{position:fixed;right:16px;bottom:16px;display:grid;gap:9px;z-index:90;transition:.25s}
-/* на первом экране кнопки ложились поверх фактов — JS прячет их до прокрутки;
-   без JS класс не вешается и кнопки просто видны всегда */
-.floats.off{opacity:0;pointer-events:none;transform:translateY(10px)}
-.floats a{width:52px;height:52px;display:grid;place-items:center;border:1px solid var(--edge-2);
-  background:var(--bg-blur);backdrop-filter:blur(8px);color:var(--text);
-  font-family:var(--font-m);font-size:10px;letter-spacing:.05em;transition:.2s}
-.floats a:hover{border-color:var(--accent);color:var(--accent-t)}
-.floats a.hot{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
-.floats a.hot:hover{background:var(--accent-2);color:#fff}
-
 /* ---------- МОДАЛКА ---------- */
 .modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(8,11,14,.76);
   backdrop-filter:blur(6px);z-index:200;padding:20px}
