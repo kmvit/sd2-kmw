@@ -17,6 +17,13 @@
   if (greeting) greeting.textContent = 'Здравствуйте! Чем могу помочь? Задайте вопрос — постараюсь ответить или подскажу, к кому обратиться.';
   const heading = root?.querySelector('.gg-assistant__head span');
   if (heading) heading.textContent = 'Ассистент Стройдеталь-2';
+  const chatConsent = root?.querySelector('.gg-assistant__chat-consent');
+  const consentInput = chatConsent?.querySelector('input');
+  const consentText = chatConsent?.querySelector('span');
+  if (consentInput && consentText) {
+    consentInput.checked = true;
+    consentText.firstChild.textContent = 'Отправляя вопрос, вы соглашаетесь на обработку сообщения и запись диалога. ';
+  }
   const input = root?.querySelector('.gg-assistant__form .gg-assistant__input');
   const actions = root?.querySelector('.gg-assistant__actions');
   if (!items || !input || !actions) return;

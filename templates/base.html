@@ -27,7 +27,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 <link rel="stylesheet" href="{% static 'assets/site.css' %}" />
 <link rel="stylesheet" href="{% static 'assets/privacy.css' %}?v=20261106a" />
 {% if assistant_enabled %}<link rel="stylesheet" href="{{ assistant_base_url }}/static/assets/assistant.css?v=20261105a" />{% endif %}
-{% if assistant_enabled %}<link rel="stylesheet" href="{% static 'assets/assistant-sd2.css' %}?v=20261106b" />{% endif %}
+{% if assistant_enabled %}<link rel="stylesheet" href="{% static 'assets/assistant-sd2.css' %}?v=20261106c" />{% endif %}
 <link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32" />
 <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}" />
@@ -45,7 +45,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 {% include "partials/mmenu.html" %}
 {% include "partials/scripts.html" %}
 {% if assistant_enabled %}<script src="{{ assistant_base_url }}/static/assets/assistant.js?v=20261105a" data-api="{{ assistant_base_url }}/assistant" data-site="sd2" defer></script>{% endif %}
-{% if assistant_enabled %}<script src="{% static 'assets/assistant-sd2.js' %}?v=20261106b" data-page="{{ page.slug }}" defer></script>{% endif %}
+{% if assistant_enabled %}<script src="{% static 'assets/assistant-sd2.js' %}?v=20261106c" data-page="{{ page.slug }}" defer></script>{% endif %}
 <script src="{% static 'assets/privacy.js' %}?v=20261106a" data-metrika="{{ site.metrika_id }}" data-policy="{% url 'politika' %}" defer></script>
 </body>
 </html>
