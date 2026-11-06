@@ -44,7 +44,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 {% include "partials/footer.html" %}
 {% include "partials/mmenu.html" %}
 {% include "partials/scripts.html" %}
-{% if assistant_enabled %}<script src="{{ assistant_base_url }}/static/assets/assistant.js?v=20261106d" data-api="{{ assistant_base_url }}/assistant" data-site="sd2" defer></script>{% endif %}
+{% if assistant_enabled %}<script src="{{ assistant_base_url }}/static/assets/assistant.js?v=20261106-history5" data-api="{{ assistant_base_url }}/assistant" data-site="sd2" defer></script>{% endif %}
 {% if assistant_enabled %}<script src="{% static 'assets/assistant-sd2.js' %}?v=20261106d" data-page="{{ page.slug }}" defer></script>{% endif %}
 <script src="{% static 'assets/privacy.js' %}?v=20261106a" data-metrika="{{ site.metrika_id }}" data-policy="{% url 'politika' %}" defer></script>
 </body>
