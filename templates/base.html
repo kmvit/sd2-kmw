@@ -25,7 +25,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
 <link rel="stylesheet" href="{% static 'assets/site.css' %}" />
-<link rel="stylesheet" href="{% static 'assets/privacy.css' %}" />
+<link rel="stylesheet" href="{% static 'assets/privacy.css' %}?v=20261106a" />
 {% if assistant_enabled %}<link rel="stylesheet" href="{{ assistant_base_url }}/static/assets/assistant.css?v=20261105a" />{% endif %}
 <link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32" />
 <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml" />
@@ -45,6 +45,6 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 {% include "partials/mmenu.html" %}
 {% include "partials/scripts.html" %}
 {% if assistant_enabled %}<script src="{{ assistant_base_url }}/static/assets/assistant.js?v=20261105a" data-api="{{ assistant_base_url }}/assistant" data-site="sd2" defer></script>{% endif %}
-<script src="{% static 'assets/privacy.js' %}" data-metrika="{{ site.metrika_id }}" data-policy="{% url 'politika' %}" defer></script>
+<script src="{% static 'assets/privacy.js' %}?v=20261106a" data-metrika="{{ site.metrika_id }}" data-policy="{% url 'politika' %}" defer></script>
 </body>
 </html>
