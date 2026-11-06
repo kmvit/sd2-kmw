@@ -1,6 +1,14 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load static %}
 {% block content %}
-{% include "partials/phero.html" with crumb="Согласие на обработку данных" cta1="На главную" cta1_url="/" %}
+<section class="phero" id="top">
+  <img class="phero-media" src="{% static 'img/zavod-30834.jpg' %}" alt="Завод «Стройдеталь-2»" />
+  <span class="phero-shade"></span>
+  <div class="wrap">
+    <p class="stamp">Документы сайта</p>
+    <h1>Согласие на обработку данных</h1>
+    <div class="cta-row"><a class="btn btn--solid" href="{% url 'home' %}">На главную</a></div>
+  </div>
+</section>
 <section class="light" id="consent"><div class="wrap"><div class="prose" style="max-width:850px">
 <h2>Согласие на обработку персональных данных</h2>
 <p>Отмечая галочку в форме заявки или письма директору на сайте sd2-kmv.ru, я даю ЗАО «Стройдеталь-2» (357522, Ставропольский край, г. Пятигорск, Черкесское шоссе, 2) согласие на обработку данных, которые я указал в форме.</p>
