@@ -31,18 +31,18 @@ DIRECTIONS = [
      'от 275 ₽', 'за тонну с карьера', 'karer', 'Смотреть прайс →', 'img/zavod-704230.jpg'),
 ]
 
-# что сертифицировано, ГОСТ, файл скана, файл миниатюры, действует до
+# что сертифицировано, стандарт, PDF, миниатюра, действует до
 CERTIFICATES = [
     ('Смеси бетонные тяжёлые', 'ГОСТ 7473-2010',
-     'img/certs/sertif-1.jpg', 'img/certs/sertif-1-thumb.jpg', '2017-09-03'),
-    ('Плиты ЖБ для городских дорог', 'ГОСТ 21924.0-84',
-     'img/certs/sertif-2.jpg', 'img/certs/sertif-2-thumb.jpg', '2017-09-09'),
-    ('Плиты бетонные тротуарные', 'ГОСТ 17608-91',
-     'img/certs/sertif-3.jpg', 'img/certs/sertif-3-thumb.jpg', '2017-09-03'),
-    ('Щебень 5–20, М1000, F200', 'ГОСТ 8267-93',
-     'img/certs/sertif-5.jpg', 'img/certs/sertif-5-thumb.jpg', '2018-05-19'),
-    ('Песок природный крупный, 1 класс', 'ГОСТ 8736-93',
-     'img/certs/sertif-4.jpg', 'img/certs/sertif-4-thumb.jpg', '2018-05-19'),
+     'docs/certs/concrete-2026.pdf', 'img/certs/concrete-2026.jpg', '2029-09-13'),
+    ('Плиты железобетонные для городских дорог', 'ГОСТ 21924-2014',
+     'docs/certs/road-slabs-2026.pdf', 'img/certs/road-slabs-2026.jpg', '2029-09-13'),
+    ('Плиты бетонные тротуарные', 'ГОСТ 17608-2017',
+     'docs/certs/paving-slabs-2023.pdf', 'img/certs/paving-slabs-2023.jpg', '2028-11-15'),
+    ('Камни бортовые (ЕАЭС)', 'ТР ТС 014/2011',
+     'docs/certs/curbs-eac-2026.pdf', 'img/certs/curbs-eac-2026.jpg', '2027-03-02'),
+    ('Камни бетонные бортовые', 'ГОСТ 6665-91',
+     'docs/certs/curbs-2025.pdf', 'img/certs/curbs-2025.jpg', '2028-09-11'),
 ]
 
 # название, подпись, логотип

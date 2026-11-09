@@ -56,15 +56,11 @@ class MemberPhone(Ordered):
 
 
 class Certificate(Ordered):
-    """Сертификат соответствия. Скан открывается в новой вкладке.
-
-    Срок действия виден в админке не просто так: сканы со старого сайта
-    выданы в 2017–2018 годах и просрочены — их нужно заменить до запуска.
-    """
+    """Сертификат соответствия. Оригинальный PDF открывается в новой вкладке."""
 
     title = models.CharField('Что сертифицировано', max_length=200)
     gost = models.CharField('ГОСТ', max_length=120, blank=True)
-    scan = models.ImageField('Скан', upload_to='certs/')
+    scan = models.FileField('Сертификат PDF', upload_to='certs/')
     thumb = models.ImageField('Миниатюра', upload_to='certs/', blank=True,
                               help_text='Уменьшенная копия для плитки. Пусто — возьмём скан')
     valid_until = models.DateField('Действует до', null=True, blank=True)
