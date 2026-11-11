@@ -28,7 +28,11 @@ RETIRED = [
     '/zhelezobeton/LMP-lestnichnye-marshi-lestnicy',
     '/zhelezobeton/vinograd-shpalera-opora',
     '/zhelezobeton/shchelevye-poly-korovnikov-i-svinarnikov',
+    '/zhelezobeton/lyuk-smotrovoj-dlya-kolodcev',
+    '/zhelezobeton/progony',
 ]
+
+RETIRED_DRAFT_SLUGS = ('lyuki-kolodcev', 'progony')
 
 # Файлы старого сайта, которые есть в индексе Яндекса → документ на новом сайте.
 # Ведут на файл документа, загруженный в media; договор на старом сайте лежал
@@ -72,12 +76,15 @@ class Command(BaseCommand):
         catalog = SECTIONS['zhbi']
         live = list(SECTIONS.values())          # эти адреса отдают страницы сами
         pairs = dict(DRAFT_SECTIONS)
-        for group in ZhbiGroup.objects.exclude(legacy_url=''):
+        for group in ZhbiGroup.objects.exclude(legacy_url='').exclude(legacy_url__in=RETIRED):
             live.append(group.legacy_url)
             draft = f'{DRAFT_ZHBI_PREFIX}{group.slug}/'
             pairs[draft] = pairs[draft.rstrip('/')] = group.legacy_url
         for old in RETIRED:
             pairs[old] = catalog
+        for slug in RETIRED_DRAFT_SLUGS:
+            draft = f'{DRAFT_ZHBI_PREFIX}{slug}'
+            pairs[draft] = pairs[draft + '/'] = catalog
         # тот же адрес со слешем на конце: внешние ссылки бывают и такими
         for path in live + RETIRED:
             pairs.setdefault(path + '/', catalog if path in RETIRED else path)
