@@ -216,6 +216,11 @@ nav.main .dd a:hover{background:var(--bg-3);color:var(--head)}
 .phero .sub{margin-top:16px;max-width:60ch;font-size:clamp(15px,1.1vw,17.5px);
   color:var(--silver);line-height:1.68}
 .phero .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.phero--fullscreen{min-height:100vh;min-height:100svh;display:flex;align-items:flex-end}
+.phero--fullscreen .wrap{width:100%}
+.phero--fullscreen .phero-shade{background:
+  linear-gradient(180deg,rgba(13,18,23,.32),rgba(13,18,23,.15) 34%,rgba(13,18,23,.9) 100%),
+  linear-gradient(90deg,rgba(13,18,23,.44),transparent 80%)}
 /* хлебные крошки */
 .crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:9px;font-family:var(--font-m);
   font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--steel)}

@@ -2,8 +2,8 @@
 {% comment %}
 Шапка внутренней страницы: фото, хлебные крошки, заголовок и кнопки.
 Крошки передаются через include — они у каждой страницы свои.
-{% endcomment %}<section class="phero" id="top">
-  <img class="phero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}"{% if page.slug == 'beton' %} style="object-position:50% 82%"{% endif %}
+{% endcomment %}<section class="phero{% if hero_fullscreen %} phero--fullscreen{% endif %}" id="top">
+  <img class="phero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static hero_fallback|default:'img/zavod-30834.jpg' %}{% endif %}"{% if page.slug == 'beton' %} style="object-position:50% 82%"{% endif %}
        alt="{{ page.admin_title }} — завод «Стройдеталь-2»" />
   <span class="phero-shade"></span>
   <div class="wrap">

@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load static %}
 
 {% block content %}
-{% include "partials/phero.html" with crumb="ЖБИ и тротуарная плитка" cta1="Смотреть каталог" cta1_url="#catalog" cta2="Запросить прайс" cta2_url="#request" %}
+{% include "partials/phero.html" with hero_fullscreen=True hero_fallback="img/zhbi-plitka-sklad.jpg" crumb="ЖБИ и тротуарная плитка" cta1="Смотреть каталог" cta1_url="#catalog" cta2="Запросить прайс" cta2_url="#request" %}
 {% include "partials/bar.html" %}
 
 {% with s=sections.catalog %}{% if s %}
