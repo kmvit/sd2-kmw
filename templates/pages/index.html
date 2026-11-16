@@ -3,7 +3,7 @@
 {% block content %}
 {# ============ ПЕРВЫЙ ЭКРАН ============ #}
 <section class="hero" id="top">
-  <img class="hero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/zavod-30834.jpg' %}{% endif %}"
+  <img class="hero-media" src="{% if page.photo %}{{ page.photo.url }}{% else %}{% static 'img/produkciya-zavod.jpg' %}{% endif %}"
        alt="Бетонный завод «Стройдеталь-2» в Пятигорске" />
   <span class="hero-shade"></span>
   <div class="wrap hero-inner">
@@ -30,8 +30,7 @@
 
 {# ============ ПРОДУКЦИЯ ============ #}
 {% with s=sections.products %}{% if s %}
-<section id="products"{% if s.photo %} class="products-with-photo"{% endif %}>
-  {% if s.photo %}<img class="products-photo" src="{{ s.photo.url }}" alt="" loading="lazy" />{% endif %}
+<section id="products">
   <div class="wrap">
     <div class="sec-head">
       <div>
