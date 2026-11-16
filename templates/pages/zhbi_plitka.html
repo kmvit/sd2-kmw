@@ -63,7 +63,15 @@
     <h3 style="margin-top:44px">Какую модель выбрать</h3>
     <div class="notes" style="margin-top:20px">
       {% for item in models %}{% if item.description %}
-      <div class="note"><i>{{ item.size }}</i><b>{{ item.title }}</b><p>{{ item.description }}</p></div>
+      <div class="note">
+        <i>{{ item.size }}</i>
+        <b>{{ item.title }}</b>
+        <p>{{ item.description }}</p>
+        {% if item.title == "Брусчатка" %}
+        <img class="paving-model-photo" src="{% static 'img/bruschatka-stend.jpg' %}"
+             alt="Образец укладки брусчатки на стенде завода" width="1440" height="1920" loading="lazy" />
+        {% endif %}
+      </div>
       {% endif %}{% endfor %}
     </div>
   </div>
