@@ -267,8 +267,15 @@
           <div><label class="f-label" for="c-h">Толщина, м</label><input class="f-input" id="c-h" type="text" value="0,2" inputmode="decimal" /></div>
           <div><label class="f-label" for="c-m">Марка</label>
             <select class="f-input" id="c-m">
-              {% for g in grades %}<option>{{ g.title }} ({{ g.grade_class }})</option>{% empty %}
-              <option>М300 (В22,5)</option><option>М350 (В25)</option><option>М400 (В30)</option>{% endfor %}
+              <option>М100 (В7,5)</option>
+              <option>М200 (В15)</option>
+              <option>М250 (В20)</option>
+              <option selected>М300 (В22,5)</option>
+              <option>М350 (В25)</option>
+              <option>М400 (В30)</option>
+              <option>М450 (В35)</option>
+              <option>М500 (В40)</option>
+              <option>М600 (В45)</option>
             </select>
           </div>
         </div>
