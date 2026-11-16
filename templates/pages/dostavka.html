@@ -83,7 +83,7 @@
         <div class="prose" style="margin-top:22px">{{ s.note|safe }}</div>
       </div>
       <div class="lab-photo">
-        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/zavod-525081.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
+        <img src="{% if s.photo %}{{ s.photo.url }}{% else %}{% static 'img/dostavka-miksery.jpg' %}{% endif %}" alt="{{ s.photo_caption }}" />
         {% if s.photo_caption %}<span class="tag">{{ s.photo_caption }}</span>{% endif %}
       </div>
     </div>

@@ -30,7 +30,8 @@
 
 {# ============ ПРОДУКЦИЯ ============ #}
 {% with s=sections.products %}{% if s %}
-<section id="products">
+<section id="products"{% if s.photo %} class="products-with-photo"{% endif %}>
+  {% if s.photo %}<img class="products-photo" src="{{ s.photo.url }}" alt="" loading="lazy" />{% endif %}
   <div class="wrap">
     <div class="sec-head">
       <div>

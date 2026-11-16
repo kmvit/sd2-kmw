@@ -302,6 +302,14 @@ nav.main .dd a:hover{background:var(--bg-3);color:var(--head)}
 .bar p::before{content:"";width:7px;height:7px;background:var(--accent-2);flex:none}
 
 /* ---------- ПРОДУКЦИЯ: СТРОКИ-РЕЕСТР ---------- */
+.products-with-photo{isolation:isolate;--text-3:#9BA7B3}
+.products-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  z-index:-2}
+.products-with-photo::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(13,18,23,.76),rgba(13,18,23,.88) 55%,var(--ink))}
+:root[data-theme="light"] .products-with-photo{--text-3:#4E5963}
+:root[data-theme="light"] .products-with-photo::before{
+  background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.9) 55%,#fff)}
 .reg{border-top:1px solid var(--edge)}
 .reg-row{display:grid;grid-template-columns:82px 190px 1fr auto;gap:clamp(16px,2.4vw,40px);
   align-items:center;padding:clamp(16px,2vw,26px) 0;border-bottom:1px solid var(--edge);
