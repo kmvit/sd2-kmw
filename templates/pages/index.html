@@ -152,9 +152,10 @@
       <div>
         <p class="stamp">{{ s.stamp }}</p>
         <p class="big" style="margin-top:22px">{{ s.lead|safe }}</p>
+        {% if s.note %}<p class="big" style="margin-top:16px">{{ s.note|safe }}</p>{% endif %}
         {% for card in cards.director %}
         <div class="dir-sign">
-          <b>{{ card.title }}</b>
+          <b>{{ card.title }},</b>
           <span>{{ card.icon }}</span>
         </div>
         {% endfor %}
