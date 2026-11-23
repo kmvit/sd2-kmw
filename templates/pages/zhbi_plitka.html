@@ -70,9 +70,36 @@
         {% if item.title == "Брусчатка" %}
         <img class="paving-model-photo" src="{% static 'img/bruschatka-yellow.jpg' %}"
              alt="Жёлтая брусчатка" width="400" height="300" loading="lazy" />
+        {% elif item.title == "Квадрат 100 × 100" %}
+        <img class="paving-model-photo" src="{% static 'img/square-100-product.jpg' %}"
+             alt="Квадрат 100 × 100" width="390" height="322" loading="lazy" />
+        {% elif item.title == "Квадрат 200 × 200" %}
+        <img class="paving-model-photo" src="{% static 'img/square-200-product.jpg' %}"
+             alt="Квадрат 200 × 200" width="399" height="319" loading="lazy" />
+        {% elif item.title == "Паркет" %}
+        <img class="paving-model-photo" src="{% static 'img/parket-product.jpg' %}"
+             alt="Паркет" width="1920" height="802" loading="lazy" />
+        {% elif item.title == "Старый город" %}
+        <img class="paving-model-photo" src="{% static 'img/staryi-gorod-product.jpg' %}"
+             alt="Старый город" width="1920" height="1271" loading="lazy" />
+        {% elif item.title == "Ландхаус" %}
+        <img class="paving-model-photo" src="{% static 'img/landhaus-product.jpg' %}"
+             alt="Ландхаус" width="1920" height="1271" loading="lazy" />
+        {% elif item.title == "Классико" %}
+        <img class="paving-model-photo" src="{% static 'img/klassiko-product.jpg' %}"
+             alt="Классико" width="1920" height="1271" loading="lazy" />
+        {% elif item.title == "Палисад (декоративный бордюр)" %}
+        <img class="paving-model-photo" src="{% static 'img/palisad-product.jpg' %}"
+             alt="Палисад (декоративный бордюр)" width="1920" height="1271" loading="lazy" />
         {% endif %}
       </div>
       {% endif %}{% endfor %}
+      <div class="note">
+        <i>332/200/80</i>
+        <b>Водоотвод (лоток)</b>
+        <img class="paving-model-photo" src="{% static 'img/vodootvod-product.jpg' %}"
+             alt="Водоотвод (лоток)" width="1920" height="1090" loading="lazy" />
+      </div>
     </div>
   </div>
 </section>
