@@ -291,7 +291,8 @@ nav.main .dd a:hover{background:var(--bg-3);color:var(--head)}
 .note b{font-family:var(--font-h);font-weight:600;font-size:18px;letter-spacing:.04em;
   text-transform:uppercase;color:var(--head);line-height:1.25}
 .note p{font-size:13.5px;color:var(--text-3);line-height:1.6}
-.paving-model-photo{width:100%;height:auto}
+.paving-model-photo{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;
+  background:#fff;margin-top:auto;flex-shrink:0}
 
 /* ---------- ЛЕНТА ГАРАНТИЙ ---------- */
 .bar{background:var(--accent-d);border-block:1px solid var(--accent-d)}
