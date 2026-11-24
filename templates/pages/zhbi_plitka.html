@@ -117,7 +117,7 @@
     <div class="tags" style="display:flex;flex-wrap:wrap;gap:8px">
       {% for c in colors %}<span class="chip">{{ c.title }}</span>{% endfor %}
     </div>
-    <p class="stamp" style="margin-top:34px">Восемь смешений серии «Мегаполис»</p>
+    <p class="stamp" style="margin-top:34px">Смешения серии «Мегаполис» — {{ mixes|length }}</p>
     <div class="tags" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
       {% for c in mixes %}<span class="chip hot">{{ c.title }}</span>{% endfor %}
     </div>
