@@ -12,7 +12,8 @@
     <p class="sub">{{ page.subtitle }}</p>
     <p class="hero-also">Также с завода: <a href="#products">ЖБИ и плитка · асфальтобетон · щебень и песок</a></p>
     <div class="cta-row">
-      <a class="btn btn--solid" href="#request">Узнать цену и сроки</a>
+      <a class="btn btn--solid" href="{% url 'delivery_quote' %}?origin={{ request.path|urlencode }}">Узнать цену с доставкой</a>
+      <a class="btn btn--line" href="#request">Запросить ТКП</a>
       <a class="btn btn--line" href="#calc">Рассчитать объём бетона</a>
     </div>
     <div class="hero-facts">
@@ -252,7 +253,7 @@
         <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
         <p>{{ s.lead }}</p>
         <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-          <a class="btn btn--solid" href="#request">Отправить расчёт в заявку</a>
+          <a class="btn btn--solid" id="calc-quote" href="{% url 'delivery_quote' %}?origin={{ request.path|urlencode }}">Узнать цену с доставкой</a>
           <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">Спросить менеджера</a>
         </div>
       </div>

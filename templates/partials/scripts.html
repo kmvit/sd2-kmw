@@ -15,10 +15,16 @@
     var calc = function(){
       var v = num($('c-l').value) * num($('c-w').value) * num($('c-h').value);
       var r = v * 1.05;
+      var link = $('calc-quote');
+      var url = new URL(link.href);
+      url.searchParams.set('volume', r > 0 ? r.toFixed(1) : '');
+      url.searchParams.set('grade', $('c-m').value.split(' ')[0]);
+      link.href = url.href;
       $('c-res-v').innerHTML = fmt(v) + ' <small>м³</small>';
       $('c-res-t').textContent = 'с запасом 5 % — ' + fmt(r) + ' м³ · ' + mixers(Math.ceil(r / 7));
     };
     ['c-l','c-w','c-h'].forEach(function(id){ $(id).addEventListener('input', calc); });
+    $('c-m').addEventListener('change', calc);
     calc();
   }
 

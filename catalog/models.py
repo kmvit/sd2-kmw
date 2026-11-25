@@ -80,7 +80,7 @@ class ConcreteGrade(Ordered, Priced):
     water = models.CharField('Водонепроницаемость', max_length=30, blank=True, help_text='W4')
     frost = models.CharField('Морозостойкость', max_length=30, blank=True, help_text='F150')
     mobility = models.CharField('Подвижность', max_length=120, blank=True,
-                                help_text='П2 (15 см) или П3 под насос')
+                                help_text='П2 (от 5 до 9 см) или П3 (от 10 до 15 см)')
 
     class Meta(Ordered.Meta):
         verbose_name = 'Марка бетона'

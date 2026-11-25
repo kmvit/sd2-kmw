@@ -19,10 +19,11 @@ class Lead(models.Model):
     STATUSES = [(NEW, 'Новая'), (IN_WORK, 'В работе'),
                 (DONE, 'Обработана'), (SPAM, 'Спам')]
 
+    submission_id = models.UUIDField(unique=True, null=True, editable=False)
     name = models.CharField('Имя', max_length=150)
     phone = models.CharField('Телефон', max_length=40)
     product = models.CharField('Что нужно', max_length=120, blank=True)
-    details = models.CharField('Объём и адрес', max_length=300, blank=True)
+    details = models.TextField('Объём и адрес', blank=True)
     page = models.CharField('Страница', max_length=200, blank=True,
                             help_text='С какой страницы отправлена заявка')
     utm = models.CharField('Метки кампании', max_length=300, blank=True)

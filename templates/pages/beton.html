@@ -33,6 +33,8 @@
         </tbody>
       </table>
     </div>
+    <a class="btn btn--solid" href="{% url 'delivery_quote' %}?origin={{ request.path|urlencode }}">Узнать цену с доставкой</a>
+    <a class="btn btn--line" href="#request">Запросить ТКП</a>
     {% if s.note %}<p class="tbl-note">{{ s.note }}</p>{% endif %}
   </div>
 </section>

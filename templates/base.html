@@ -40,7 +40,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 
 {% block content %}{% endblock %}
 
-{% include "partials/request_form.html" %}
+{% if request.resolver_match.url_name != 'delivery_quote' %}{% include "partials/request_form.html" %}{% endif %}
 {% include "partials/footer.html" %}
 {% include "partials/mmenu.html" %}
 {% include "partials/scripts.html" %}
