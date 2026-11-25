@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Админка: общие данные сайта, страницы с блоками и плитками."""
+from django import forms
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 from .models import Card, Document, MenuItem, Page, Section, SiteSettings
 
@@ -9,10 +12,45 @@ admin.site.site_title = 'Стройдеталь-2'
 admin.site.index_title = 'Управление сайтом'
 
 
+class LeadEmailsField(forms.CharField):
+    def prepare_value(self, value):
+        return '\n'.join(part.strip() for part in value.split(',')) if value else ''
+
+    def to_python(self, value):
+        value = super().to_python(value)
+        addresses = []
+        for line in value.splitlines():
+            for part in line.split(','):
+                address = part.strip()
+                if not address:
+                    continue
+                try:
+                    validate_email(address)
+                except ValidationError:
+                    raise ValidationError('Проверьте адрес «%(address)s».',
+                                          params={'address': address})
+                if address not in addresses:
+                    addresses.append(address)
+        return ','.join(addresses)
+
+
+class SiteSettingsForm(forms.ModelForm):
+    lead_emails = LeadEmailsField(
+        label='Получатели заявок', required=False,
+        widget=forms.Textarea(attrs={'rows': 4, 'cols': 50}),
+        help_text='Введите по одному адресу на строку. Каждая новая заявка придёт всем получателям.',
+    )
+
+    class Meta:
+        model = SiteSettings
+        fields = '__all__'
+
+
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     """Настройки — одна запись, поэтому добавление и удаление закрыты."""
 
+    form = SiteSettingsForm
     fieldsets = [
         ('Телефоны', {'fields': ['phone_main', 'phone_extra', 'phone_note']}),
         ('Адрес и режим работы', {'fields': ['address', 'address_full', 'work_hours']}),
