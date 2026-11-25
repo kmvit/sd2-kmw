@@ -148,6 +148,7 @@ EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT', 25))
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD', '')
+EMAIL_USE_SSL = os.environ.get('DJANGO_EMAIL_SSL', '') == '1'
 EMAIL_USE_TLS = os.environ.get('DJANGO_EMAIL_TLS', '') == '1'
 
 # Default primary key field type
