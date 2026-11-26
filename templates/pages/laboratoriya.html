@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load static %}
 
 {% block content %}
-{% include "partials/phero.html" with crumb="Лаборатория" cta1="Запросить протокол испытаний" cta2="Проверить чужой бетон" cta2_url="#compare" %}
+{% url 'lab_protocol' as protocol_url %}{% include "partials/phero.html" with crumb="Лаборатория" cta1_url=protocol_url cta1="Запросить протокол испытаний" cta2="Проверить чужой бетон" cta2_url="#compare" %}
 {% include "partials/bar.html" %}
 
 {% with s=sections.control %}{% if s %}
@@ -47,7 +47,7 @@
         <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
         <p>{{ s.lead }}</p>
         <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-          <a class="btn btn--solid" href="#request">Договориться об испытании</a>
+          <a class="btn btn--solid" href="{% url 'lab_test' %}">Договориться об испытании</a>
           <a class="btn btn--line" href="tel:{{ site.phone_main_link }}">Спросить лабораторию</a>
         </div>
       </div>

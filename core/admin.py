@@ -57,7 +57,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ('Карта', {'fields': ['map_lat', 'map_lon', 'map_zoom'],
                    'description': 'Координаты метки завода на схеме проезда'}),
         ('Реквизиты', {'fields': ['company', 'founded_year']}),
-        ('Заявки', {'fields': ['lead_emails', 'director_email']}),
+        ('Заявки', {'fields': ['lead_emails', 'laboratory_email', 'director_email']}),
         ('Цены', {'fields': ['show_prices', 'price_note']}),
         ('Поисковые системы', {'fields': ['noindex', 'metrika_id']}),
     ]

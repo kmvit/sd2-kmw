@@ -3,7 +3,7 @@
 заводится карта 301-редиректов со старого сайта."""
 from django.urls import path
 
-from . import delivery, views
+from . import delivery, laboratory, views
 
 urlpatterns = [
     path(url, views.make_page_view(template, active, name), name=name)
@@ -11,6 +11,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('laboratoriya/ispytanie/', laboratory.request_service, {'protocol': False}, name='lab_test'),
+    path('laboratoriya/protokol/', laboratory.request_service, {'protocol': True}, name='lab_protocol'),
     path('zayavka/beton/', delivery.delivery_quote, name='delivery_quote'),
     # карточки ЖБИ — на адресах старого сайта: /zhelezobeton/<как было>
     path('zhelezobeton/<str:slug>', views.zhbi_item, name='zhbi_item'),

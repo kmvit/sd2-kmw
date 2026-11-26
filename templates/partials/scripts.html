@@ -5,7 +5,7 @@
   // мини-калькулятор: объём = Д×Ш×Т, запас 5 %, миксер 7 м³.
   // Есть не на всех страницах — без него остальной скрипт должен работать.
   if ($('c-l')) {
-    var num = function(v){ return parseFloat(String(v).replace(',','.')) || 0; };
+    var num = function(v){ return Number(String(v).replace(',','.')); };
     var fmt = function(v){ return v.toFixed(1).replace('.',','); };
     var mixers = function(n){
       if (n === 1) return '1 миксер';
@@ -13,12 +13,24 @@
       return n + ' миксеров';
     };
     var calc = function(){
-      var v = num($('c-l').value) * num($('c-w').value) * num($('c-h').value);
-      var r = v * 1.05;
+      var dimensions = ['c-l', 'c-w', 'c-h'].map(function(id){ return num($(id).value); });
+      var v = dimensions.reduce(function(total, size){ return total * size; }, 1);
+      var scaled = v * 1.05 * 10;
+      var r = Math.ceil(scaled - Number.EPSILON * scaled) / 10;
       var link = $('calc-quote');
       var url = new URL(link.href);
-      url.searchParams.set('volume', r > 0 ? r.toFixed(1) : '');
-      url.searchParams.set('grade', $('c-m').value.split(' ')[0]);
+      ['volume', 'grade', 'calculation'].forEach(function(key){ url.searchParams.delete(key); });
+      if (!dimensions.every(function(size){ return size > 0; }) || !Number.isFinite(r) || r <= 0) {
+        link.href = url.href;
+        $('c-res-v').textContent = '—';
+        $('c-res-t').textContent = 'Введите положительные размеры плиты.';
+        return;
+      }
+      var grade = $('c-m').value.split(' ')[0];
+      url.searchParams.set('volume', r.toFixed(1));
+      url.searchParams.set('grade', grade);
+      url.searchParams.set('calculation', 'Плита ' + dimensions.join(' × ') + ' м, ' + grade +
+        ', ' + fmt(r) + ' м³ с запасом 5%');
       link.href = url.href;
       $('c-res-v').innerHTML = fmt(v) + ' <small>м³</small>';
       $('c-res-t').textContent = 'с запасом 5 % — ' + fmt(r) + ' м³ · ' + mixers(Math.ceil(r / 7));

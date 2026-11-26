@@ -40,7 +40,7 @@ try{var _t=localStorage.getItem('sd2-theme');if(_t)document.documentElement.data
 
 {% block content %}{% endblock %}
 
-{% if request.resolver_match.url_name != 'delivery_quote' %}{% include "partials/request_form.html" %}{% endif %}
+{% if request.resolver_match.url_name != 'delivery_quote' and request.resolver_match.url_name != 'lab_test' and request.resolver_match.url_name != 'lab_protocol' %}{% include "partials/request_form.html" %}{% endif %}
 {% include "partials/footer.html" %}
 {% include "partials/mmenu.html" %}
 {% include "partials/scripts.html" %}

@@ -54,3 +54,9 @@ def notify_director(message):
         f'Время: {message.created:%d.%m.%Y %H:%M}',
     ])
     return _send('Обращение к директору с сайта', body, [to] if to else [])
+
+
+def notify_laboratory(lead):
+    address = SiteSettings.get().laboratory_email
+    body = f'{lead.product}\nТелефон: {lead.phone}\n{lead.details}\nСтраница: {lead.page}'
+    return _send(lead.product, body, [address] if address else [])

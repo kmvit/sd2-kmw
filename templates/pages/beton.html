@@ -114,7 +114,7 @@
         <h2 style="margin-top:14px">{{ s.title|safe }}</h2>
         <p>{{ s.lead }}</p>
         <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-          <a class="btn btn--solid" href="#request">Договориться об испытании</a>
+          <a class="btn btn--solid" href="{% url 'lab_test' %}">Договориться об испытании</a>
           <a class="btn btn--line" href="{% url 'laboratoriya' %}">О лаборатории</a>
         </div>
       </div>

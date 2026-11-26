@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ service }}{% endblock %}
+{% block content %}
+<section><div class="wrap" style="max-width:680px">
+  <h1>{{ service }}</h1>
+  {% if accepted %}<p role="status">Обращение принято.</p>{% endif %}
+  {% if protocol %}<p>Лаборатория свяжется с вами по поводу выдачи протокола.</p>
+  {% else %}<p>Лаборатория свяжется с вами, чтобы согласовать приём образцов.</p>{% endif %}
+  {% if not accepted %}
+  <form class="form-card" method="post">
+    {% csrf_token %}{{ form.website }}{{ form.website.errors }}
+    <label class="f-label" for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>{{ form.phone }}{{ form.phone.errors }}
+    <label class="f-label" for="{{ form.details.id_for_label }}">{{ form.details.label }}</label>{{ form.details }}{{ form.details.errors }}
+    <label class="f-agree">{{ form.agree }} <span>Согласен на обработку персональных данных — <a href="{% url 'soglasie' %}">текст согласия</a></span></label>{{ form.agree.errors }}
+    <button class="btn btn--solid" type="submit">Отправить обращение</button>
+  </form>
+  {% endif %}
+</div></section>
+{% endblock %}

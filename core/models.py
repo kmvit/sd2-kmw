@@ -63,6 +63,8 @@ class SiteSettings(models.Model):
     lead_emails = models.CharField(
         'Куда слать заявки', max_length=300, blank=True,
         help_text='Адреса через запятую — на них уходит письмо о каждой заявке')
+    laboratory_email = models.EmailField('Почта лаборатории', blank=True,
+                                         help_text='Получатель заявок на испытание и запросов протоколов.')
     director_email = models.EmailField(
         'Личная почта директора', blank=True,
         help_text='Форма «написать директору» уходит только сюда, минуя отдел продаж')
