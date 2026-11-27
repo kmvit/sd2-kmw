@@ -82,7 +82,7 @@ class ZhbiGroupAdmin(admin.ModelAdmin):
     search_fields = ['title', 'slug']
     inlines = [ZhbiItemInline]
     fieldsets = [
-        (None, {'fields': ['title', 'slug', 'kinds_label', 'photo', ('order', 'published')]}),
+        (None, {'fields': ['title', 'slug', 'kinds_label', 'order_unit', 'photo', ('order', 'published')]}),
         ('Страница товара', {'fields': ['summary', 'description', 'gost', 'note']}),
         ('Поисковая выдача', {'fields': ['seo_title', 'seo_description', 'legacy_url']}),
     ]

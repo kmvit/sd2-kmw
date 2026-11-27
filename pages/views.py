@@ -22,6 +22,7 @@ from leads.forms import DirectorMessageForm, LeadForm
 from leads.notify import notify_director, notify_lead
 
 from .legacy import SECTIONS
+from .zhbi_request import ZhbiRequestForm
 
 # (адрес, имя маршрута, шаблон, какой пункт меню подсветить)
 # Разделы старого сайта — на прежних адресах (pages/legacy.py), новые — со слешем.
@@ -153,7 +154,8 @@ def zhbi_item(request, slug):
             for item in items]
 
     ctx = page_context(request, 'zhbi_item', 'products')
-    ctx.update({'group': group, 'rows': rows, 'columns': columns,
+    ctx.update({'group': group, 'zhbi_form': ZhbiRequestForm(group),
+                'rows': rows, 'columns': columns,
                 'page': group, 'other_groups': ZhbiGroup.objects.filter(published=True)
                                                         .exclude(pk=group.pk)[:8]})
     # у плитки и блоков позиции лежат в своих справочниках
@@ -179,10 +181,18 @@ def _back(request, fragment=''):
 @require_POST
 def lead_create(request):
     """Приём заявки на расчёт."""
-    form = LeadForm(request.POST)
+    slug = request.POST.get('zhbi_group')
+    if slug:
+        group = get_object_or_404(ZhbiGroup, slug=slug, published=True)
+        form = ZhbiRequestForm(group, request.POST)
+    else:
+        form = LeadForm(request.POST)
     if form.is_valid():
         lead = form.save(commit=False)
-        lead.page = (request.POST.get('next') or '')[:200]
+        if slug:
+            lead.page = request.build_absolute_uri(lead.page)[:200]
+        else:
+            lead.page = (request.POST.get('next') or '')[:200]
         lead.save()
         notify_lead(lead)
         return _back(request, '?ok=1#request')

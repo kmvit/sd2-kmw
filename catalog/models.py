@@ -213,6 +213,8 @@ class ZhbiGroup(Ordered):
 
     title = models.CharField('Название', max_length=200)
     slug = models.SlugField('Адрес страницы', max_length=200, unique=True)
+    order_unit = models.CharField('Единица заказа', max_length=8, default='шт.',
+                                  choices=[('шт.', 'Штуки'), ('м²', 'Квадратные метры')])
     kinds_label = models.CharField('Сколько видов', max_length=40, blank=True,
                                    help_text='Подпись на плитке каталога, например «9 видов»')
     photo = models.ImageField('Фото изделия', upload_to='zhbi/', blank=True)

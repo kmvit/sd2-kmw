@@ -313,6 +313,7 @@ class Command(BaseCommand):
             group, created = ZhbiGroup.objects.get_or_create(
                 slug=data['slug'],
                 defaults={'title': data['title'], 'kinds_label': data['kinds'],
+                          'order_unit': data.get('order_unit', 'шт.'),
                           'gost': data['gost'], 'description': data['description'],
                           'legacy_url': data['legacy'], 'order': i * 10,
                           'custom_template': self.CUSTOM_TEMPLATES.get(data['slug'], ''),

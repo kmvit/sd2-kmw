@@ -23,7 +23,7 @@ class LaboratoryForm(HoneypotMixin):
 
 @require_http_methods(['GET', 'POST'])
 def request_service(request, protocol):
-    service = 'Запрос протокола' if protocol else 'Испытание бетона'
+    service = 'Запрос протокола' if protocol else 'Испытание'
     form = LaboratoryForm(request.POST if request.method == 'POST' else None)
     if protocol:
         form.fields['details'].label = 'Номер накладной или дата поставки (если известны)'

@@ -34,7 +34,8 @@ def notify_lead(lead):
         f'Имя: {lead.name}',
         f'Телефон: {lead.phone}',
         f'Что нужно: {lead.product or "—"}',
-        f'Объём и адрес: {lead.details or "—"}',
+        lead.details if lead.product == 'ЖБИ, плитка, бордюр' and lead.details.startswith('Изделие: ')
+        else f'Объём и адрес: {lead.details or "—"}',
         f'Страница: {lead.page or "—"}',
         f'Время: {lead.created:%d.%m.%Y %H:%M}',
     ])
